@@ -1,15 +1,15 @@
 source_code,concept_id,concept_name,unit,group,notes
 DET,2100000040,CogState Detection,log10(ms),test,
 IDN,2100000041,CogState Identification,log10(ms),test,
-ONB,2100000042,CogState One-Back correct responses,count,test,Raw count of correct responses (100% integer 0-59) out of TRIAL. Previously mislabelled log10(ms) - a lower-is-better scale - which inverted the effect direction. DET/IDN really are log10(ms).
-OCL,2100000043,CogState One-Card Learning correct responses,count,test,Raw count of correct responses (100% integer 2-80) out of TRIAL, not the arcsine-transformed proportion.
+ONB,2100000042,CogState One-Back correct responses,count,test,"Count of correct responses out of TRIAL. Higher is better,  unlike the log10(ms) reaction-time measures DET and IDN."
+OCL,2100000043,CogState One-Card Learning correct responses,count,test,"Count of correct responses out of TRIAL,  not the arcsine-transformed proportion."
 CPAL,2100000044,CogState CPAL,arcsine(sqrt(proportion)),test,
 LNS,2100000045,CogState Letter-Number Sequencing,score,test,
 COGSTATE_COMPOSITE,2100000046,CogState Composite Score,z-score,composite,
 FNMT,2100000047,CogState Face-Name Memory Test correct responses,count,test,Count 0-12 out of TRIAL
 FNLT,2100000048,CogState Face-Name Learning Test correct responses,count,test,Count 0-12 out of TRIAL
 FSBT,2100000049,CogState Face-Symbol Binding Test correct responses,count,test,Count 0-12 out of TRIAL
-BPXT,2100000140,CogState Brief Psychomotor Test,score,test,UNCHARACTERIZED: range -0.595..1.0 with 0.8% integer values matches no battery metric (cor/acc/lmn) and no TRIAL denominator. Scale and direction unconfirmed - do not assume.
+BPXT,2100000140,CogState Brief Psychomotor Test,score,test,"Scale and direction unconfirmed: the value range matches none of the battery metrics (cor,  acc,  lmn) and there is no TRIAL denominator."
 C3Comp,2100000141,CogState C3 Composite,z-score,composite,
 C3AbrComp,2100000142,CogState C3 Abbreviated Composite,z-score,composite,
 AttnComp,2100000143,CogState Attention Composite,z-score,composite,

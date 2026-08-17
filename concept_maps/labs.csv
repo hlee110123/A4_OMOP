@@ -22,26 +22,26 @@ HMT71_5,40761509,RBC Morphology,repeat 5
 HMT95,3013498,Atypical/Variant lymphocytes,LOINC 733-6
 HMT98,3034708,Nucleated erythrocytes/100 leukocytes [Ratio] in Blood,LOINC 19048-8 (RPTU is '%' so ratio form)
 HMT370,3004410,Hemoglobin A1c,LOINC 4548-4
-RCT1,3006140,Bilirubin.total [Moles/volume] in Serum or Plasma,LOINC 14631-6. Was 3024128 (1975-2 Mass/volume); source reports umol/L
+RCT1,3006140,Bilirubin.total [Moles/volume] in Serum or Plasma,LOINC 14631-6. Source reports umol/L
 RCT3,3004077,GGT,LOINC 2324-2
 RCT5,3013721,AST,LOINC 1920-8
-RCT6,3024641,Urea nitrogen [Moles/volume] in Serum or Plasma,LOINC 14937-7. Was 3013682 (3094-0 Mass/volume); source reports mmol/L
+RCT6,3024641,Urea nitrogen [Moles/volume] in Serum or Plasma,LOINC 14937-7. Source reports mmol/L
 RCT14,3007220,Creatine kinase [Enzymatic activity/volume] in Serum or Plasma,LOINC 2157-6
-RCT183,3015377,Calcium [Moles/volume] in Serum or Plasma,LOINC 2000-8. Was 3006906 (17861-6 Mass/volume); source reports mmol/L
-RCT392,3020564,Creatinine [Moles/volume] in Serum or Plasma,LOINC 14682-9. Was 3016723 (2160-0 Mass/volume); source reports umol/L which is a molar concentration
+RCT183,3015377,Calcium [Moles/volume] in Serum or Plasma,LOINC 2000-8. Source reports mmol/L
+RCT392,3020564,Creatinine [Moles/volume] in Serum or Plasma,"LOINC 14682-9. Source reports umol/L,  a molar concentration"
 RCT4,3006923,ALT/SGPT,LOINC 1742-6
-RCT8,3026493,Urate [Moles/volume] in Serum or Plasma,LOINC 14933-6. Was 3037556 (3084-1 Mass/volume); source reports umol/L (source LBTEST: Serum Uric Acid)
-RCT9,3003458,Phosphate [Moles/volume] in Serum or Plasma,LOINC 14879-1. Was 3011904 (2777-1 Mass/volume); source reports mmol/L
-RCT12,3020630,Total Protein,LOINC 2885-2. Mass/volume is CORRECT: source reports g/L which is a mass concentration. The defect for this group is unit_concept_id (g/L must be 8636, not 8713 = g/dL)
-RCT13,3024561,Albumin,LOINC 1751-7. Mass/volume is CORRECT (g/L is a mass concentration); see RCT12 note on the unit
+RCT8,3026493,Urate [Moles/volume] in Serum or Plasma,LOINC 14933-6. Source reports umol/L; source LBTEST is Serum Uric Acid
+RCT9,3003458,Phosphate [Moles/volume] in Serum or Plasma,LOINC 14879-1. Source reports mmol/L
+RCT12,3020630,Total Protein,"LOINC 2885-2. Source reports g/L,  a mass concentration,  so Mass/volume is correct; unit is 8636"
+RCT13,3024561,Albumin,"LOINC 1751-7. Source reports g/L,  a mass concentration; see RCT12"
 RCT15,3019550,Sodium,LOINC 2951-2
 RCT16,3023103,Potassium,LOINC 2823-3
 RCT18,3014576,Chloride,LOINC 2075-0
-RCT20,3019900,Cholesterol [Moles/volume] in Serum or Plasma,LOINC 14647-2. Was 3027114 (2093-3 Mass/volume); source reports mmol/L
-RCT29,3027597,Direct Bilirubin,LOINC 1968-7. KNOWN MISMATCH: source reports umol/L (molar) under a Mass/volume concept. No 'Bilirubin.direct [Moles/volume] in Serum or Plasma' exists; nearest is 3005772 (conjugated). Deferred pending a decision
-RCT142,3037110,Fasting glucose [Mass/volume] in Serum or Plasma,LOINC 1558-6 (fasting-specific; distinct from RCT1669 random glucose). KNOWN MISMATCH: source reports mmol/L under a Mass/volume concept. No molar fasting-glucose concept exists; remapping to generic molar 3013826 would lose the fasting qualifier. Deferred
+RCT20,3019900,Cholesterol [Moles/volume] in Serum or Plasma,LOINC 14647-2. Source reports mmol/L
+RCT29,3027597,Direct Bilirubin,LOINC 1968-7. Source reports umol/L against a Mass/volume concept; no Bilirubin.direct [Moles/volume] in Serum or Plasma concept exists
+RCT142,3037110,Fasting glucose [Mass/volume] in Serum or Plasma,LOINC 1558-6 (fasting-specific; distinct from RCT1669 random glucose). Source reports mmol/L against a Mass/volume concept; no molar fasting-glucose concept exists
 RCT1407,3035995,Alkaline Phosphatase,LOINC 6768-6
-RCT1669,3013826,Glucose [Moles/volume] in Serum or Plasma,LOINC 14749-6. Was 3004501 (2345-7 Mass/volume); source reports mmol/L (random/non-fasting)
+RCT1669,3013826,Glucose [Moles/volume] in Serum or Plasma,LOINC 14749-6. Source reports mmol/L; random/non-fasting
 UAT1,3027162,Urine Color,LOINC 5778-6
 UAT2,3033543,Urine Specific Gravity,LOINC 5811-5
 UAT3,3015736,Urine pH,LOINC 5803-2

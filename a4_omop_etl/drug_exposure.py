@@ -6,8 +6,8 @@ from . import concepts
 from .helpers import prepare_source_df, calc_days_to_date
 
 
-# RxNorm ingredient 'placebo' (standard, Drug domain). dose.csv records the blinded
-# nominal dose level for BOTH arms, so BLINDDOSE alone cannot identify the ingredient.
+# RxNorm ingredient 'placebo'. dose.csv records the blinded nominal dose level for
+# both arms, so BLINDDOSE alone does not identify the ingredient.
 PLACEBO_CONCEPT_ID = 19047135
 
 
@@ -23,7 +23,7 @@ def create_drug_exposure(
 
     Solanezumab infusions map to the standard RxNorm ingredient concept with the
     dose in `quantity`. Placebo-arm infusions map to the placebo concept with a
-    NULL quantity — BLINDDOSE is the blinded nominal level, not a mass of drug
+    NULL quantity, since BLINDDOSE is the blinded nominal level rather than a mass
     received. Arm is taken from SUBJINFO.TX (unblinded in the source release).
     """
     DRUG_CONCEPTS = concepts.load_drug_concepts()
@@ -34,7 +34,7 @@ def create_drug_exposure(
 
     dose_filtered = prepare_source_df(dose_filtered, person_df, date_anchor_df, visit_occurrence_df)
 
-    # Attach randomized treatment arm; a dosed row with no arm is a data error, not a default
+    # Attach randomized treatment arm. A dosed row with no arm is a data error.
     dose_filtered = dose_filtered.merge(subjinfo_df[['BID', 'TX']], on='BID', how='left')
     missing_tx = dose_filtered['TX'].isna().sum()
     if missing_tx:
@@ -52,7 +52,7 @@ def create_drug_exposure(
         calc_days_to_date, args=('ENDDATE_DAYS_CONSENT',), axis=1
     )
 
-    # Map drug concepts: BLINDDOSE gives the Solanezumab dose form; placebo overrides it
+    # BLINDDOSE gives the Solanezumab dose form; placebo overrides it
     dose_filtered['drug_concept_id'] = dose_filtered['BLINDDOSE'].map(DRUG_CONCEPTS).fillna(0).astype(int)
     dose_filtered.loc[is_placebo, 'drug_concept_id'] = PLACEBO_CONCEPT_ID
 
@@ -69,7 +69,7 @@ def create_drug_exposure(
         'drug_type_concept_id': 32809,  # Case Report Form
         'stop_reason': dose_filtered['COMPLETE'],
         'refills': None,
-        # Dose in mg — NULL for placebo, where BLINDDOSE is a blinding level, not a mass
+        # Dose in mg, NULL for placebo where BLINDDOSE is a blinding level rather than a mass
         'quantity': dose_filtered['BLINDDOSE'].astype(float).mask(is_placebo),
         'days_supply': None,
         'sig': None,
@@ -78,7 +78,7 @@ def create_drug_exposure(
         'provider_id': None,
         'visit_occurrence_id': dose_filtered['visit_occurrence_id'],
         'visit_detail_id': None,
-        # Blinded dose level retained so the randomization stratum stays recoverable
+        # Blinded dose level is retained so the randomization stratum stays recoverable
         'drug_source_value': dose_filtered.apply(
             lambda r: f"{'Placebo' if r['TX'] == 'Placebo' else 'Solanezumab'} {int(r['BLINDDOSE'])}mg",
             axis=1
@@ -88,8 +88,8 @@ def create_drug_exposure(
         'dose_unit_source_value': 'mg',
     })
 
-    # drug_exposure_start_date / _end_date are NOT NULL in OMOP CDM v5.4. A row whose
-    # source day-offsets are NaN cannot be dated; drop and report rather than emit NULL.
+    # The drug_exposure date columns are NOT NULL in OMOP CDM v5.4. A row whose source
+    # day-offsets are missing cannot be dated, so it is dropped and reported.
     undated = drug_exposure['drug_exposure_start_date'].isna() | \
         drug_exposure['drug_exposure_end_date'].isna()
     if undated.any():

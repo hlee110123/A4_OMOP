@@ -34,9 +34,8 @@ def create_measurement_imaging(
         calc_days_to_date, args=('Date_DAYS_CONSENT',), axis=1
     )
 
-    # Get ROI columns (exclude metadata and any date column).
-    # Anchored prefix, NOT a substring test: 'LeftCaudate'/'RightCaudate' contain the
-    # letters "date" but are real ROIs. Date_DAYS_T0 is a day offset, not a volume.
+    # ROI columns, excluding metadata and date columns. The prefix match is anchored:
+    # LeftCaudate and RightCaudate contain the letters 'date' but are ROIs.
     meta_cols = ['SUBSTUDY', 'BID', 'VISCODE', 'Date_DAYS_CONSENT',
                  'person_id', 'person_source_value', 'synthetic_consent_date', 'measurement_date']
     roi_cols = [c for c in mri_filtered.columns
@@ -64,9 +63,8 @@ def create_measurement_imaging(
     print(f"  Volumetric MRI: {len(mri_df)} rows -> {mri_count} measurements")
 
     # ---- Amyloid PET SUVR ----
-    # scan_date_DAYS_CONSENT is populated for ~95% of scans; the remainder fall back to the
-    # visit date, which resolves 98.7% of them. Joining the visit here also populates
-    # visit_occurrence_id, which this branch previously hard-coded to None.
+    # scan_date_DAYS_CONSENT is not populated for every scan; the visit join supplies
+    # a fallback date and populates visit_occurrence_id.
     amyloid_filtered = prepare_source_df(
         amyloid_df[amyloid_df['scan_analyzed'] == 'Yes'].copy(), person_df, date_anchor_df,
         visit_occurrence_df, visit_extra_cols=['visit_start_date']
@@ -99,8 +97,7 @@ def create_measurement_imaging(
     print(f"  Amyloid PET: {len(amyloid_df)} rows -> {amyloid_count} measurements")
 
     # ---- Tau PET SUVR ----
-    # Same treatment as amyloid: fall back to the visit date where scan_date is absent
-    # (resolves 100% of tau scans) and populate visit_occurrence_id.
+    # Same treatment as amyloid: visit date as fallback, and visit linkage.
     tau_filtered = prepare_source_df(
         tau_df[tau_df['scan_analyzed'] == 'Yes'].copy(), person_df, date_anchor_df,
         visit_occurrence_df, visit_extra_cols=['visit_start_date']
@@ -200,10 +197,9 @@ def create_measurement_imaging_extended(
     for _, row in flair_merged.iterrows():
         for field, col in [('WMH_VOL', 'WMHvol_masked'), ('WMH_CORRECTED', 'WMH_corrected'), ('ICV', 'ICV')]:
             val = safe_float(row.get(col)) if col in row else None
-            # WMHvol_masked and ICV are in CUBIC MM per external_datadic; convert to mL so
-            # ICV is comparable with imaging_volumetric_mri's IntraCranialVolume (~1,468 mL).
-            # WMH_corrected is deliberately NOT scaled — it is (WMHvol/ICV)*1300, a volume
-            # normalized to a standard 1300 head, and is the source's analysis variable.
+            # WMHvol_masked and ICV are supplied in cubic mm; convert to mL to match the
+            # volumetric MRI pipeline. WMH_corrected is not scaled: it is (WMHvol/ICV)*1300,
+            # a volume normalized to a standard 1300 head.
             if field in ('WMH_VOL', 'ICV') and val is not None:
                 val = val / 1000.0
             if val is not None:
@@ -273,10 +269,9 @@ def create_measurement_imaging_extended(
     # --- Tau PET PetSurfer (alternative pipeline) ---
     petsurfer_count = 0
     if tau_petsurfer_df is not None:
-        # Compute region_cols from original df before merging adds extra columns.
-        # bi_* = bilateral PVC SUVR, PVC_* = regional PVC SUVR. NumVoxels_* are voxel
-        # counts supplied only for volume-weighting when combining regions (see
-        # Documents/Methods/imaging_Tau_PET_methods.pdf) — they are not measurements.
+        # Compute region_cols from the original df, before merging adds extra columns.
+        # bi_* is bilateral PVC SUVR and PVC_* is regional PVC SUVR. NumVoxels_* holds
+        # voxel counts for volume-weighting when combining regions, not measurements.
         region_cols = [c for c in tau_petsurfer_df.columns if c.startswith(('bi_', 'PVC_'))]
         ps_merged = prepare_source_df(tau_petsurfer_df, person_df, date_anchor_df, visit_occurrence_df,
                                       visit_extra_cols=['visit_start_date'])

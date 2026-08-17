@@ -119,10 +119,8 @@ def create_observation_period(
         return row['synthetic_consent_date']  # Day 0 = consent
 
     def calc_end_date(row):
-        # Take the LATEST of discontinuation and last completed visit. Preferring
-        # DISCDTC outright made the max-visit branch unreachable (DISCDTC is populated
-        # for all 6,945 subjects) and truncated follow-up for the 1,333 subjects whose
-        # discontinuation date precedes their last completed visit.
+        # Take the latest of discontinuation and last completed visit: a
+        # discontinuation date can precede the last visit actually attended.
         candidates = [0]
         for col in ('DISCDTC_DAYS_CONSENT', 'max_visit_days'):
             value = pd.to_numeric(row.get(col), errors='coerce')

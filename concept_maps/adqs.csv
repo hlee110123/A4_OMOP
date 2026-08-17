@@ -17,7 +17,7 @@ E2E4,36308156,APOE e2/e4,Measurement,,LOINC LA21361-3
 E3E3,36309003,APOE e3/e3 (wild type),Measurement,,LOINC LA21358-9
 E3E4,36311054,APOE e3/e4,Measurement,,LOINC LA21359-7
 E4E4,36303222,APOE e4/e4,Measurement,,LOINC LA21360-5
-# Baseline subject-level demographics/anthropometry (sourced from SUBJINFO.csv, one row per subject; reviewer-confirmed in Derived Dict mapping.xlsx)
-EDCCNTU,1015298,Years of education,Observation,,LOINC (concept_id 1015298); value_as_number = years (range 0-36); reviewer-confirmed
-BMIBL,4245997,Body mass index,Measurement,,SNOMED standard; baseline BMI value_as_number (kg/m2, range 13.8-78.9); reviewer-confirmed
-WRKRET,44803812,Retirement,Observation,,SNOMED standard; retirement status — value_as_concept 1=Yes(4188539)/0=No(4188540)/96=Unknown(0); reviewer-confirmed
+# Baseline subject-level demographics and anthropometry, sourced from SUBJINFO.csv (one row per subject)
+EDCCNTU,1015298,Years of education,Observation,,LOINC (concept_id 1015298); value_as_number = years (range 0-36)
+BMIBL,4245997,Body mass index,Measurement,,"SNOMED standard; baseline BMI value_as_number (kg/m2,  range 13.8-78.9)"
+WRKRET,44803812,Retirement,Observation,,SNOMED standard; retirement status — value_as_concept 1=Yes(4188539)/0=No(4188540)/96=Unknown(0)

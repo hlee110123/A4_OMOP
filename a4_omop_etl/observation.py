@@ -32,9 +32,9 @@ def create_observation_lifestyle(
         ALCOHOL  -> Alcoholic drinks per day (44786671)
         CAFFEINE -> Caffeinated beverages per day (40767275)
         AEROBIC  -> Active physical exercise (4312325)
-        WALKING  -> Walking exercise frequency (903630)
-        SLEEP    -> Sleep duration hours (40768255)
-        SLEEPDAY -> Daytime nap hours (40768262)
+        WALKING  -> Walking exercise frequency (2100000300)
+        SLEEP    -> Sleep duration (40768255)
+        SLEEPDAY -> Daytime nap duration (40768262)
         SUBUSE   -> Substance use behavior (37162238)
     """
     OBSERVATION_CONCEPTS = concepts.load_observation_concepts()
@@ -52,8 +52,8 @@ def create_observation_lifestyle(
         for col in lifestyle_cols:
             if pd.notna(row.get(col)):
                 concept = OBSERVATION_CONCEPTS.get(col, {})
-                # Units come from concept_maps/observations.csv — they are per-field.
-                # (SLEEP is hours; SLEEPDAY and WALKING are minutes.)
+                # Units are per-field and come from concept_maps/observations.csv:
+                # SLEEP is hours, SLEEPDAY and WALKING are minutes.
                 unit_concept_id = concept.get('unit_concept_id', 0)
                 unit_source_value = concept.get('unit')
                 observations.append(build_observation_record(
@@ -75,16 +75,12 @@ def create_observation_lifestyle(
 
 
 def _with_visit_dates(df, person_df, date_anchor_df, visit_occurrence_df, label):
-    """Merge person + date anchor + visit, keeping only rows with a real visit date.
+    """Merge person, date anchor and visit, keeping only rows with a visit date.
 
-    observation_date is NOT NULL in OMOP CDM, and most of these source files carry no
-    date column of their own — only VISCODE. These modules previously substituted
-    synthetic_consent_date, which collapsed every repeated assessment onto a single day
-    per person (64.9% of the OBSERVATION table) and made repeated rows byte-identical.
-
-    The real date comes from visit_occurrence, which is built from SV: (BID, VISCODE)
-    resolves for 99.7-100% of rows and every SV visit carries a date. Rows that do not
-    resolve are dropped and counted rather than given a fabricated date.
+    Most of these source files carry no date column of their own, only VISCODE, so the
+    assessment date comes from visit_occurrence via (BID, VISCODE). observation_date is
+    NOT NULL in OMOP CDM; rows whose visit cannot be resolved are dropped and counted
+    rather than given a substitute date.
     """
     merged = prepare_source_df(df, person_df, date_anchor_df, visit_occurrence_df,
                                visit_extra_cols=['visit_start_date'])
@@ -106,7 +102,7 @@ def create_observation_family_history(
     """
     Create OMOP OBSERVATION records from family history files.
 
-    Sources: famhxpar.csv (parents), famhxsib.csv (siblings) | Date: synthetic_consent_date
+    Sources: famhxpar.csv (parents), famhxsib.csv (siblings) | Date: visit_start_date
 
     Field Mappings (concept_maps/observations.csv, group=family_history):
         All use concept_id 4167217 (Family history of clinical finding)
@@ -121,7 +117,7 @@ def create_observation_family_history(
 
     for _, row in fampar.iterrows():
         # Mother
-        if row.get('MOTHER') in (0, 1):  # clinical_datadic: 1=Yes; 0=No
+        if row.get('MOTHER') in (0, 1):  # 1=Yes, 0=No
             concept = OBSERVATION_CONCEPTS['FAMHX_MOTHER']
             observations.append(build_observation_record(
                 person_id=row['person_id'],
@@ -134,7 +130,7 @@ def create_observation_family_history(
                 observation_source_value='FAMHX:MOTHER',
             ))
         # Father
-        if row.get('FATHER') in (0, 1):  # clinical_datadic: 1=Yes; 0=No
+        if row.get('FATHER') in (0, 1):  # 1=Yes, 0=No
             concept = OBSERVATION_CONCEPTS['FAMHX_FATHER']
             observations.append(build_observation_record(
                 person_id=row['person_id'],
@@ -155,7 +151,7 @@ def create_observation_family_history(
 
     concept = OBSERVATION_CONCEPTS['FAMHX_SIBLING']
     for _, row in famsib.iterrows():
-        # SIBDEMENT: clinical_datadic: 1=Yes; 0=No
+        # SIBDEMENT: 1=Yes, 0=No
         if row.get('SIBDEMENT') in (0, 1):
             observations.append(build_observation_record(
                 person_id=row['person_id'],
@@ -273,7 +269,7 @@ def create_observation_cssrs(
     Create OMOP OBSERVATION records from C-SSRS files (full detail).
 
     Sources: cssrs.csv (current visit), cssrslv.csv (lifetime)
-    Date: visit-linked (current) or synthetic_consent_date (lifetime)
+    Date: visit_start_date
 
     Field Mappings (concept_maps/cssrs.csv, 30 entries):
         Ideation: WISHLIFE, ACTLIFE, METHOD, INTENT, PLAN
@@ -337,14 +333,13 @@ def create_observation_cssrs(
                     count += 1
         return count
 
-    # cssrs.csv is the baseline form (VISCODE=1) whose items are LIFETIME (WISHLIFE,
-    # SEVLIFE, ...); cssrslv.csv is the follow-up form covering the interval SINCE THE
-    # LAST VISIT (WISHLV, SEVLV, ...). The labels were previously inverted.
+    # cssrs.csv is the baseline form (VISCODE=1) and its items ask about the lifetime
+    # (WISHLIFE, SEVLIFE, ...). cssrslv.csv is the follow-up form and covers the interval
+    # since the last visit (WISHLV, SEVLV, ...).
     #
-    # qualifier_concept_id is left NULL: no valid OMOP qualifier concept exists for these
-    # recall windows — LOINC encodes the window in the concept itself (...Lifetime /
-    # ...1 month), and there is no "since last visit" concept at all. The two forms still
-    # share concept_ids; separating them is a concept-mapping change tracked separately.
+    # qualifier_concept_id is left NULL: OMOP has no qualifier concept for these recall
+    # windows. LOINC encodes the window in the concept itself (...Lifetime, ...1 month)
+    # and has no "since last visit" concept, so the two forms still share concept_ids.
     lifetime_count = process_cssrs(cssrs_df, 'CSSRS|Baseline', cssrs_items,
                                    qualifier_concept_id=None, qualifier_label='Lifetime')
     interval_count = process_cssrs(cssrslv_df, 'CSSRSLV|SinceLastVisit', cssrslv_items, col_map=CSSRSLV_COLUMN_MAP,
@@ -366,7 +361,7 @@ def create_observation_study_partner(
     """
     Create OMOP OBSERVATION records from study partner information.
 
-    Source: spinfo.csv | Date: synthetic_consent_date
+    Source: spinfo.csv | Date: visit_start_date
 
     Field Mappings (concept_maps/observations.csv, group=study_partner):
         RELATIONSHIP  -> Study Partner Relationship (2100000080)

@@ -8,10 +8,10 @@ cm,8582,
 mL,8587,
 msec,8588,
 mmol/L,8753,
-GI/L,9444,billion per liter (10^9/L) — used for WBC, neutrophils, lymphocytes, etc.
+GI/L,9444,"billion per liter (10^9/L) — used for WBC,  neutrophils,  lymphocytes,  etc."
 U/L,8645,
 umol/L,8749,
-g/L,8636,gram per liter. Was 8713 which is gram per DECILITER - a 10x error affecting albumin/total protein/haemoglobin/MCHC/haptoglobin
+g/L,8636,gram per liter; distinct from g/dL (8713)
 pg/mL,8845,
 ng/L,8725,
 ratio,8523,
@@ -39,7 +39,7 @@ NO UNITS,0,Non-standard unit
 B/M,8541,beats per minute (ECG heart rate)
 count,8510,Counts per period
 binary,0,Non-standard unit
-hours,8505,hours (SLEEPDAY, EMPHRS, VOLHRS)
+hours,8505,"hours (SLEEPDAY,  EMPHRS,  VOLHRS)"
 hours/week,8505,hours per week (SPINFO contact hours)
 nights,8510,count of overnight stays
 kg/m2,9531,kilogram per square meter (UCUM; BMIBL baseline body mass index)

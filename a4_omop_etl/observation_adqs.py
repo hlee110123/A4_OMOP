@@ -10,7 +10,7 @@ Treatment dates removed — derivable from drug_exposure table.
 Baseline demographics sourced from SUBJINFO (one row per subject):
   EDCCNTU (years of education) -> OBSERVATION, value_as_number
   BMIBL   (baseline BMI)       -> MEASUREMENT, value_as_number
-Both reviewer-confirmed in Derived Dict mapping.xlsx; see concept_maps/adqs.csv.
+See concept_maps/adqs.csv for the concept mappings.
 """
 
 import pandas as pd

@@ -5,9 +5,9 @@ SUVR_TAU,2100000032,Tau PET SUVR,ratio,core,
 MCH,2100000070,Microhemorrhage Count,count,extended,
 LOBAR,2100000075,Lobar Microhemorrhage,binary,extended,
 DEEP,2100000076,Deep Microhemorrhage,binary,extended,
-WMH_VOL,2100000071,White Matter Hyperintensity Volume,mL,extended,Source is cubic mm; ETL converts to mL
-WMH_CORRECTED,2100000072,WMH volume normalized to ICV 1300,mm3_per_ICV1300,extended,NOT a percentage: (WMHvol_masked/ICV)*1300 per external_datadic. True % of ICV = value / 13
-ICV,2100000077,Intracranial Volume,mL,extended,Source is cubic mm; ETL converts to mL
+WMH_VOL,2100000071,White Matter Hyperintensity Volume,mL,extended,Source is cubic mm; converted to mL
+WMH_CORRECTED,2100000072,WMH volume normalized to ICV 1300,mm3_per_ICV1300,extended,Not a percentage: computed as (WMHvol_masked/ICV)*1300. Percentage of ICV is value/13
+ICV,2100000077,Intracranial Volume,mL,extended,Source is cubic mm; converted to mL
 RETINAL_AI,2100000073,Retinal AI Score,score,extended,
 PET_VA_SUVR,2100000074,PET Visual Assessment SUVR,ratio,extended,
 TAU_PETSURFER,2100000078,Tau PET SUVR PetSurfer,SUVR,extended,

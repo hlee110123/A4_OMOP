@@ -17,4 +17,4 @@ NF-L ,3966310,Neurofilament light chain [Mass/volume] in Serum or Plasma by Immu
 TPP181,1259491,Phosphorylated tau 181 [Mass/volume] in Plasma by Immunoassay,pg/mL,LOINC 103675-5 (Roche LBTESTCD)
 AMYLB40,2100000011,Total Plasma Abeta-40,pg/mL,Roche LBTESTCD alias (same concept as TP40)
 AMYLB42,2100000012,Total Plasma Abeta-42,pg/mL,Roche LBTESTCD alias (same concept as TP42)
-APOE4,3007675,Apolipoprotein E [Mass/volume] in Serum or Plasma,ug/mL,LOINC 1886-1. Roche plasma ApoE PROTEIN concentration (LBMTDL='Plasma Apo'; UG/ML; electrochemiluminescence immunoassay) - NOT the APOE genotype. Genotype calls come from clrm_lab CLT1878 and map to 3029139
+APOE4,3007675,Apolipoprotein E [Mass/volume] in Serum or Plasma,ug/mL,LOINC 1886-1. Roche plasma ApoE protein concentration by electrochemiluminescence immunoassay. Genotype calls are separate: clrm_lab CLT1878 maps to 3029139

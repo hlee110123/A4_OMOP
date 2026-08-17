@@ -14,7 +14,7 @@ def create_measurement_cogstate(
     Create OMOP MEASUREMENT records from COGSTATE_COMPUTERIZED.csv.
 
     Source: cogstate.csv | Filter: VALUE not null | Date: visit_start_date
-    Visit linking: AVISIT -> VISCODE custom mapping
+    Visit linking: VISIT -> visit_occurrence
 
     Field Mappings (concept_maps/cogstate.csv, group=test,composite):
         DET, IDN, ONB, OCL, CPAL, LNS, FNMT, FNLT, FSBT, BPXT -> individual tests
@@ -29,10 +29,8 @@ def create_measurement_cogstate(
     cogstate_filtered = cogstate_df[cogstate_df['VALUE'].notna()].copy()
     print(f"  CogState: {len(cogstate_df)} total -> {len(cogstate_filtered)} with valid VALUE")
 
-    # VISIT is the numeric visit code. This replaces an AVISIT->VISCODE lookup keyed on
-    # visit *names* ('Screening 1', 'Baseline', ...) which never matched a single row,
-    # because AVISIT is int64 in the delivered data. The failure was silent: unmatched
-    # rows fell back to '000', a visit_source_value that exists in no visit_occurrence.
+    # VISIT holds the numeric visit code and links to visit_occurrence directly.
+    # AVISIT is also numeric here, not a visit name.
     cogstate_filtered = cogstate_filtered.copy()
     cogstate_filtered['VISCODE'] = cogstate_filtered['VISIT']
     cogstate_merged = prepare_source_df(
@@ -42,7 +40,7 @@ def create_measurement_cogstate(
     linked = cogstate_merged['visit_occurrence_id'].notna().mean()
     print(f"  CogState visit linkage: {linked:.2%}")
     if linked < 0.90:
-        print(f"  WARNING: CogState visit linkage only {linked:.1%} — check VISIT codes")
+        print(f"  WARNING: CogState visit linkage only {linked:.1%}; check VISIT codes")
 
     # Calculate test date
     cogstate_merged['measurement_date'] = cogstate_merged.apply(

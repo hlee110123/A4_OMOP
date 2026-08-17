@@ -38,16 +38,9 @@ def expand_observation_periods(
 ) -> pd.DataFrame:
     """Widen observation_period to cover every clinical event.
 
-    event_tables is a list of (dataframe, date_column) pairs and must include ALL
-    event tables. Previously only measurement/observation/drug_exposure were
-    considered, so visits, procedures and conditions could fall outside; and only
-    the END was expanded, so screening events (which run to 174 days BEFORE consent)
-    fell before the start.
-
-    Dates are compared as datetimes. The previous implementation coerced everything
-    with str() and compared lexicographically, then assigned the winning *string*
-    back into a datetime column — correct only because every producer happened to
-    emit a Timestamp, whose str() form sorts correctly.
+    event_tables is a list of (dataframe, date_column) pairs and must cover all event
+    tables. Both bounds are widened: screening events can precede consent, so the start
+    moves as well as the end.
     """
     print("\n--- Expanding Observation Periods ---")
     op = observation_period.copy()

@@ -96,12 +96,9 @@ def drop_undated(df, date_col: str, id_column: str, label: str,
     """Drop rows with no resolvable date and report what was lost, by source.
 
     The date columns of MEASUREMENT, OBSERVATION and DRUG_EXPOSURE are NOT NULL in
-    OMOP CDM v5.4, so an undated row cannot be loaded. Emitting NULL produced a table
-    that silently failed to load; substituting a placeholder date would be worse, since
-    a fabricated date survives every downstream sanity check. Dropping and counting is
-    the honest option.
-
-    IDs are reassigned afterwards so the surrogate key stays contiguous.
+    OMOP CDM v5.4, so an undated row cannot be loaded. A substituted placeholder
+    date would pass downstream checks while being wrong, so rows are dropped and
+    counted instead. IDs are reassigned afterwards to keep the key contiguous.
     """
     if len(df) == 0 or date_col not in df.columns:
         return df

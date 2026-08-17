@@ -43,9 +43,8 @@ def create_phyneuro_observations_and_measurements(
     """
     PHYNEURO_CONCEPTS = concepts.load_condition_concepts()
 
-    # DONE is only populated at follow-up visits; at screening (VISCODE=1) the CRF
-    # omits it entirely. Treat missing as done — verified: those 5,695 rows carry a
-    # median 16/16 exam fields, while DONE==0 rows carry none.
+    # DONE is only recorded at follow-up visits; at screening it is absent, so a
+    # missing value means the exam was done.
     phyneuro_filtered = phyneuro_df[phyneuro_df['DONE'].fillna(1) == 1].copy()
     print(f"  Phyneuro: {len(phyneuro_df)} total -> {len(phyneuro_filtered)} (DONE=1 or missing)")
 

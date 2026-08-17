@@ -20,9 +20,8 @@ from . import concepts
 IMAGE_FINDING_CONCEPTS = concepts.load_image_finding_concepts()
 IMAGE_FEATURE_TYPE_CONCEPTS = concepts.load_image_feature_type_concepts()
 
-# OMOP concept_id for the measurement.measurement_id FIELD (concept_class_id='Field').
-# 1147330 is the *table* concept 'measurement' (concept_class_id='Table'); it does not
-# identify a column, which breaks the MI-CDM polymorphic join for generic consumers.
+# measurement.measurement_id, concept_class_id='Field'. The MI-CDM polymorphic join
+# needs the field concept: the table concept 'measurement' does not identify a column.
 _MEASUREMENT_FIELD_CONCEPT_ID = 1147138
 
 # Maps _mi_cdm_pipeline annotation → alg_system URN
