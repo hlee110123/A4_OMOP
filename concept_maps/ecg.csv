@@ -1,0 +1,6 @@
+source_code,concept_id,concept_name,unit,notes
+RATE,3027018,Heart rate,beats/min,LOINC standard
+QT,4116637,QT interval duration,ms,SNOMED standard
+QRS,3022022,QRS duration,ms,LOINC standard
+PR,4092020,PR interval duration,ms,SNOMED standard
+RR,3013078,R-R interval by EKG,ms,LOINC standard

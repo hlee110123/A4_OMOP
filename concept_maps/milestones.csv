@@ -1,0 +1,16 @@
+source_code,concept_id,concept_name,notes
+INFORMED CONSENT OBTAINED,3018196,Informed consent obtained,LOINC standard
+RANDOMIZED,2000000010,Study randomization,Custom concept
+COMPLETED,2000000011,Study completion,Custom concept
+SCREEN FAILURE,2000000012,Screen failure,Custom concept
+WITHDRAWAL BY SUBJECT,2000000013,Withdrawal by subject,Custom concept
+STUDY TERMINATED BY SPONSOR,2000000014,Study termination by sponsor,Custom concept
+ADVERSE EVENT,2000000015,Discontinuation due to adverse event,Custom concept
+DEATH,4306655,Death,SNOMED standard
+LOST TO FOLLOW UP,2000000016,Lost to follow-up,Custom concept
+OTHER,2000000017,Discontinuation for other reason,Custom concept
+WITHDRAWAL BY PARENT/GUARDIAN,2000000018,Withdrawal by parent/guardian,Custom concept
+LACK OF EFFICACY,2000000019,Discontinuation due to lack of efficacy,Custom concept
+SAFETY RISK,2000000020,Discontinuation due to safety risk,Custom concept
+PHYSICIAN DECISION,2000000021,Discontinuation by physician decision,Custom concept
+PROTOCOL DEVIATION,2000000022,Discontinuation due to protocol deviation,Custom concept

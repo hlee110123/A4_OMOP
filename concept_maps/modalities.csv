@@ -1,0 +1,4 @@
+source_code,concept_id,concept_name,domain,notes
+MR,2128009230,Magnetic resonance,Imaging Modality,DICOM vocabulary (DICOM2OMOP standard per Park & Jeon et al. 2024)
+PT,2128009252,Positron emission tomography,Imaging Modality,DICOM vocabulary (DICOM2OMOP standard per Park & Jeon et al. 2024)
+OP,2128009239,Ophthalmic photography,Imaging Modality,DICOM vocabulary (DICOM2OMOP standard per Park & Jeon et al. 2024)

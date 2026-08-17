@@ -1,0 +1,7 @@
+source_code,concept_id,concept_name,notes
+screening,9202,Outpatient Visit,Screening visits (001-005)
+baseline,9202,Outpatient Visit,Baseline/randomization visit (006)
+infusion,9202,Outpatient Visit,Infusion day visits (outpatient)
+clinic,9202,Outpatient Visit,Clinic follow-up visits
+unscheduled,9202,Outpatient Visit,Unscheduled visits (701-705)
+default,9202,Outpatient Visit,Default for unmapped visit types

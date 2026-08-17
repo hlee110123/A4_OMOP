@@ -1,0 +1,98 @@
+# Data files (contain patient/subject data - DO NOT UPLOAD)
+Raw Data/
+Derived Data/
+External Data/
+OMOP_Output/
+
+# OMOP vocabulary files (large; downloaded from Athena - do not commit)
+CONCEPT.csv
+VOCABULARY.csv
+CONCEPT_RELATIONSHIP.csv
+CONCEPT_ANCESTOR.csv
+CONCEPT_SYNONYM.csv
+CONCEPT_CLASS.csv
+CONCEPT_CPT4.csv
+DOMAIN.csv
+RELATIONSHIP.csv
+DRUG_STRENGTH.csv
+
+# Excel data files
+Clinical dict mapping.xlsx
+A4_DataStructure_012326.xlsx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+a4_omop_etl.py
+CLAUDE.md
+custom_concepts_needed.csv
+standard_concepts_reference.csv
+.code-graph/code-graph.db
+.playwright-mcp/page-2026-02-02T22-38-05-227Z.png
+Documents/Data Dictionaries/clinical_datadic.csv
+Documents/Data Dictionaries/derived_datadic.csv
+Documents/Data Dictionaries/external_datadic.csv
+Documents/Data Dictionaries/visits_datadic.csv
+Documents/FAQ + Guides/a4_learn_data_faq.pdf
+Documents/FAQ + Guides/a4_learn_data_primer.pdf
+Documents/FAQ + Guides/a4_learn_data_primer.Rmd
+Documents/FAQ + Guides/Intro-to-A4-data.pdf
+Documents/FAQ + Guides/Intro-to-A4-data.Rmd
+Documents/Methods/biomarker_assay_methods.pdf
+Documents/Methods/clrm_methods.pdf
+Documents/Methods/cogstate_methods.pdf
+Documents/Methods/imaging_FLAIR_WMH_QC_methods.pdf
+Documents/Methods/imaging_MRI_reads_methods.pdf
+Documents/Methods/imaging_PET_VA_methods.pdf
+Documents/Methods/imaging_retinal_methods.pdf
+Documents/Methods/imaging_SUVR_methods.pdf
+Documents/Methods/imaging_Tau_PET_methods.pdf
+Documents/Methods/imaging_volumetric_MRI_methods.pdf
+OMOP_Output_backup/condition_occurrence.csv
+OMOP_Output_backup/date_anchor.csv
+OMOP_Output_backup/drug_exposure.csv
+OMOP_Output_backup/measurement.csv
+OMOP_Output_backup/observation_period.csv
+OMOP_Output_backup/observation.csv
+OMOP_Output_backup/person.csv
+OMOP_Output_backup/visit_occurrence.csv
+R Package/A4LEARN_1.0.20241030.tar.gz
+R Package/A4LEARN_1.1.20250808.tar.gz
+
+# ETL validity/accuracy audit output — analysis artifacts, not used by the ETL
+docs/ETL_Audit_2026-07.md
+docs/audit_artifacts/
+
+# Database credentials — never commit
+.env
+.env.local
+
+# AHEAD 3-45 material — separate study, not part of the A4 ETL
+docs/A4_AHEAD_Field_Crosswalk.md
+Dataset.zip
+Dataset_extracted/
+OMOP_Output.zip
+
+# Local-only: history backup, licensed papers, reviewer working files
+.git-history-backup/
+papers/
+mappings/
+reviewer_mappings/

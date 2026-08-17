@@ -1,0 +1,17 @@
+source_code,concept_id,concept_name,group,unit,unit_concept_id,notes
+SMOKE,43054909,Tobacco smoking status,lifestyle,packs/day,0,SNOMED standard. CRF asks packs per day; no UCUM count-per-day concept exists so unit_concept_id is 0 with a descriptive source unit
+ALCOHOL,44786671,Alcoholic drinks per day,lifestyle,drinks/day,0,LOINC from reviewer mapping (replaced SNOMED 4238768). No UCUM count-per-day concept
+CAFFEINE,40767275,Caffeinated beverages per day,lifestyle,cups/day,0,LOINC/PhenX from reviewer mapping (replaced SNOMED 37153131). No UCUM count-per-day concept
+AEROBIC,4312325,Active physical exercise,lifestyle,hours/week,0,SNOMED standard. CRF asks hours PER WEEK; no UCUM hour-per-week concept exists
+WALKING,2100000300,Walking exercise frequency,lifestyle,minute,8550,Custom (no standard SNOMED/LOINC equivalent). CRF asks minutes of walking per day
+SLEEP,40768255,Sleep duration,lifestyle,hour,8505,LOINC standard. CRF asks hours slept at night
+SLEEPDAY,40768262,Daytime nap duration,lifestyle,minute,8550,LOINC from reviewer mapping. CRF asks MINUTES napped during the day (0-360) - previously emitted as hours
+SUBUSE,37162238,Substance use behavior,lifestyle,,,SNOMED from reviewer mapping. Yes/No response - no unit
+FAMHX_MOTHER,2100000210,Family history - Mother,family_history,,,Custom concept per reviewer triage (replaced generic SNOMED 4167217)
+FAMHX_FATHER,2100000211,Family history - Father,family_history,,,Custom concept per reviewer triage (replaced generic SNOMED 4167217)
+FAMHX_SIBLING,2100000212,Family history - Sibling,family_history,,,Custom concept per reviewer triage (replaced generic SNOMED 4167217)
+RELATIONSHIP,2100000080,Study Partner Relationship,study_partner,,,
+CONTACT_HRS,2100000081,Study Partner Contact Hours,measurement,,,Moved to measurement (numeric hours/week)
+COHABITATION,2100000082,Study Partner Cohabitation,study_partner,,,
+SP_AGE,2100000083,Study Partner Age,study_partner,,,
+SP_GENDER,2100000084,Study Partner Gender,study_partner,,,

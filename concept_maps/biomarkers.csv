@@ -1,0 +1,20 @@
+source_code,concept_id,concept_name,unit,notes
+TP40,2100000011,Total Plasma Abeta-40,pg/mL,Custom (research-specific assay; no LOINC for free/bound/total form distinction)
+TP42,2100000012,Total Plasma Abeta-42,pg/mL,Custom (research-specific assay)
+BP40,2100000013,Bound Plasma Abeta-40,pg/mL,Custom (research-specific assay)
+BP42,2100000014,Bound Plasma Abeta-42,pg/mL,Custom (research-specific assay)
+FP40,2100000015,Free Plasma Abeta-40,pg/mL,Custom (research-specific assay)
+FP42,2100000016,Free Plasma Abeta-42,pg/mL,Custom (research-specific assay)
+TP42/TP40,2100000010,Amyloid-beta 42/40 Ratio,ratio,Custom (computed ratio)
+FP40/TP40,2100000510,Free/Total Plasma Abeta-40 Ratio,ratio,Custom (computed ratio)
+FP42/FP40,2100000511,Free Plasma Abeta-42/40 Ratio,ratio,Custom (computed ratio)
+FP42/TP42,2100000512,Free/Total Plasma Abeta-42 Ratio,ratio,Custom (computed ratio)
+PTAU217,1092155,Tau protein.phosphorylated 217 [Mass/volume] in Serum or Plasma by Immunoassay,U/mL,LOINC 104663-0
+GFAP,1761505,Glial fibrillary acidic protein [Mass/volume] in Serum by Immunoassay,pg/mL,LOINC 100435-7
+GFAP ,1761505,Glial fibrillary acidic protein [Mass/volume] in Serum by Immunoassay,pg/mL,Trailing-space variant from source LBTESTCD
+NFL,3966310,Neurofilament light chain [Mass/volume] in Serum or Plasma by Immunoassay,pg/mL,LOINC 101281-4
+NF-L ,3966310,Neurofilament light chain [Mass/volume] in Serum or Plasma by Immunoassay,pg/mL,Trailing-space alias from source LBTESTCD
+TPP181,1259491,Phosphorylated tau 181 [Mass/volume] in Plasma by Immunoassay,pg/mL,LOINC 103675-5 (Roche LBTESTCD)
+AMYLB40,2100000011,Total Plasma Abeta-40,pg/mL,Roche LBTESTCD alias (same concept as TP40)
+AMYLB42,2100000012,Total Plasma Abeta-42,pg/mL,Roche LBTESTCD alias (same concept as TP42)
+APOE4,3007675,Apolipoprotein E [Mass/volume] in Serum or Plasma,ug/mL,LOINC 1886-1. Roche plasma ApoE PROTEIN concentration (LBMTDL='Plasma Apo'; UG/ML; electrochemiluminescence immunoassay) - NOT the APOE genotype. Genotype calls come from clrm_lab CLT1878 and map to 3029139

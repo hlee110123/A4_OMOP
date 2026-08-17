@@ -1,0 +1,8 @@
+source_code,concept_id,concept_name,unit,unit_concept_id,notes
+STDWT,3025315,Body weight,kg,9529,
+STDHT,3036277,Body height,cm,8582,
+VSBPSYS,3004249,Systolic BP,mmHg,8876,
+VSBPDIA,3012888,Diastolic BP,mmHg,8876,
+VSPULSE,3027018,Heart rate,beats/min,8541,
+VSRESP,3024171,Respiratory rate,breaths/min,8541,
+STDTEMP,3020891,Body temperature,Cel,586323,

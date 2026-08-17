@@ -1,0 +1,5 @@
+source_code,concept_id,concept_name,domain,notes
+MRI_BRAIN,37311324,MRI of brain,Procedure,SNOMED 816077007
+PET_AMYLOID,36304731,PET+CT Brain for amyloidosis,Procedure,LOINC 87907-2
+PET_TAU,37021253,PET+CT Brain for tau protein,Procedure,LOINC 92927-3
+RETINAL_IMAGING,4063911,Ocular fundus photography,Procedure,SNOMED 20067007

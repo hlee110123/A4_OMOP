@@ -1,0 +1,3 @@
+source_code,concept_id,concept_name,domain,notes
+derived,32880,Derived value,Type Concept,Algorithm-derived measurement
+ehr,32817,EHR,Type Concept,Direct clinical observation

@@ -1,0 +1,100 @@
+source_code,concept_id,concept_name,unit,group,notes
+GDTOTAL,3051694,Geriatric depression scale (GDS) total,score,measurement,LOINC standard - moved from observation to measurement (numeric score)
+GDSATIS,3048479,Are you basically satisfied with your life [GDS],score,primary,LOINC standard from GDS panel
+GDDROP,3049765,Have you dropped many of your activities and interests [GDS],score,primary,LOINC standard from GDS panel
+GDEMPTY,3052362,Do you feel that your life is empty [GDS],score,primary,LOINC standard from GDS panel
+GDBORED,3048797,Do you often get bored [GDS],score,primary,LOINC standard from GDS panel
+GDSPIRIT,3049130,Are you in good spirits most of the time [GDS],score,primary,LOINC standard from GDS panel
+GDAFRAID,3052621,Are you afraid that something bad is going to happen to you [GDS],score,primary,LOINC standard from GDS panel
+GDHAPPY,3048472,Do you feel happy most of the time [GDS],score,primary,LOINC standard from GDS panel
+GDHELP,3051362,Do you often feel helpless [GDS],score,primary,LOINC standard from GDS panel
+GDHOME,3049156,Do you prefer to stay at home rather than going out [GDS],score,primary,LOINC standard from GDS panel
+GDMEMORY,3052630,Do you feel you have more problems with memory than most [GDS],score,primary,LOINC standard from GDS panel
+GDALIVE,3051716,Do you think its wonderful to be alive now [GDS],score,primary,LOINC standard from GDS panel
+GDWORTH,3051419,Do you feel pretty worthless the way you are now [GDS],score,primary,LOINC standard from GDS panel
+GDENERGY,3050101,Do you feel full of energy [GDS],score,primary,LOINC standard from GDS panel
+GDHOPE,3048841,Do you feel that your situation is hopeless [GDS],score,primary,LOINC standard from GDS panel
+GDBETTER,3053256,Do you think that most people are better off than you are [GDS],score,primary,LOINC standard from GDS panel
+STAITOTAL,2100000060,STAI Total Score,score,measurement,Moved from observation to measurement (numeric score)
+ASSCORE,37525066,ADL01-Total ADCS-ADL Score,score,measurement,CDISC standard (replaced custom 2100000061 per reviewer mapping)
+AISCORE,2100000067,ADL-PQ Study Partner Total Score,score,measurement,Study partner informant score - moved to measurement
+CADDVLP,2100000062,AD Concern Development,score,primary,
+CADKNOW,2100000063,AD Concern Knowledge,score,primary,
+CADBLIEV,2100000064,AD Concern Belief,score,primary,
+CADWRST,2100000065,AD Concern Worry,score,primary,
+CADCNCRN,2100000066,AD Concern Total,score,primary,
+IESCORE,1761510,Total score [Impact of Event Scale-Revised],score,measurement,LOINC standard - moved from secondary observation to measurement
+IETHINK,1761742,Thought about adverse event unintentionally,,secondary,LOINC standard from IES-R panel
+IEAVOID,1761406,Avoided getting upset when unintentionally thought about adverse event,,secondary,LOINC standard from IES-R panel
+IEREMOVE,1761453,Tried to remove adverse event from memory,,secondary,LOINC standard from IES-R panel
+IESLEEP,1761776,Trouble falling asleep,,secondary,LOINC standard from IES-R panel
+IEWAVES,1761777,Waves of strong feelings about adverse event,,secondary,LOINC standard from IES-R panel
+IEDREAMS,1761687,Had dreams about adverse event,,secondary,LOINC standard from IES-R panel
+IEAWAY,1761804,Avoided reminders of adverse event,,secondary,LOINC standard from IES-R panel
+IEREAL,1761537,Felt as if adverse event did not happen,,secondary,LOINC standard from IES-R panel
+IETALK,1761343,Tried not to talk about adverse event,,secondary,LOINC standard from IES-R panel
+IEMIND,1761420,Experienced mental images of adverse event,,secondary,LOINC standard from IES-R panel
+IETHINGS,1761360,Other things triggered persistent thoughts about adverse event,,secondary,LOINC standard from IES-R panel
+IEDEAL,1761884,Aware of feelings about adverse event but did not address them,,secondary,LOINC standard from IES-R panel
+IENOTTHNK,1761403,Tried to not think of adverse event,,secondary,LOINC standard from IES-R panel
+IEREMIND,1761881,Reminders brought back feelings about adverse event,,secondary,LOINC standard from IES-R panel
+IENUMB,1761666,Feeling about adverse event were numb,,secondary,LOINC standard from IES-R panel
+FTP_METHOD,2100000201,Future Time Perspective Method,,secondary,
+RSS_QUALITY,2100000202,Research Satisfaction Quality,,secondary,
+RSS_RECOMMEND,2100000203,Research Satisfaction Recommend,,secondary,
+VIEWS_SEEK,2100000204,Views Seek Knowledge,,secondary,
+RUIB_ADMIT,2100000205,Resource Use Hospital Admission,,secondary,
+RUIB_VOLUNTEER,4074926,Does voluntary work,,secondary,SNOMED standard from reviewer mapping (replaced custom 2100000206)
+RUIB_EMPLOY,4235700,In paid employment,,secondary,SNOMED standard from reviewer mapping (replaced custom 2100000207)
+RUIB1_NIGHTS,2100000208,Hospital Overnight Stay Nights,nights,measurement,Moved to measurement (numeric count)
+RUIB1_TYPE,2100000209,Hospital Stay Type,,secondary,
+ASCBOOK,4268404,ADL-PQ Manage Finances,,adlpq_item,SNOMED from reviewer mapping
+ASTRAVL,37539747,ADL-PQ Drive Car,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASAPPLI,37539138,ADL-PQ Use Household Appliance,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASLAUN,37534726,ADL-PQ Clean Laundry,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASPAY,2100000213,ADL-PQ Pay Bills,,adlpq_item,Custom concept (not in reviewer spreadsheet)
+ASSNACK,37541473,ADL-PQ Make a Meal,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASTIMES,2100000214,ADL-PQ Keep Appointments,,adlpq_item,Custom concept (not in reviewer spreadsheet)
+ASFIND,37537935,ADL-PQ Find Personal Belongings,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASWDOWN,2100000215,ADL-PQ Write Down Messages,,adlpq_item,Custom concept (not in reviewer spreadsheet)
+ASMOVIE,2100000216,ADL-PQ Follow Movie Plot,,adlpq_item,Custom concept (not in reviewer spreadsheet)
+ASCEVNT,37541905,ADL-PQ Talk About Current Events,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASPHONE,37522529,ADL-PQ Telephone Use,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASMEDS,37524736,ADL-PQ Take Medications Regularly,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASPLAN,37534530,ADL-PQ Initiate Complex Activities,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASCOMPL,37540569,ADL-PQ Complete Complex Activities,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASCELL,37532760,ADL-PQ Use Cell Phone,,adlpq_item,CDISC ADL01 from reviewer mapping
+ASCELLUSE,37542292,ADL-PQ Cell Phone Use Level,,adlpq_item,CDISC ADL03 from reviewer mapping
+ASCALL,36309019,ADL-PQ Make Phone Calls,,adlpq_item,LOINC from reviewer mapping
+ASTEXT,37079157,ADL-PQ Text Messaging,,adlpq_item,LOINC from reviewer mapping
+EMPHRS,44786817,Work hours per week (employment),,secondary,LOINC from reviewer mapping
+VOLHRS,44786817,Work hours per week (volunteer),,secondary,LOINC from reviewer mapping
+FTOPPS,2100000217,FTP Opportunities,,secondary,Custom - teal instrument
+FTGOAL,2100000218,FTP Goals,,secondary,Custom - teal instrument
+FTPOSSBL,2100000219,FTP Possibilities,,secondary,Custom - teal instrument
+FTLIFE,2100000220,FTP Life Ahead,,secondary,Custom - teal instrument
+FTINFINIT,2100000221,FTP Infinite Time,,secondary,Custom - teal instrument
+FTANYTHNG,2100000222,FTP Can Do Anything,,secondary,Custom - teal instrument
+FTNEW,2100000223,FTP New Things,,secondary,Custom - teal instrument
+FTRUNOUT,2100000224,FTP Running Out of Time,,secondary,Custom - teal instrument
+FTLIMIT,2100000225,FTP Limited Possibilities,,secondary,Custom - teal instrument
+FTGETOLD,2100000226,FTP Getting Old,,secondary,Custom - teal instrument
+RSSCOMP,2100000227,RSS Comprehension,,secondary,Custom - teal instrument
+RSSEXPECT,2100000228,RSS Met Expectations,,secondary,Custom - teal instrument
+RSSREDO,2100000229,RSS Would Redo,,secondary,Custom - teal instrument
+RSSBEST,2100000230,RSS Best Part,,secondary,Custom - teal instrument
+RSSLEAST,2100000231,RSS Least Liked,,secondary,Custom - teal instrument
+RSSMED,2100000232,RSS Medical Care,,secondary,Custom - teal instrument
+RSSTST,4322976,RSS Testing Procedure,,secondary,SNOMED from reviewer mapping
+RSSVIS,2100000233,RSS Visit Experience,,secondary,Custom - teal instrument
+RSSOTH,2100000234,RSS Other Comments,,secondary,Custom - teal instrument
+RSSIPAD,2100000235,RSS iPad Experience,,secondary,Custom - teal instrument
+VEASE,2100000236,Views Ease of Decision,,secondary,Custom - teal instrument
+VRISK,2100000237,Views Risk Perception,,secondary,Custom - teal instrument
+VPART,2100000238,Views Participation Value,,secondary,Custom - teal instrument
+VCNTRB,2100000239,Views Contribution,,secondary,Custom - teal instrument
+VAFFAIR,2100000240,Views Personal Affairs,,secondary,Custom - teal instrument
+VCNFRM,2100000241,Views Confirmation Value,,secondary,Custom - teal instrument
+VPREP,2100000242,Views Preparedness,,secondary,Custom - teal instrument
+VCURIOUS,2100000243,Views Curiosity,,secondary,Custom - teal instrument
+VOTHER,2100000244,Views Other Reasons,,secondary,Custom - teal instrument

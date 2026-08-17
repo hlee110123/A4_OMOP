@@ -1,0 +1,13 @@
+category,source_code,concept_id,concept_name,notes
+gender,1,8532,Female,SUBJINFO: SEX=1
+gender,2,8507,Male,SUBJINFO: SEX=2
+race,1,8527,White,
+race,2,8516,Black or African American,
+race,58,8515,Asian,
+race,79,8557,Native Hawaiian or Other Pacific Islander,
+race,84,8657,American Indian or Alaska Native,
+race,97,0,Unknown,
+race,100,0,More than one race,
+ethnicity,50,38003563,Hispanic or Latino,
+ethnicity,56,38003564,Not Hispanic or Latino,
+ethnicity,97,0,Unknown,

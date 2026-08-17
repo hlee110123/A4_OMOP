@@ -1,0 +1,45 @@
+unit_source_value,unit_concept_id,notes
+mmHg,8876,
+beats/min,8541,
+breaths/min,8483,
+Cel,586323,
+kg,9529,
+cm,8582,
+mL,8587,
+msec,8588,
+mmol/L,8753,
+GI/L,9444,billion per liter (10^9/L) — used for WBC, neutrophils, lymphocytes, etc.
+U/L,8645,
+umol/L,8749,
+g/L,8636,gram per liter. Was 8713 which is gram per DECILITER - a 10x error affecting albumin/total protein/haemoglobin/MCHC/haptoglobin
+pg/mL,8845,
+ng/L,8725,
+ratio,8523,
+%,8554,
+mg/dL,8840,
+mEq/L,9557,
+fL,8583,femtoliter
+pg,8564,picogram
+g/dL,8713,grams per deciliter
+mg/L,8751,
+ng/mL,8842,
+ug/mL,8859,micrograms per mL
+U/mL,8763,
+TI/L,8734,trillion per liter (10^12/L) — used for RBC count
+TITER,0,titer is a ratio - no standard unit
+sec,8555,seconds
+IU/mL,8985,international units per mL
+0,0,invalid unit source value
+score,0,Non-standard unit
+z-score,0,Non-standard unit
+SUVR,8523,Ratio (standardized uptake value ratio)
+log10(ms),0,Non-standard unit
+arcsine(sqrt(proportion)),0,Non-standard unit
+NO UNITS,0,Non-standard unit
+B/M,8541,beats per minute (ECG heart rate)
+count,8510,Counts per period
+binary,0,Non-standard unit
+hours,8505,hours (SLEEPDAY, EMPHRS, VOLHRS)
+hours/week,8505,hours per week (SPINFO contact hours)
+nights,8510,count of overnight stays
+kg/m2,9531,kilogram per square meter (UCUM; BMIBL baseline body mass index)

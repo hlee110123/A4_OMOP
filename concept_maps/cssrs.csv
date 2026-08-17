@@ -1,0 +1,30 @@
+source_code,concept_id,concept_name,category,notes
+WISHLIFE,1001715,Wish to be dead Lifetime,ideation,LOINC standard from C-SSRS panel
+ACTLIFE,1001533,Non-specific active suicidal thoughts Lifetime,ideation,LOINC standard from C-SSRS panel
+METHOD,1002307,Active suicidal ideation with any methods without intent Lifetime,ideation,LOINC standard from C-SSRS panel
+INTENT,1002212,Active suicidal ideation with some intent without plan Lifetime,ideation,LOINC standard from C-SSRS panel
+PLAN,1001538,Active suicidal ideation with specific plan and intent Lifetime,ideation,LOINC standard from C-SSRS panel
+ATTMPT,1002181,Actual suicide attempt Lifetime,attempt,LOINC standard from C-SSRS panel
+ATTMPT5,2100000106,C-SSRS Attempt Past 5 Years,attempt,custom - no standard equivalent
+ATTMPTN,1001884,Actual suicide attempts # Lifetime,attempt,LOINC standard from C-SSRS panel
+NONSUI,1002148,Non-suicidal self-injurious behavior Lifetime,self_injury,LOINC standard from C-SSRS panel
+NONSUI5,2100000111,C-SSRS NSSI Past 5 Years,self_injury,custom - no standard equivalent
+INTER,1001743,Interrupted suicide attempt Lifetime,behavior,LOINC standard from C-SSRS panel
+INTERN,1002459,Interrupted suicide attempts # Lifetime,behavior,LOINC standard from C-SSRS panel
+ABORT,1002340,Aborted or self-interrupted suicide attempt Lifetime,behavior,LOINC standard from C-SSRS panel
+ABORTN,1002016,Aborted or self-interrupted suicide attempts # Lifetime,behavior,LOINC standard from C-SSRS panel
+PREP,1002213,Preparatory acts or suicidal behavior Lifetime,behavior,LOINC standard from C-SSRS panel
+BEHAVLIF,2100000115,C-SSRS Suicidal Behavior Lifetime,behavior,custom composite - no standard equivalent
+SEVLIFE,1001656,Most severe suicidal ideation Lifetime,severity,LOINC standard from C-SSRS panel
+FREQLIF,1001804,Frequency of most severe suicidal ideation Lifetime,intensity,LOINC standard from C-SSRS panel
+DURATLIF,1001899,Duration of most severe suicidal ideation Lifetime,intensity,LOINC standard from C-SSRS panel
+CONTROLLIF,1002299,Controllability of most severe suicidal ideation Lifetime,intensity,LOINC standard from C-SSRS panel
+DETERLIF,1002010,Deterrents of most severe suicidal ideation Lifetime,intensity,LOINC standard from C-SSRS panel
+REASONLIF,1001750,Reasons for most severe suicidal ideation Lifetime,intensity,LOINC standard from C-SSRS panel
+RECENTDAM,1001783,Actual lethality/medical damage most recent suicide attempt,lethality,LOINC standard from C-SSRS panel
+RECENTPOT,1001955,Potential lethality most recent suicide attempt,lethality,LOINC standard from C-SSRS panel
+LETHALDAM,1001730,Actual lethality/medical damage most lethal suicide attempt Lifetime,lethality,LOINC standard from C-SSRS panel
+LETHALPOT,1002243,Potential lethality most lethal suicide attempt Lifetime,lethality,LOINC standard from C-SSRS panel
+FIRSTDAM,1001754,Actual lethality/medical damage initial/first suicide attempt,lethality,LOINC standard from C-SSRS panel
+FIRSTPOT,1001649,Potential lethality initial/first attempt,lethality,LOINC standard from C-SSRS panel
+SUICIDE,2100000119,C-SSRS Suicide Completion,outcome,custom - no standard equivalent

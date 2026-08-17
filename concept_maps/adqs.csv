@@ -1,0 +1,23 @@
+# ADQS-derived concepts: APOE genotype/carrier + treatment arm assignment
+source_code,concept_id,concept_name,domain,value_as_concept_id,notes
+# APOE genotype test (LOINC standard)
+APOEGN,3029139,APOE gene alleles e2 and e3 and e4 [Identifier] in Blood or Tissue by Molecular genetics method Nominal,Measurement,,LOINC 42315-2
+# APOE4 carrier flag (LOINC presence concept; binary Yes/No value)
+APOEGNPRSNFLG,3006041,Apolipoprotein E4 [Presence] in Blood,Measurement,,LOINC 15353-6
+APOE4_POSITIVE,4188539,APOE epsilon 4 allele,Measurement,,SNOMED concept for positive carrier (used as value_as_concept_id)
+APOE4_NEGATIVE,4188540,APOE epsilon 4 allele absence,Measurement,,SNOMED concept for negative carrier (used as value_as_concept_id)
+# Treatment arm assignment — TX is not derivable from drug_exposure because trial was blinded
+TX,2100000400,Treatment assignment,Observation,,Custom (study-specific)
+TX_PLACEBO,2100000401,Placebo treatment arm,Observation,,Custom (used as value_as_concept_id)
+TX_SOLANEZUMAB,2100000402,Solanezumab treatment arm,Observation,,Custom (used as value_as_concept_id)
+# APOE genotype value concepts (LOINC LA answer codes, used as value_as_concept_id paired with APOEGN test)
+E2E2,36307526,APOE e2/e2,Measurement,,LOINC LA21356-3
+E2E3,36310377,APOE e2/e3,Measurement,,LOINC LA21357-1
+E2E4,36308156,APOE e2/e4,Measurement,,LOINC LA21361-3
+E3E3,36309003,APOE e3/e3 (wild type),Measurement,,LOINC LA21358-9
+E3E4,36311054,APOE e3/e4,Measurement,,LOINC LA21359-7
+E4E4,36303222,APOE e4/e4,Measurement,,LOINC LA21360-5
+# Baseline subject-level demographics/anthropometry (sourced from SUBJINFO.csv, one row per subject; reviewer-confirmed in Derived Dict mapping.xlsx)
+EDCCNTU,1015298,Years of education,Observation,,LOINC (concept_id 1015298); value_as_number = years (range 0-36); reviewer-confirmed
+BMIBL,4245997,Body mass index,Measurement,,SNOMED standard; baseline BMI value_as_number (kg/m2, range 13.8-78.9); reviewer-confirmed
+WRKRET,44803812,Retirement,Observation,,SNOMED standard; retirement status — value_as_concept 1=Yes(4188539)/0=No(4188540)/96=Unknown(0); reviewer-confirmed

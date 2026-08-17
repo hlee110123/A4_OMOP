@@ -1,0 +1,8 @@
+source_code,concept_id,concept_name,domain,notes
+brain_volume,2100000093,Brain volumetric measurement,Image Finding,MRI FreeSurfer volumes
+amyloid_suvr,2100000094,Amyloid PET SUVR,Image Finding,Amyloid PET uptake ratio
+tau_suvr,2100000095,Tau PET SUVR,Image Finding,Tau PET uptake ratio
+mri_read,2100000096,MRI radiological read,Image Finding,Qualitative MRI assessment
+flair_volume,2100000097,FLAIR lesion volume,Image Finding,White matter hyperintensity
+retinal_measure,2100000098,Retinal imaging measurement,Image Finding,OCT/fundus metrics
+pet_visual_assessment,2100000099,PET visual assessment,Image Finding,Qualitative PET read

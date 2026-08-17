@@ -1,0 +1,18 @@
+source_code,concept_id,concept_name,group,notes
+PXHEADEY,4247371,Head finding,observation,SNOMED 406122000
+PXCARD,4103183,Cardiac finding,observation,SNOMED 301095005
+PXPULM,4024567,Respiratory finding,observation,SNOMED 106048009
+PXABDOM,43531058,Finding of abdomen,observation,SNOMED 609624008
+PXMUSCUL,135930,Musculoskeletal finding,observation,SNOMED 106028002
+PXEDEMA,4158343,Peripheral edema,observation,SNOMED 271809000
+PXSKIN,141960,Skin finding,observation,SNOMED 271807003
+PXOTHER,441840,Clinical finding,observation,SNOMED 404684003 (generic catch-all)
+NXGAIT,437643,Abnormal gait,observation,SNOMED 22325002
+NXMOTOR,433453,Motor function behavior finding,observation,SNOMED 106129007
+NXSENSOR,433227,Abnormal sensation,observation,SNOMED 247322000
+NXTREMOR,443782,Tremor,observation,SNOMED 26079004
+NXFINGER,4139442,Dysmetria,observation,SNOMED 32566006 (finger-to-nose test assesses dysmetria; test name preserved in source_value)
+NXHEEL,4139442,Dysmetria,observation,SNOMED 32566006 (heel-to-shin test assesses dysmetria; test name preserved in source_value)
+NXNERVE,4024014,Cranial nerve finding,observation,SNOMED 106150003
+NXOTHER,4011630,Neurological finding,observation,SNOMED 102957003 (generic neurological catch-all)
+PXEDSEV,2100000500,Edema Severity Score,measurement,Custom (ordinal 0-4 grading; no LOINC equivalent for this scale)

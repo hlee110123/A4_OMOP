@@ -1,0 +1,97 @@
+source_code,concept_id,concept_name,notes
+HMT1,3000963,Hemoglobin,LOINC 718-7
+HMT2,3009542,Hematocrit,LOINC 4544-3
+HMT3,3020416,RBC,LOINC 789-8
+HMT4,3023599,MCV [Entitic volume] by Automated count,LOINC 787-2
+HMT7,3010813,WBC,LOINC 6690-2
+HMT13,3024929,Platelets,LOINC 777-3
+HMT40,3000963,Hemoglobin,LOINC 718-7 (duplicate code)
+HMT102,3009744,MCHC,LOINC 786-4
+HMT8,3017732,Neutrophils,LOINC 751-8
+HMT9,3004327,Lymphocytes,LOINC 731-0
+HMT10,3001604,Monocytes,LOINC 742-7
+HMT11,3013115,Eosinophils,LOINC 711-2
+HMT12,3006315,Basophils,LOINC 704-7
+HMT20,3004809,Band neutrophils,LOINC 764-1
+HMT71,40761509,RBC Morphology,LOINC 58408-6
+HMT71_1,40761509,RBC Morphology,repeat 1
+HMT71_2,40761509,RBC Morphology,repeat 2
+HMT71_3,40761509,RBC Morphology,repeat 3
+HMT71_4,40761509,RBC Morphology,repeat 4
+HMT71_5,40761509,RBC Morphology,repeat 5
+HMT95,3013498,Atypical/Variant lymphocytes,LOINC 733-6
+HMT98,3034708,Nucleated erythrocytes/100 leukocytes [Ratio] in Blood,LOINC 19048-8 (RPTU is '%' so ratio form)
+HMT370,3004410,Hemoglobin A1c,LOINC 4548-4
+RCT1,3006140,Bilirubin.total [Moles/volume] in Serum or Plasma,LOINC 14631-6. Was 3024128 (1975-2 Mass/volume); source reports umol/L
+RCT3,3004077,GGT,LOINC 2324-2
+RCT5,3013721,AST,LOINC 1920-8
+RCT6,3024641,Urea nitrogen [Moles/volume] in Serum or Plasma,LOINC 14937-7. Was 3013682 (3094-0 Mass/volume); source reports mmol/L
+RCT14,3007220,Creatine kinase [Enzymatic activity/volume] in Serum or Plasma,LOINC 2157-6
+RCT183,3015377,Calcium [Moles/volume] in Serum or Plasma,LOINC 2000-8. Was 3006906 (17861-6 Mass/volume); source reports mmol/L
+RCT392,3020564,Creatinine [Moles/volume] in Serum or Plasma,LOINC 14682-9. Was 3016723 (2160-0 Mass/volume); source reports umol/L which is a molar concentration
+RCT4,3006923,ALT/SGPT,LOINC 1742-6
+RCT8,3026493,Urate [Moles/volume] in Serum or Plasma,LOINC 14933-6. Was 3037556 (3084-1 Mass/volume); source reports umol/L (source LBTEST: Serum Uric Acid)
+RCT9,3003458,Phosphate [Moles/volume] in Serum or Plasma,LOINC 14879-1. Was 3011904 (2777-1 Mass/volume); source reports mmol/L
+RCT12,3020630,Total Protein,LOINC 2885-2. Mass/volume is CORRECT: source reports g/L which is a mass concentration. The defect for this group is unit_concept_id (g/L must be 8636, not 8713 = g/dL)
+RCT13,3024561,Albumin,LOINC 1751-7. Mass/volume is CORRECT (g/L is a mass concentration); see RCT12 note on the unit
+RCT15,3019550,Sodium,LOINC 2951-2
+RCT16,3023103,Potassium,LOINC 2823-3
+RCT18,3014576,Chloride,LOINC 2075-0
+RCT20,3019900,Cholesterol [Moles/volume] in Serum or Plasma,LOINC 14647-2. Was 3027114 (2093-3 Mass/volume); source reports mmol/L
+RCT29,3027597,Direct Bilirubin,LOINC 1968-7. KNOWN MISMATCH: source reports umol/L (molar) under a Mass/volume concept. No 'Bilirubin.direct [Moles/volume] in Serum or Plasma' exists; nearest is 3005772 (conjugated). Deferred pending a decision
+RCT142,3037110,Fasting glucose [Mass/volume] in Serum or Plasma,LOINC 1558-6 (fasting-specific; distinct from RCT1669 random glucose). KNOWN MISMATCH: source reports mmol/L under a Mass/volume concept. No molar fasting-glucose concept exists; remapping to generic molar 3013826 would lose the fasting qualifier. Deferred
+RCT1407,3035995,Alkaline Phosphatase,LOINC 6768-6
+RCT1669,3013826,Glucose [Moles/volume] in Serum or Plasma,LOINC 14749-6. Was 3004501 (2345-7 Mass/volume); source reports mmol/L (random/non-fasting)
+UAT1,3027162,Urine Color,LOINC 5778-6
+UAT2,3033543,Urine Specific Gravity,LOINC 5811-5
+UAT3,3015736,Urine pH,LOINC 5803-2
+UAT5,3009261,Urine Glucose,LOINC 5792-7
+UAT6,3023539,Ketones [Mass/volume] in Urine by Test strip,LOINC 5797-6
+UAT11,3000348,Leukocyte esterase [Presence] in Urine by Test strip,LOINC 5799-2
+UAT13,3007876,Urine Clarity/Appearance,LOINC 5767-9
+UAT43,3011397,Urine Blood,LOINC 5794-3
+UAT49,3014051,Urine Protein,LOINC 5804-0
+CGT283,3034426,Prothrombin Time PT,LOINC 5902-2
+CGT564,3022217,INR,LOINC 6301-6
+SCT1528,3010156,CRP high sensitivity,LOINC 30522-7
+SCT2356,3012336,Haptoglobin,LOINC 4542-7
+CNT63,4014007,Hepatitis B Surface Antigen,SNOMED
+CNT68,42537336,Hepatitis B Core Antibody,SNOMED
+CNT69,3018447,Hepatitis C virus RNA [Units/volume] (viral load) in Serum or Plasma by NAA with probe detection,LOINC 11011-4 (source LBTEST: 'Hepatitis C Virus-QT' = quantitative viral load)
+CNT70,37394378,Hepatitis A IgM Antibody,SNOMED
+CNT73,37392817,Hepatitis A Total Antibody,SNOMED
+CNT350,4196134,Hepatitis C Antibody,SNOMED (duplicate of antibody panel variant)
+CNT353,4278658,Hepatitis B Surface Antibody,SNOMED
+CNT550,4014007,Hepatitis B Surface Antigen II,SNOMED (duplicate of antigen panel variant)
+ORT7923,4295162,Hepatitis E IgG,SNOMED
+ORT7924,4268445,Hepatitis E IgM,SNOMED
+ORT11357,4295162,Hepatitis E IgG,SNOMED (duplicate from second panel)
+ORT11358,4268445,Hepatitis E IgM,SNOMED (duplicate from second panel)
+IMT1669,37173542,ANA,SNOMED
+IMT1669_1,37173542,ANA,repeat 1
+IMT1669_2,37173542,ANA,repeat 2
+IMT1669_3,37173542,ANA,repeat 3
+IMT1754,4217559,Anti-Smooth Muscle Antibody IgG,SNOMED
+CLT1878,3029139,APOE genotype,LOINC 33327-0
+ROCHE:,2100000500,Roche biomarker panel category marker,Custom (panel-level grouping)
+SRT20477,2100000501,Anti-Solanezumab antibody level,Custom (investigational drug ADA)
+SRT16102,2100000502,Solanezumab plasma concentration,Custom (investigational drug PK)
+SRT21423,2100000503,Anti-Solanezumab neutralizing antibody,Custom (investigational drug ADA)
+SRT20478,2100000504,Anti-Solanezumab antibody titer,Custom (investigational drug ADA)
+ORT13169,2100000505,Solanezumab CSF concentration,Custom (investigational drug PK)
+AB:FP40/TP40,2100000510,Free/Total plasma Abeta-40 ratio,Custom (research-specific assay ratio)
+AB:FP42/FP40,2100000511,Free plasma Abeta-42/40 ratio,Custom (research-specific assay ratio)
+AB:FP42/TP42,2100000512,Free/Total plasma Abeta-42 ratio,Custom (research-specific assay ratio)
+SRT15753,2100000520,CSF modified Abeta-40,Custom (research-specific assay)
+SRT15754,2100000521,CSF modified Abeta-42,Custom (research-specific assay)
+SRT10631,43055225,CSF pTau-181,LOINC 72260-3
+SRT10630,3000242,Tau protein [Mass/volume] in Cerebral spinal fluid,LOINC 30160-6
+SRT18142,2100000524,CSF free Abeta-40,Custom (research-specific assay)
+SRT18047,2100000525,CSF free Abeta-42,Custom (research-specific assay)
+ORT11360,2100000530,Hep E IgG/IgM interpretation,Custom (interpretation field)
+ORT11360_1,2100000530,Hep E interpretation,repeat 1
+ORT11360_2,2100000530,Hep E interpretation,repeat 2
+ORT11360_3,2100000530,Hep E interpretation,repeat 3
+ORT11360_4,2100000530,Hep E interpretation,repeat 4
+ORT11360_5,2100000530,Hep E interpretation,repeat 5
+GET1881,2100000531,HCV RNA viral load,Custom

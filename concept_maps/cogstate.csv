@@ -1,0 +1,64 @@
+source_code,concept_id,concept_name,unit,group,notes
+DET,2100000040,CogState Detection,log10(ms),test,
+IDN,2100000041,CogState Identification,log10(ms),test,
+ONB,2100000042,CogState One-Back correct responses,count,test,Raw count of correct responses (100% integer 0-59) out of TRIAL. Previously mislabelled log10(ms) - a lower-is-better scale - which inverted the effect direction. DET/IDN really are log10(ms).
+OCL,2100000043,CogState One-Card Learning correct responses,count,test,Raw count of correct responses (100% integer 2-80) out of TRIAL, not the arcsine-transformed proportion.
+CPAL,2100000044,CogState CPAL,arcsine(sqrt(proportion)),test,
+LNS,2100000045,CogState Letter-Number Sequencing,score,test,
+COGSTATE_COMPOSITE,2100000046,CogState Composite Score,z-score,composite,
+FNMT,2100000047,CogState Face-Name Memory Test correct responses,count,test,Count 0-12 out of TRIAL
+FNLT,2100000048,CogState Face-Name Learning Test correct responses,count,test,Count 0-12 out of TRIAL
+FSBT,2100000049,CogState Face-Symbol Binding Test correct responses,count,test,Count 0-12 out of TRIAL
+BPXT,2100000140,CogState Brief Psychomotor Test,score,test,UNCHARACTERIZED: range -0.595..1.0 with 0.8% integer values matches no battery metric (cor/acc/lmn) and no TRIAL denominator. Scale and direction unconfirmed - do not assume.
+C3Comp,2100000141,CogState C3 Composite,z-score,composite,
+C3AbrComp,2100000142,CogState C3 Abbreviated Composite,z-score,composite,
+AttnComp,2100000143,CogState Attention Composite,z-score,composite,
+LearnWMComp,2100000144,CogState Learning/Working Memory Composite,z-score,composite,
+OCLONBComp,2100000145,CogState OCL-ONB Composite,z-score,composite,
+PsychAttnComp,2100000146,CogState Psychomotor/Attention Composite,z-score,composite,
+BPET,2100000147,CogState Brief Psychomotor Exam,arcsine(sqrt(proportion)),battery,
+FNFT,2100000148,CogState Face-Name Feature Test,arcsine(sqrt(proportion)),battery,
+BPET_lmn,2100000270,CogState BPET Log Mean RT,log10(ms),battery_metric,Battery expanded metric
+BPET_cor,2100000271,CogState BPET Correct Responses,count,battery_metric,Battery expanded metric
+BPET_err,2100000272,CogState BPET Errors,count,battery_metric,Battery expanded metric
+BPET_percor,2100000273,CogState BPET Percent Correct,%,battery_metric,Battery expanded metric
+FNFT_lmn,2100000274,CogState FNFT Log Mean RT,log10(ms),battery_metric,Battery expanded metric
+FNFT_cor,2100000275,CogState FNFT Correct Responses,count,battery_metric,Battery expanded metric
+FNFT_err,2100000276,CogState FNFT Errors,count,battery_metric,Battery expanded metric
+FNFT_percor,2100000277,CogState FNFT Percent Correct,%,battery_metric,Battery expanded metric
+MCQT_TOTAL,2100000090,MACQ Memory Complaint Total,score,questionnaire,
+MACQ_Q1,2100000280,MACQ Q1 Remember Things,score,macq_item,Individual MACQ item
+MACQ_Q2,2100000281,MACQ Q2 Where Placed Things,score,macq_item,Individual MACQ item
+MACQ_Q3,2100000282,MACQ Q3 Remember Names,score,macq_item,Individual MACQ item
+MACQ_Q4,2100000283,MACQ Q4 Remember Phone Numbers,score,macq_item,Individual MACQ item
+MACQ_Q5,2100000284,MACQ Q5 Remember What Read,score,macq_item,Individual MACQ item
+MACQ_Q6,2100000285,MACQ Q6 Remember Experiences,score,macq_item,Individual MACQ item
+CPATH_TOTAL,2100000091,C-PATH Total Score,score,questionnaire,
+CPATH_Q1,2100000290,C-PATH Q1,score,cpath_item,Individual C-PATH item
+CPATH_Q2,2100000291,C-PATH Q2,score,cpath_item,Individual C-PATH item
+CPATH_Q3,2100000292,C-PATH Q3,score,cpath_item,Individual C-PATH item
+CPATH_Q4,2100000293,C-PATH Q4,score,cpath_item,Individual C-PATH item
+CPATH_Q5,2100000294,C-PATH Q5,score,cpath_item,Individual C-PATH item
+CPATH_Q6,2100000295,C-PATH Q6,score,cpath_item,Individual C-PATH item
+CPATH_Q7,2100000296,C-PATH Q7,score,cpath_item,Individual C-PATH item
+CPATH_Q8,2100000297,C-PATH Q8,score,cpath_item,Individual C-PATH item
+CPATH_Q9,2100000298,C-PATH Q9,score,cpath_item,Individual C-PATH item
+CPATH_Q10,2100000299,C-PATH Q10,score,cpath_item,Individual C-PATH item
+CPATH_Q11,2100000300,C-PATH Q11,score,cpath_item,Individual C-PATH item
+CPATH_Q12,2100000301,C-PATH Q12,score,cpath_item,Individual C-PATH item
+CPATH_Q13,2100000302,C-PATH Q13,score,cpath_item,Individual C-PATH item
+CPATH_Q14,2100000303,C-PATH Q14,score,cpath_item,Individual C-PATH item
+CPATH_Q15,2100000304,C-PATH Q15,score,cpath_item,Individual C-PATH item
+CPATH_Q16,2100000305,C-PATH Q16,score,cpath_item,Individual C-PATH item
+CPATH_Q17,2100000306,C-PATH Q17,score,cpath_item,Individual C-PATH item
+CPATH_Q18,2100000307,C-PATH Q18,score,cpath_item,Individual C-PATH item
+CPATH_Q19,2100000308,C-PATH Q19,score,cpath_item,Individual C-PATH item
+CPATH_Q20,2100000309,C-PATH Q20,score,cpath_item,Individual C-PATH item
+CPATH_Q21,2100000310,C-PATH Q21,score,cpath_item,Individual C-PATH item
+CPATH_Q22,2100000311,C-PATH Q22,score,cpath_item,Individual C-PATH item
+CPATH_Q23,2100000312,C-PATH Q23,score,cpath_item,Individual C-PATH item
+CPATH_Q24,2100000313,C-PATH Q24,score,cpath_item,Individual C-PATH item
+CPATH_Q25,2100000314,C-PATH Q25,score,cpath_item,Individual C-PATH item
+CPATH_Q26,2100000315,C-PATH Q26,score,cpath_item,Individual C-PATH item
+CPATH_CADL,2100000316,C-PATH Complex ADL Domain,score,cpath_domain,C-PATH domain score
+CPATH_IF,2100000317,C-PATH Interpersonal Functioning Domain,score,cpath_domain,C-PATH domain score

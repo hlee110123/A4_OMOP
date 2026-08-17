@@ -1,0 +1,55 @@
+source_code,concept_id,concept_name,unit,group,notes
+PACC.raw,2100000001,PACC Raw Composite Score,score,core,Raw composite (not change-from-baseline)
+MMSCORE,42869860,MMSE Total Score (MMSCORE),score,core,LOINC standard
+CDGLOBAL,37546494,CDR Global Score,score,core,CDISC standard
+CDSOB,37524289,CDR Sum of Boxes,score,core,CDISC standard
+FCTOTAL96,4151971,Buschke selective reminding test,score,core,SNOMED 311477008 (FCSRT and Buschke selective reminding test are the same instrument)
+LDELTOTAL,2100000005,Logical Memory Delayed,score,core,Custom concept
+DIGITTOTAL,2100000006,Digit Symbol Total,score,core,Custom concept
+LIMMTOTAL,2100000007,Logical Memory Immediate,score,core,Custom concept
+CFIPTTOTAL,2100000050,CFI Patient Total,score,extended,
+CFSPTTOTAL,2100000051,CFI Study Partner Total,score,extended,
+DIGITTOTAL,2100000052,Digit Symbol Total,score,extended,Extended version
+FCTOTAL96,4151971,Buschke selective reminding test,score,extended,SNOMED 311477008 (extended group: same test-level concept as core)
+FCTOTF,2100000056,FCSR Free Recall Total,score,extended,
+FCTOTC,2100000057,FCSR Cued Recall Total,score,extended,
+LIMMTOTAL,2100000054,Logical Memory Immediate,score,extended,Extended version
+LDELTOTAL,2100000055,Logical Memory Delayed,score,extended,Extended version
+MMDATE,37535522,MMSE Orientation Date,score,mmse_item,CDISC standard
+MMYEAR,37530054,MMSE Orientation Year,score,mmse_item,CDISC standard
+MMMONTH,37524690,MMSE Orientation Month,score,mmse_item,CDISC standard
+MMDAY,37543352,MMSE Orientation Day,score,mmse_item,CDISC standard
+MMSEASON,37544881,MMSE Orientation Season,score,mmse_item,CDISC standard
+MMHOSPIT,37525797,MMSE Orientation Hospital,score,mmse_item,CDISC standard
+MMFLOOR,37530368,MMSE Orientation Floor,score,mmse_item,CDISC standard
+MMCITY,37528823,MMSE Orientation City,score,mmse_item,CDISC standard
+MMAREA,37534195,MMSE Orientation Area,score,mmse_item,CDISC standard
+MMSTATE,37538536,MMSE Orientation State,score,mmse_item,CDISC standard
+MMBALL,37545292,MMSE Registration Ball,score,mmse_item,CDISC standard
+MMFLAG,37534185,MMSE Registration Flag,score,mmse_item,CDISC standard
+MMTREE,37530589,MMSE Registration Tree,score,mmse_item,CDISC standard
+MMWORLD,2100000163,MMSE Attention WORLD,score,mmse_item,Custom - no CDISC mapping available
+MMBALLDL,37544754,MMSE Recall Ball,score,mmse_item,CDISC standard
+MMFLAGDL,37528921,MMSE Recall Flag,score,mmse_item,CDISC standard
+MMTREEDL,37543093,MMSE Recall Tree,score,mmse_item,CDISC standard
+MMWATCH,4169312,MMSE Naming Watch,score,mmse_item,CDISC standard
+MMPENCIL,4169312,MMSE Naming Pencil,score,mmse_item,CDISC standard - same as MMWATCH (naming task)
+MMREPEAT,37527809,MMSE Repetition,score,mmse_item,CDISC standard
+MMHAND,37531096,MMSE Command Take Paper,score,mmse_item,CDISC standard
+MMFOLD,37531417,MMSE Command Fold Paper,score,mmse_item,CDISC standard
+MMONFLR,37537897,MMSE Command Put on Floor,score,mmse_item,CDISC standard
+MMREAD,37529583,MMSE Reading,score,mmse_item,CDISC standard
+MMWRITE,37539887,MMSE Writing,score,mmse_item,CDISC standard
+MMDRAW,37541207,MMSE Drawing,score,mmse_item,CDISC standard
+MMDLTR,37532418,MMSE Attention Letter D Position,text,mmse_letter,CDISC standard
+MMLLTR,37524591,MMSE Attention Letter L Position,text,mmse_letter,CDISC standard
+MMRLTR,37532900,MMSE Attention Letter R Position,text,mmse_letter,CDISC standard
+MMOLTR,37525937,MMSE Attention Letter O Position,text,mmse_letter,CDISC standard
+MMWLTR,37534611,MMSE Attention Letter W Position,text,mmse_letter,CDISC standard
+MEMORY,37522525,CDR Memory Domain,score,cdr_domain,CDISC standard
+ORIENT,37525225,CDR Orientation Domain,score,cdr_domain,CDISC standard
+JUDGE,37530450,CDR Judgment Domain,score,cdr_domain,CDISC standard
+COMMUN,37538839,CDR Community Affairs Domain,score,cdr_domain,CDISC standard
+HOME,37545969,CDR Home and Hobbies Domain,score,cdr_domain,CDISC standard
+CARE,37546534,CDR Personal Care Domain,score,cdr_domain,CDISC standard
+CDRSB,2100000187,CDR Sum of Boxes Revised,score,cdr_domain,CDR Sum of Boxes from CDR form
