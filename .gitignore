@@ -5,16 +5,16 @@ External Data/
 OMOP_Output/
 
 # OMOP vocabulary files (large; downloaded from Athena - do not commit)
-CONCEPT.csv
-VOCABULARY.csv
-CONCEPT_RELATIONSHIP.csv
-CONCEPT_ANCESTOR.csv
-CONCEPT_SYNONYM.csv
-CONCEPT_CLASS.csv
-CONCEPT_CPT4.csv
-DOMAIN.csv
-RELATIONSHIP.csv
-DRUG_STRENGTH.csv
+/CONCEPT.csv
+/VOCABULARY.csv
+/CONCEPT_RELATIONSHIP.csv
+/CONCEPT_ANCESTOR.csv
+/CONCEPT_SYNONYM.csv
+/CONCEPT_CLASS.csv
+/CONCEPT_CPT4.csv
+/DOMAIN.csv
+/RELATIONSHIP.csv
+/DRUG_STRENGTH.csv
 
 # Excel data files
 Clinical dict mapping.xlsx
@@ -43,7 +43,6 @@ Thumbs.db
 *.bak
 a4_omop_etl.py
 CLAUDE.md
-custom_concepts_needed.csv
 standard_concepts_reference.csv
 .code-graph/code-graph.db
 .playwright-mcp/page-2026-02-02T22-38-05-227Z.png
@@ -96,3 +95,6 @@ OMOP_Output.zip
 papers/
 mappings/
 reviewer_mappings/
+
+# Third-party vocabulary bundle - obtain separately
+omop_table_staging_v5.csv

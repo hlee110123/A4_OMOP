@@ -1,0 +1,183 @@
+concept_id,source_code,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code,valid_start_date,valid_end_date,invalid_reason,record_count,category,notes
+2000000010,RANDOMIZED,Study randomization,Observation,A4_LEARN,Clinical Observation,S,A4_DS_RANDOMIZED,2020-01-01,2099-12-31,,1169,Milestones,Randomization event
+2000000011,COMPLETED,Study completion,Observation,A4_LEARN,Clinical Observation,S,A4_DS_COMPLETED,2020-01-01,2099-12-31,,2001,Milestones,Study completion event
+2000000012,SCREEN FAILURE,Screen failure,Observation,A4_LEARN,Clinical Observation,S,A4_DS_SCREEN_FAIL,2020-01-01,2099-12-31,,5274,Milestones,Screen failure event
+2000000013,WITHDRAWAL BY SUBJECT,Withdrawal by subject,Observation,A4_LEARN,Clinical Observation,S,A4_DS_WITHDRAWAL,2020-01-01,2099-12-31,,335,Milestones,Voluntary withdrawal by subject
+2000000014,STUDY TERMINATED BY SPONSOR,Study termination by sponsor,Observation,A4_LEARN,Clinical Observation,S,A4_DS_SPONSOR_TERM,2020-01-01,2099-12-31,,260,Milestones,Sponsor-initiated study termination
+2000000015,ADVERSE EVENT,Discontinuation due to adverse event,Observation,A4_LEARN,Clinical Observation,S,A4_DS_AE,2020-01-01,2099-12-31,,68,Milestones,Discontinuation due to adverse event
+2000000016,LOST TO FOLLOW UP,Lost to follow-up,Observation,A4_LEARN,Clinical Observation,S,A4_DS_LTFU,2020-01-01,2099-12-31,,46,Milestones,Lost to follow-up
+2000000017,OTHER,Discontinuation for other reason,Observation,A4_LEARN,Clinical Observation,S,A4_DS_OTHER,2020-01-01,2099-12-31,,78,Milestones,Study discontinuation for other/unspecified reason
+2000000018,WITHDRAWAL_GUARDIAN,Withdrawal by parent/guardian,Observation,A4_LEARN,Clinical Observation,S,A4_DS_GUARDIAN,2020-01-01,2099-12-31,,24,Milestones,Withdrawal by parent or guardian
+2000000019,LACK_EFFICACY,Discontinuation due to lack of efficacy,Observation,A4_LEARN,Clinical Observation,S,A4_DS_EFFICACY,2020-01-01,2099-12-31,,10,Milestones,Discontinuation due to lack of efficacy
+2000000020,SAFETY_RISK,Discontinuation due to safety risk,Observation,A4_LEARN,Clinical Observation,S,A4_DS_SAFETY,2020-01-01,2099-12-31,,8,Milestones,Discontinuation due to safety risk
+2000000021,PHYSICIAN_DECISION,Discontinuation by physician decision,Observation,A4_LEARN,Clinical Observation,S,A4_DS_PHYSICIAN,2020-01-01,2099-12-31,,7,Milestones,Discontinuation by physician decision
+2000000022,PROTOCOL_DEVIATION,Discontinuation due to protocol deviation,Observation,A4_LEARN,Clinical Observation,S,A4_DS_PROTOCOL,2020-01-01,2099-12-31,,1,Milestones,Discontinuation due to protocol deviation
+2100000001,PACC,PACC Composite Score,Measurement,A4_LEARN,Clinical Test,S,A4_PACC_COMPOSITE,2020-01-01,2099-12-31,,21402,Cognitive,Preclinical Alzheimer Cognitive Composite (z-score)
+2100000005,LDELTOTAL,Logical Memory Delayed Total,Measurement,A4_LEARN,Clinical Test,S,A4_LOGMEM_DELAYED,2020-01-01,2099-12-31,,26467,Cognitive,Wechsler Logical Memory Delayed Recall
+2100000006,DIGITTOTAL,Digit Symbol Total,Measurement,A4_LEARN,Clinical Test,S,A4_DIGIT_SYMBOL,2020-01-01,2099-12-31,,26440,Cognitive,Digit Symbol Substitution Test Total
+2100000010,TP42/TP40,Plasma Abeta 42/40 Ratio,Measurement,A4_LEARN,Lab Test,S,A4_ABETA_RATIO,2020-01-01,2099-12-31,,2960,AD Biomarker,Total plasma amyloid beta 42/40 ratio
+2100000011,TP40,Total Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_TOTAL,2020-01-01,2099-12-31,,5412,AD Biomarker,Total plasma amyloid beta-40 (pg/mL)
+2100000012,TP42,Total Plasma Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_TOTAL,2020-01-01,2099-12-31,,5313,AD Biomarker,Total plasma amyloid beta-42 (pg/mL)
+2100000013,BP40,Bound Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_BOUND,2020-01-01,2099-12-31,,3068,AD Biomarker,Bound plasma amyloid beta-40 (pg/mL)
+2100000014,BP42,Bound Plasma Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_BOUND,2020-01-01,2099-12-31,,2841,AD Biomarker,Bound plasma amyloid beta-42 (pg/mL)
+2100000015,FP40,Free Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_FREE,2020-01-01,2099-12-31,,3103,AD Biomarker,Free plasma amyloid beta-40 (pg/mL)
+2100000016,FP42,Free Plasma Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_FREE,2020-01-01,2099-12-31,,2903,AD Biomarker,Free plasma amyloid beta-42 (pg/mL)
+2100000030,MRI_VOLUME,Brain Region Volume MRI,Measurement,A4_LEARN,Procedure,S,A4_MRI_VOLUME,2020-01-01,2099-12-31,,156403,Imaging,Volumetric MRI brain region volume (mL)
+2100000031,SUVR_AMYLOID,Amyloid PET SUVR,Measurement,A4_LEARN,Procedure,S,A4_PET_AMYLOID,2020-01-01,2099-12-31,,45960,Imaging,Amyloid PET standardized uptake value ratio
+2100000032,SUVR_TAU,Tau PET SUVR,Measurement,A4_LEARN,Procedure,S,A4_PET_TAU,2020-01-01,2099-12-31,,295296,Imaging,Tau PET standardized uptake value ratio
+2100000040,DET,CogState Detection,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_DET,2020-01-01,2099-12-31,,22798,CogState,Psychomotor speed - simple reaction time (log10 ms)
+2100000041,IDN,CogState Identification,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_IDN,2020-01-01,2099-12-31,,22771,CogState,Attention - choice reaction time (log10 ms)
+2100000042,ONB,CogState One-Back,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_ONB,2020-01-01,2099-12-31,,22713,CogState,Working memory - speed (log10 ms)
+2100000043,OCL,CogState One-Card Learning,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_OCL,2020-01-01,2099-12-31,,22769,CogState,Visual learning - accuracy (arcsine sqrt)
+2100000047,FNMT,CogState Face-Name Memory Test,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_FNMT,2020-01-01,2099-12-31,,22233,CogState,Associative memory test
+2100000048,FNLT,CogState Face-Name Learning Test,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_FNLT,2020-01-01,2099-12-31,,22265,CogState,Associative learning test
+2100000049,FSBT,CogState Face-Symbol Binding Test,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_FSBT,2020-01-01,2099-12-31,,22276,CogState,Symbol binding test
+2100000050,CFIPTTOTAL,CFI Patient Total Score,Measurement,A4_LEARN,Clinical Test,S,A4_CFI_PATIENT,2020-01-01,2099-12-31,,15149,Cognitive,Cognitive Function Instrument - Patient Version
+2100000051,CFSPTTOTAL,CFI Study Partner Total Score,Measurement,A4_LEARN,Clinical Test,S,A4_CFI_PARTNER,2020-01-01,2099-12-31,,15192,Cognitive,Cognitive Function Instrument - Study Partner Version
+2100000052,DIGITTOTAL,Digit Symbol Total,Measurement,A4_LEARN,Clinical Test,S,A4_DIGIT_TOTAL,2020-01-01,2099-12-31,,26459,Cognitive,Digit Symbol Substitution Test Total
+2100000054,LIMMTOTAL,Logical Memory Immediate Total,Measurement,A4_LEARN,Clinical Test,S,A4_LOGMEM_IMM,2020-01-01,2099-12-31,,26492,Cognitive,Wechsler Logical Memory Immediate Recall
+2100000055,LDELTOTAL,Logical Memory Delayed Total,Measurement,A4_LEARN,Clinical Test,S,A4_LOGMEM_DEL,2020-01-01,2099-12-31,,26480,Cognitive,Wechsler Logical Memory Delayed Recall
+2100000056,FCTOTF,FCSR-16 Free Recall Total,Measurement,A4_LEARN,Clinical Test,S,A4_FCSR_FREE,2020-01-01,2099-12-31,,26439,Cognitive,Free and Cued Selective Reminding - Free Recall
+2100000057,FCTOTC,FCSR-16 Cued Recall Total,Measurement,A4_LEARN,Clinical Test,S,A4_FCSR_CUED,2020-01-01,2099-12-31,,26438,Cognitive,Free and Cued Selective Reminding - Cued Recall
+2100000060,STAITOTAL,STAI Total Score,Measurement,A4_LEARN,Clinical Test,S,A4_STAI_TOTAL,2020-01-01,2099-12-31,,21546,Questionnaire,State-Trait Anxiety Inventory Total
+2100000062,CADDVLP,AD Concern Development,Measurement,A4_LEARN,Clinical Test,S,A4_CONCERN_DVLP,2020-01-01,2099-12-31,,15280,Questionnaire,Concern about developing Alzheimer's disease
+2100000063,CADKNOW,AD Concern Knowledge,Measurement,A4_LEARN,Clinical Test,S,A4_CONCERN_KNOW,2020-01-01,2099-12-31,,15281,Questionnaire,Knowledge concern about AD
+2100000064,CADBLIEV,AD Concern Belief,Measurement,A4_LEARN,Clinical Test,S,A4_CONCERN_BLIEV,2020-01-01,2099-12-31,,15277,Questionnaire,Belief concern about AD
+2100000065,CADWRST,AD Concern Worst,Measurement,A4_LEARN,Clinical Test,S,A4_CONCERN_WRST,2020-01-01,2099-12-31,,15280,Questionnaire,Worst case concern about AD
+2100000066,CADCNCRN,AD Concern Overall,Measurement,A4_LEARN,Clinical Test,S,A4_CONCERN_OVRL,2020-01-01,2099-12-31,,15281,Questionnaire,Overall concern about AD
+2100000067,AISCORE,ADL-PQ Study Partner Total Score,Measurement,A4_LEARN,Clinical Test,S,A4_AISCORE,2020-01-01,2099-12-31,,15175,Questionnaire,Questionnaire total score; totals are kept in MEASUREMENT.
+2100000070,MCH,MRI Microhemorrhage Count,Measurement,A4_LEARN,Procedure,S,A4_MRI_MCH,2020-01-01,2099-12-31,,1797,Imaging,MRI microhemorrhage count
+2100000071,WMH_VOL,White Matter Hyperintensity Volume,Measurement,A4_LEARN,Procedure,S,A4_MRI_WMH_VOL,2020-01-01,2099-12-31,,6782,Imaging,FLAIR white matter hyperintensity volume (mL)
+2100000072,WMH_CORRECTED,WMH Volume ICV-Corrected,Measurement,A4_LEARN,Procedure,S,A4_MRI_WMH_CORR,2020-01-01,2099-12-31,,6782,Imaging,WMH volume corrected for intracranial volume (%)
+2100000073,RETINAL_AI,Retinal AI Score,Measurement,A4_LEARN,Procedure,S,A4_RETINAL_AI,2020-01-01,2099-12-31,,252,Imaging,Retinal imaging AI prediction score
+2100000074,PET_VA,PET Visual Assessment,Measurement,A4_LEARN,Procedure,S,A4_PET_VA,2020-01-01,2099-12-31,,4492,Imaging,PET visual assessment rating
+2100000075,LOBAR,MRI Lobar Microhemorrhage,Measurement,A4_LEARN,Procedure,S,A4_MRI_LOBAR,2020-01-01,2099-12-31,,1763,Imaging,Lobar microhemorrhage count
+2100000076,DEEP,MRI Deep Microhemorrhage,Measurement,A4_LEARN,Procedure,S,A4_MRI_DEEP,2020-01-01,2099-12-31,,1764,Imaging,Deep microhemorrhage count
+2100000077,ICV,Intracranial Volume,Measurement,A4_LEARN,Procedure,S,A4_MRI_ICV,2020-01-01,2099-12-31,,6782,Imaging,Intracranial volume (mL)
+2100000078,TAU_PETSURFER,Tau PET SUVR PetSurfer,Measurement,A4_LEARN,Procedure,S,A4_TAU_PETSURFER,2020-01-01,2099-12-31,,107690,Imaging,Tau PET regional SUVR via PetSurfer pipeline
+2100000079,TAU_STANFORD,Tau PET SUVR Stanford,Measurement,A4_LEARN,Procedure,S,A4_TAU_STANFORD,2020-01-01,2099-12-31,,119954,Imaging,Tau PET regional SUVR via Stanford pipeline
+2100000080,RELATIONSHIP,Study Partner Relationship,Observation,A4_LEARN,Clinical Observation,S,A4_SP_RELATIONSHIP,2020-01-01,2099-12-31,,7641,Study Partner,Study partner relationship to participant
+2100000081,CONTACT_HRS,Study Partner Contact Hours,Observation,A4_LEARN,Clinical Observation,S,A4_SP_CONTACT_HRS,2020-01-01,2099-12-31,,7355,Study Partner,Weekly contact hours with study partner
+2100000082,COHABITATION,Study Partner Cohabitation,Observation,A4_LEARN,Clinical Observation,S,A4_SP_COHABITATION,2020-01-01,2099-12-31,,7611,Study Partner,Whether study partner lives with participant
+2100000090,MACQ_Total,CogState MACQ Total,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_MACQ,2020-01-01,2099-12-31,,27455,CogState,Memory and Cognition Questionnaire Total
+2100000091,CPATH_Total,CogState C-PATH Total,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_CPATH,2020-01-01,2099-12-31,,27769,CogState,C-PATH questionnaire session total
+2100000093,brain_volume,Brain volumetric measurement,Measurement,A4_LEARN,Clinical Test,S,A4_BRAIN_VOLUME,2020-01-01,2099-12-31,,156403,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000094,amyloid_suvr,Amyloid PET SUVR,Measurement,A4_LEARN,Clinical Test,S,A4_AMYLOID_SUVR,2020-01-01,2099-12-31,,43528,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000095,tau_suvr,Tau PET SUVR,Measurement,A4_LEARN,Clinical Test,S,A4_TAU_SUVR,2020-01-01,2099-12-31,,409371,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000096,mri_read,MRI radiological read,Measurement,A4_LEARN,Clinical Test,S,A4_MRI_READ,2020-01-01,2099-12-31,,5324,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000097,flair_volume,FLAIR lesion volume,Measurement,A4_LEARN,Clinical Test,S,A4_FLAIR_VOLUME,2020-01-01,2099-12-31,,20346,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000098,retinal_measure,Retinal imaging measurement,Measurement,A4_LEARN,Clinical Test,S,A4_RETINAL_MEASURE,2020-01-01,2099-12-31,,252,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000099,pet_visual_assessment,PET visual assessment,Measurement,A4_LEARN,Clinical Test,S,A4_PET_VISUAL_ASSESSMENT,2020-01-01,2099-12-31,,4492,MI-CDM Image Finding,REVIEW: MI-CDM spec not in repo; domain assumed Measurement
+2100000106,ATTMPT5,C-SSRS Attempt Past 5 Years,Observation,A4_LEARN,Clinical Observation,S,A4_CSSRS_ATTMPT5,2020-01-01,2099-12-31,,5496,C-SSRS,Suicide attempt in past 5 years
+2100000111,NONSUI5,C-SSRS NSSI Past 5 Years,Observation,A4_LEARN,Clinical Observation,S,A4_CSSRS_NSSI5,2020-01-01,2099-12-31,,5660,C-SSRS,Non-suicidal self-injury past 5 years
+2100000115,BEHAVLIF,C-SSRS Suicidal Behavior Lifetime,Observation,A4_LEARN,Clinical Observation,S,A4_CSSRS_BEHAV,2020-01-01,2099-12-31,,5660,C-SSRS,Suicidal behavior lifetime indicator
+2100000119,SUICIDE,C-SSRS Suicide Completion,Observation,A4_LEARN,Clinical Observation,S,A4_CSSRS_SUICIDE,2020-01-01,2099-12-31,,18681,C-SSRS,Suicide completion indicator
+2100000140,BPXT,CogState Brief Psychomotor Test,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_BPXT,2020-01-01,2099-12-31,,22443,CogState,Brief psychomotor assessment
+2100000141,C3Comp,CogState C3 Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_C3,2020-01-01,2099-12-31,,22345,CogState,C3 Composite Score (z-score)
+2100000142,C3AbrComp,CogState C3 Abbreviated Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_C3ABR,2020-01-01,2099-12-31,,22178,CogState,Abbreviated C3 Composite (z-score)
+2100000143,AttnComp,CogState Attention Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_ATTN,2020-01-01,2099-12-31,,22679,CogState,Attention domain composite
+2100000144,LearnWMComp,CogState Learning/WM Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_LNWM,2020-01-01,2099-12-31,,22681,CogState,Learning and Working Memory composite
+2100000145,OCLONBComp,CogState OCL-ONB Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_OCLONB,2020-01-01,2099-12-31,,22681,CogState,OCL-ONB combined composite
+2100000146,PsychAttnComp,CogState Psychomotor/Attention Composite,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_PSYATTN,2020-01-01,2099-12-31,,22764,CogState,Psychomotor and Attention composite
+2100000147,BPET,CogState Brief Psychomotor Exam,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_BPET,2020-01-01,2099-12-31,,27762,CogState,Brief Psychomotor Examination Test accuracy
+2100000148,FNFT,CogState Face-Name Feature Test,Measurement,A4_LEARN,Clinical Test,S,A4_COGSTATE_FNFT,2020-01-01,2099-12-31,,27762,CogState,Face-Name Feature Test accuracy
+2100000163,MMWORLD,MMSE Attention WORLD,Measurement,A4_LEARN,Clinical Test,S,A4_MMWORLD,2020-01-01,2099-12-31,,26442,Cognitive,Declared in concept_maps/cognitive.csv
+2100000187,CDRSB,CDR Sum of Boxes (prorated),Measurement,A4_LEARN,Clinical Test,S,A4_CDRSB,2020-01-01,2099-12-31,,15117,Cognitive,Declared in concept_maps/cognitive.csv
+2100000201,FTP_METHOD,Future Time Perspective Method,Observation,A4_LEARN,Clinical Observation,S,A4_FTP_METHOD,2020-01-01,2099-12-31,,17450,Questionnaire,Future Time Perspective scale response
+2100000202,RSS_QUALITY,Research Satisfaction Quality,Observation,A4_LEARN,Clinical Observation,S,A4_RSS_QUALITY,2020-01-01,2099-12-31,,7088,Questionnaire,Research Satisfaction Scale - quality rating
+2100000203,RSS_RECOMMEND,Research Satisfaction Recommend,Observation,A4_LEARN,Clinical Observation,S,A4_RSS_RECOMMEND,2020-01-01,2099-12-31,,7086,Questionnaire,Research Satisfaction Scale - recommendation
+2100000204,VIEWS_SEEK,Views Seek Knowledge,Observation,A4_LEARN,Clinical Observation,S,A4_VIEWS_SEEK,2020-01-01,2099-12-31,,10130,Questionnaire,Views on Disclosure - knowledge seeking
+2100000205,RUIB_ADMIT,Resource Use Hospital Admission,Observation,A4_LEARN,Clinical Observation,S,A4_RUIB_ADMIT,2020-01-01,2099-12-31,,9009,Resource Utilization,Hospital admission indicator
+2100000208,BR1NIGHT,Hospital Overnight Stay Nights,Observation,A4_LEARN,Clinical Observation,S,A4_RUIB1_NIGHTS,2020-01-01,2099-12-31,,1106,Resource Utilization,Number of hospital overnight stay nights
+2100000209,BR1TYPE,Hospital Stay Type,Observation,A4_LEARN,Clinical Observation,S,A4_RUIB1_TYPE,2020-01-01,2099-12-31,,1001,Resource Utilization,Type of hospital stay (coded)
+2100000210,FAMHX_MOTHER,Family history - Mother,Observation,A4_LEARN,Clinical Observation,S,A4_FAMHX_MOTHER,2020-01-01,2099-12-31,,5806,Family History,Declared in concept_maps/observations.csv
+2100000211,FAMHX_FATHER,Family history - Father,Observation,A4_LEARN,Clinical Observation,S,A4_FAMHX_FATHER,2020-01-01,2099-12-31,,5771,Family History,Declared in concept_maps/observations.csv
+2100000212,FAMHX_SIBLING,Family history - Sibling,Observation,A4_LEARN,Clinical Observation,S,A4_FAMHX_SIBLING,2020-01-01,2099-12-31,,13842,Family History,Declared in concept_maps/observations.csv
+2100000213,ASPAY,ADL-PQ Shop and Pay for Items,Observation,A4_LEARN,Clinical Observation,S,A4_ASPAY,2020-01-01,2099-12-31,,15108,Questionnaire,Questionnaire item.
+2100000214,ASTIMES,ADL-PQ Keep Appointments,Observation,A4_LEARN,Clinical Observation,S,A4_ASTIMES,2020-01-01,2099-12-31,,15109,Questionnaire,Questionnaire item.
+2100000215,ASWDOWN,ADL-PQ Write Down Messages,Observation,A4_LEARN,Clinical Observation,S,A4_ASWDOWN,2020-01-01,2099-12-31,,15113,Questionnaire,Questionnaire item.
+2100000216,ASMOVIE,ADL-PQ Follow Movie Plot,Observation,A4_LEARN,Clinical Observation,S,A4_ASMOVIE,2020-01-01,2099-12-31,,15111,Questionnaire,Questionnaire item.
+2100000217,FTOPPS,FTP Opportunities,Observation,A4_LEARN,Clinical Observation,S,A4_FTOPPS,2020-01-01,2099-12-31,,17442,Questionnaire,Questionnaire item.
+2100000218,FTGOAL,FTP Goals,Observation,A4_LEARN,Clinical Observation,S,A4_FTGOAL,2020-01-01,2099-12-31,,17442,Questionnaire,Questionnaire item.
+2100000219,FTPOSSBL,FTP Possibilities,Observation,A4_LEARN,Clinical Observation,S,A4_FTPOSSBL,2020-01-01,2099-12-31,,17430,Questionnaire,Questionnaire item.
+2100000220,FTLIFE,FTP Life Ahead,Observation,A4_LEARN,Clinical Observation,S,A4_FTLIFE,2020-01-01,2099-12-31,,17434,Questionnaire,Questionnaire item.
+2100000221,FTINFINIT,FTP Infinite Time,Observation,A4_LEARN,Clinical Observation,S,A4_FTINFINIT,2020-01-01,2099-12-31,,17382,Questionnaire,Questionnaire item.
+2100000222,FTANYTHNG,FTP Can Do Anything,Observation,A4_LEARN,Clinical Observation,S,A4_FTANYTHNG,2020-01-01,2099-12-31,,17428,Questionnaire,Questionnaire item.
+2100000223,FTNEW,FTP New Things,Observation,A4_LEARN,Clinical Observation,S,A4_FTNEW,2020-01-01,2099-12-31,,17442,Questionnaire,Questionnaire item.
+2100000224,FTRUNOUT,FTP Running Out of Time,Observation,A4_LEARN,Clinical Observation,S,A4_FTRUNOUT,2020-01-01,2099-12-31,,17441,Questionnaire,Questionnaire item.
+2100000225,FTLIMIT,FTP Limited Possibilities,Observation,A4_LEARN,Clinical Observation,S,A4_FTLIMIT,2020-01-01,2099-12-31,,17439,Questionnaire,Questionnaire item.
+2100000226,FTGETOLD,FTP Getting Old,Observation,A4_LEARN,Clinical Observation,S,A4_FTGETOLD,2020-01-01,2099-12-31,,17441,Questionnaire,Questionnaire item.
+2100000227,RSSCOMP,RSS Survey Completed By,Observation,A4_LEARN,Clinical Observation,S,A4_RSSCOMP,2020-01-01,2099-12-31,,7087,Questionnaire,Questionnaire item.
+2100000228,RSSEXPECT,RSS Met Expectations,Observation,A4_LEARN,Clinical Observation,S,A4_RSSEXPECT,2020-01-01,2099-12-31,,7050,Questionnaire,Questionnaire item.
+2100000229,RSSREDO,RSS Would Redo,Observation,A4_LEARN,Clinical Observation,S,A4_RSSREDO,2020-01-01,2099-12-31,,7085,Questionnaire,Questionnaire item.
+2100000230,RSSBEST,RSS Best Part,Observation,A4_LEARN,Clinical Observation,S,A4_RSSBEST,2020-01-01,2099-12-31,,7076,Questionnaire,Questionnaire item.
+2100000231,RSSLEAST,RSS Least Liked,Observation,A4_LEARN,Clinical Observation,S,A4_RSSLEAST,2020-01-01,2099-12-31,,7046,Questionnaire,Questionnaire item.
+2100000232,RSSMED,RSS Study Medication,Observation,A4_LEARN,Clinical Observation,S,A4_RSSMED,2020-01-01,2099-12-31,,5050,Questionnaire,Questionnaire item.
+2100000233,RSSVIS,RSS Number of Visits,Observation,A4_LEARN,Clinical Observation,S,A4_RSSVIS,2020-01-01,2099-12-31,,7010,Questionnaire,Questionnaire item.
+2100000234,RSSOTH,RSS Other,Observation,A4_LEARN,Clinical Observation,S,A4_RSSOTH,2020-01-01,2099-12-31,,6147,Questionnaire,Questionnaire item.
+2100000235,RSSIPAD,RSS iPad Experience,Observation,A4_LEARN,Clinical Observation,S,A4_RSSIPAD,2020-01-01,2099-12-31,,6976,Questionnaire,Questionnaire item.
+2100000236,VEASE,Views Ease of Decision,Observation,A4_LEARN,Clinical Observation,S,A4_VEASE,2020-01-01,2099-12-31,,10126,Questionnaire,Questionnaire item.
+2100000237,VRISK,Views Risk Perception,Observation,A4_LEARN,Clinical Observation,S,A4_VRISK,2020-01-01,2099-12-31,,10132,Questionnaire,Questionnaire item.
+2100000238,VPART,Views Participation Value,Observation,A4_LEARN,Clinical Observation,S,A4_VPART,2020-01-01,2099-12-31,,10129,Questionnaire,Questionnaire item.
+2100000239,VCNTRB,Views Contribution,Observation,A4_LEARN,Clinical Observation,S,A4_VCNTRB,2020-01-01,2099-12-31,,10129,Questionnaire,Questionnaire item.
+2100000240,VAFFAIR,Views Personal Affairs,Observation,A4_LEARN,Clinical Observation,S,A4_VAFFAIR,2020-01-01,2099-12-31,,10128,Questionnaire,Questionnaire item.
+2100000241,VCNFRM,Views Confirmation Value,Observation,A4_LEARN,Clinical Observation,S,A4_VCNFRM,2020-01-01,2099-12-31,,10126,Questionnaire,Questionnaire item.
+2100000242,VPREP,Views Preparedness,Observation,A4_LEARN,Clinical Observation,S,A4_VPREP,2020-01-01,2099-12-31,,10131,Questionnaire,Questionnaire item.
+2100000243,VCURIOUS,Views Curiosity,Observation,A4_LEARN,Clinical Observation,S,A4_VCURIOUS,2020-01-01,2099-12-31,,10117,Questionnaire,Questionnaire item.
+2100000244,VOTHER,Views Other Reasons,Observation,A4_LEARN,Clinical Observation,S,A4_VOTHER,2020-01-01,2099-12-31,,2296,Questionnaire,Questionnaire item.
+2100000270,BPET_lmn,CogState BPET Log Mean RT,Measurement,A4_LEARN,Clinical Test,S,A4_BPET_LMN,2020-01-01,2099-12-31,,27760,CogState,Declared in concept_maps/cogstate.csv
+2100000271,BPET_cor,CogState BPET Correct Responses,Measurement,A4_LEARN,Clinical Test,S,A4_BPET_COR,2020-01-01,2099-12-31,,27762,CogState,Declared in concept_maps/cogstate.csv
+2100000272,BPET_err,CogState BPET Errors,Measurement,A4_LEARN,Clinical Test,S,A4_BPET_ERR,2020-01-01,2099-12-31,,27762,CogState,Declared in concept_maps/cogstate.csv
+2100000274,FNFT_lmn,CogState FNFT Log Mean RT,Measurement,A4_LEARN,Clinical Test,S,A4_FNFT_LMN,2020-01-01,2099-12-31,,27723,CogState,Declared in concept_maps/cogstate.csv
+2100000275,FNFT_cor,CogState FNFT Correct Responses,Measurement,A4_LEARN,Clinical Test,S,A4_FNFT_COR,2020-01-01,2099-12-31,,27762,CogState,Declared in concept_maps/cogstate.csv
+2100000276,FNFT_err,CogState FNFT Errors,Measurement,A4_LEARN,Clinical Test,S,A4_FNFT_ERR,2020-01-01,2099-12-31,,27762,CogState,Declared in concept_maps/cogstate.csv
+2100000280,MACQ_Q1,MACQ Q1 Remember New Name,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q1,2020-01-01,2099-12-31,,27455,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000281,MACQ_Q2,MACQ Q2 Recall Phone Numbers,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q2,2020-01-01,2099-12-31,,27450,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000282,MACQ_Q3,MACQ Q3 Where Placed Objects,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q3,2020-01-01,2099-12-31,,27442,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000283,MACQ_Q4,MACQ Q4 Recall Article Facts,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q4,2020-01-01,2099-12-31,,27436,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000284,MACQ_Q5,MACQ Q5 Recall Shopping Items,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q5,2020-01-01,2099-12-31,,27433,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000285,MACQ_Q6,MACQ Q6 Memory vs High School,Measurement,A4_LEARN,Clinical Test,S,A4_MACQ_Q6,2020-01-01,2099-12-31,,27426,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000290,CPATH_Q1,C-PATH Q1,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q1,2020-01-01,2099-12-31,,27769,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000291,CPATH_Q2,C-PATH Q2,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q2,2020-01-01,2099-12-31,,27766,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000292,CPATH_Q3,C-PATH Q3,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q3,2020-01-01,2099-12-31,,27765,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000293,CPATH_Q4,C-PATH Q4,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q4,2020-01-01,2099-12-31,,27764,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000294,CPATH_Q5,C-PATH Q5,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q5,2020-01-01,2099-12-31,,27763,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000295,CPATH_Q6,C-PATH Q6,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q6,2020-01-01,2099-12-31,,27759,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000296,CPATH_Q7,C-PATH Q7,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q7,2020-01-01,2099-12-31,,27756,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000297,CPATH_Q8,C-PATH Q8,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q8,2020-01-01,2099-12-31,,27749,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000298,CPATH_Q9,C-PATH Q9,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q9,2020-01-01,2099-12-31,,27745,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000299,CPATH_Q10,C-PATH Q10,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q10,2020-01-01,2099-12-31,,27739,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000300,WALKING,Walking exercise frequency,Observation,A4_LEARN,Clinical Observation,S,A4_WALKING,2020-01-01,2099-12-31,,14040,Lifestyle,Walking exercise frequency (no standard SNOMED equivalent)
+2100000301,SLEEP,Sleep duration hours,Observation,A4_LEARN,Clinical Observation,S,A4_SLEEP,2020-01-01,2099-12-31,,14065,Lifestyle,Self-reported sleep duration in hours
+2100000302,CPATH_Q13,C-PATH Q13,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q13,2020-01-01,2099-12-31,,27713,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000303,CPATH_Q14,C-PATH Q14,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q14,2020-01-01,2099-12-31,,27700,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000304,CPATH_Q15,C-PATH Q15,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q15,2020-01-01,2099-12-31,,27686,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000305,CPATH_Q16,C-PATH Q16,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q16,2020-01-01,2099-12-31,,27663,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000306,CPATH_Q17,C-PATH Q17,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q17,2020-01-01,2099-12-31,,27635,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000307,CPATH_Q18,C-PATH Q18,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q18,2020-01-01,2099-12-31,,27599,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000308,CPATH_Q19,C-PATH Q19,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q19,2020-01-01,2099-12-31,,27561,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000309,CPATH_Q20,C-PATH Q20,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q20,2020-01-01,2099-12-31,,27525,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000310,CPATH_Q21,C-PATH Q21,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q21,2020-01-01,2099-12-31,,27467,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000311,CPATH_Q22,C-PATH Q22,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q22,2020-01-01,2099-12-31,,27404,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000312,CPATH_Q23,C-PATH Q23,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q23,2020-01-01,2099-12-31,,27345,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000313,CPATH_Q24,C-PATH Q24,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q24,2020-01-01,2099-12-31,,27260,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000314,CPATH_Q25,C-PATH Q25,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q25,2020-01-01,2099-12-31,,27173,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000315,CPATH_Q26,C-PATH Q26,Measurement,A4_LEARN,Clinical Test,S,A4_CPATH_Q26,2020-01-01,2099-12-31,,27066,CogState,Questionnaire item. Domain follows the table the ETL writes to (MEASUREMENT); placement is under review separately.
+2100000400,TX,Treatment assignment,Observation,A4_LEARN,Clinical Observation,S,A4_TX,2020-01-01,2099-12-31,,1169,Treatment Arm,Declared in concept_maps/observation_adqs.py
+2100000401,TX_PLACEBO,Placebo treatment arm,Meas Value,A4_LEARN,Answer,S,A4_TX_PLACEBO,2020-01-01,2099-12-31,,591,Treatment Arm,Answer concept for treatment assignment. Concept id previously held a retired HMT71 mapping; HMT71 now maps to LOINC 40761509
+2100000402,TX_SOLANEZUMAB,Solanezumab,Meas Value,A4_LEARN,Answer,S,A4_TX_SOLANEZUMAB,2020-01-01,2099-12-31,,578,Treatment Arm,Answer concept for treatment assignment
+2100000500,ROCHE:,Roche biomarker panel category marker,Measurement,A4_LEARN,Lab Test,S,A4_ROCHE_MARKER,2020-01-01,2099-12-31,,0,AD Biomarker,Roche biomarker panel category marker (metadata concept for panel grouping)
+2100000501,SRT20477,Anti-Solanezumab Antibody Level,Measurement,A4_LEARN,Lab Test,S,A4_ANTI_LY2062430,2020-01-01,2099-12-31,,8406,Drug Immunogenicity,Clinical trial drug anti-drug antibody level
+2100000502,SRT16102,Solanezumab Plasma Concentration,Measurement,A4_LEARN,Lab Test,S,A4_LY2062430_PK,2020-01-01,2099-12-31,,2023,Drug PK,Clinical trial drug plasma pharmacokinetics
+2100000503,SRT21423,Anti-Solanezumab Neutralizing Antibody,Measurement,A4_LEARN,Lab Test,S,A4_ANTI_LY2062430_NAB,2020-01-01,2099-12-31,,693,Drug Immunogenicity,Neutralizing antibody against clinical trial drug
+2100000504,SRT20478,Anti-Solanezumab Antibody Titer,Measurement,A4_LEARN,Lab Test,S,A4_ANTI_LY2062430_TITER,2020-01-01,2099-12-31,,691,Drug Immunogenicity,Antibody titer against clinical trial drug
+2100000505,ORT13169,Solanezumab CSF Concentration,Measurement,A4_LEARN,Lab Test,S,A4_LY2062430_CSF_PK,2020-01-01,2099-12-31,,150,Drug PK,Clinical trial drug CSF pharmacokinetics
+2100000510,FP40/TP40,Free/Total Plasma Abeta-40 Ratio,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_RATIO,2020-01-01,2099-12-31,,3084,AD Biomarker,Free to total plasma Abeta-40 ratio
+2100000511,FP42/FP40,Free Plasma Abeta-42/40 Ratio,Measurement,A4_LEARN,Lab Test,S,A4_ABETA_FP_RATIO,2020-01-01,2099-12-31,,2897,AD Biomarker,Free plasma Abeta-42 to Abeta-40 ratio
+2100000512,FP42/TP42,Free/Total Plasma Abeta-42 Ratio,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_RATIO,2020-01-01,2099-12-31,,2862,AD Biomarker,Free to total plasma Abeta-42 ratio
+2100000520,SRT15753,CSF Modified Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_CSF_ABETA40_MOD,2020-01-01,2099-12-31,,388,CSF Biomarker,CSF amyloid beta-40 modified assay
+2100000521,SRT15754,CSF Modified Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_CSF_ABETA42_MOD,2020-01-01,2099-12-31,,387,CSF Biomarker,CSF amyloid beta-42 modified assay
+2100000524,SRT18142,CSF Free Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_CSF_ABETA40_FREE,2020-01-01,2099-12-31,,385,CSF Biomarker,CSF free amyloid beta-40
+2100000525,SRT18047,CSF Free Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_CSF_ABETA42_FREE,2020-01-01,2099-12-31,,385,CSF Biomarker,CSF free amyloid beta-42
+2100000530,ORT11360,Hepatitis E IgG/IgM Interpretation,Measurement,A4_LEARN,Lab Test,S,A4_HEPE_INTERP,2020-01-01,2099-12-31,,13,Infectious Disease,Qualitative interpretation of Hep E serology
+2100000531,GET1881,HCV RNA Viral Load,Measurement,A4_LEARN,Lab Test,S,A4_HCV_RNA,2020-01-01,2099-12-31,,1,Infectious Disease,Hepatitis C virus RNA quantitative

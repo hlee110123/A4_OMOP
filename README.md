@@ -154,13 +154,54 @@ The ETL performs 5 validation checks:
 | [Output Schema](docs/Output_Schema.md) | Column schemas, value distributions, join patterns |
 | [Extension Guide](docs/Extension_Guide.md) | Step-by-step guide for adding new domains |
 
+## Loading into an OMOP CDM
+
+The ETL writes CSVs; loading them requires the standard vocabulary plus two
+vocabularies shipped here.
+
+1. **Standard vocabulary** — download from [athena.ohdsi.org](https://athena.ohdsi.org)
+   and load into your CDM instance. This ETL was built against `v5.0 27-FEB-25`
+   (recorded in `cdm_source.vocabulary_version`).
+
+2. **Study-specific concepts** — `custom_vocabulary/CONCEPT.csv` defines the 182
+   `A4_LEARN` concepts used for measures with no standard equivalent (CogState
+   subscales, questionnaire items, imaging finding categories). Load it into
+   `CONCEPT` alongside the standard vocabulary, and `custom_vocabulary/VOCABULARY.csv`
+   into `VOCABULARY`.
+
+3. **DICOM vocabulary** — the MI-CDM `image_occurrence.modality_concept_id` values
+   are DICOM concepts (`2128009230` MR, `2128009252` PT, `2128009239` OP). Load a
+   DICOM vocabulary to resolve them. Note these are non-standard concepts, which is
+   what the MI-CDM extension specifies for that field.
+
+4. **Load the tables** — `load_omop.py` loads the CSVs into an existing schema.
+   It matches **by column name, not position**: several exported tables do not follow
+   CDM column order, so a positional `COPY` would put values in the wrong columns and
+   still succeed.
+
+   ```bash
+   cp .env.example .env      # fill in connection settings
+   python load_omop.py
+   ```
+
+`custom_concepts_needed.csv` is the working registry behind
+`custom_vocabulary/CONCEPT.csv`, carrying source codes, row counts and mapping notes.
+
+### Known gaps
+
+- 49 concept IDs attributed to CDISC do not resolve unless the CDISC vocabulary is
+  loaded; they cover MMSE items, CDR domains and ADL-PQ items.
+- `measurement` omits `unit_source_concept_id`; `observation` omits `value_source_value`,
+  `observation_event_id` and `obs_event_field_concept_id`.
+- Nullable foreign keys are written in float form (`5.0`), and `drug_exposure.stop_reason`
+  exceeds its CDM width. Load by column name and cast, as `load_omop.py` does.
+
 ## Requirements
 
 - Python 3.8+
-- pandas
 
 ```bash
-pip install pandas
+pip install -r requirements.txt
 ```
 
 ## License
