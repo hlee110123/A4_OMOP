@@ -99,3 +99,13 @@ reviewer_mappings/
 
 # Third-party vocabulary bundle - obtain separately
 omop_table_staging_v5.csv
+
+# Local working files — not tracked (2026-08-18 decision)
+.serena/
+A4_OMOP_ETL_Structure021026*.xlsx
+analyses/*_executed.ipynb
+analyses/figure1_etl_pipeline_corrected.svg
+analyses/results/micdm_*.png
+custom_concepts_draft/
+dicom2omop/
+load_omop_to_postgres.ipynb
