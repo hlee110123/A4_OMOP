@@ -3,6 +3,7 @@ Raw Data/
 Derived Data/
 External Data/
 OMOP_Output/
+A4_JSONS/
 
 # OMOP vocabulary files (large; downloaded from Athena - do not commit)
 /CONCEPT.csv
