@@ -1,0 +1,47 @@
+source_code,source_value,value_concept_id,concept_name,concept_source
+Modality,MR,2128009230,Magnetic resonance,DICOM2OMOP
+Modality,PT,2128009252,Positron emission tomography,DICOM2OMOP
+PatientPosition,HFS,2128009361,Head First-Supine,DICOM2OMOP
+PatientPosition,FFS,2128009367,Feet First-Supine,DICOM2OMOP
+BodyPart,BRAIN,2128009416,Brain,DICOM2OMOP
+BodyPart,HEAD,2128009505,Head,DICOM2OMOP
+BodyPart,EXTREMITY,2128009478,Extremity,DICOM2OMOP
+BodyPart,LUNG,2128009558,Lung,DICOM2OMOP
+BodyPartExamined,BRAIN,2128009416,Brain,DICOM2OMOP
+BodyPartExamined,HEAD,2128009505,Head,DICOM2OMOP
+BodyPartExamined,EXTREMITY,2128009478,Extremity,DICOM2OMOP
+BodyPartExamined,LUNG,2128009558,Lung,DICOM2OMOP
+MRAcquisitionType,2D,2100000533,,A4_LEARN custom
+MRAcquisitionType,3D,2100000534,,A4_LEARN custom
+ScanningSequence,SE,2100000535,,A4_LEARN custom
+ScanningSequence,GR,2100000536,,A4_LEARN custom
+ScanningSequence,IR,2100000537,,A4_LEARN custom
+ScanningSequence,EP,2100000538,,A4_LEARN custom
+ScanningSequence,RM,2100000539,,A4_LEARN custom
+SequenceVariant,SK,2100000540,,A4_LEARN custom
+SequenceVariant,SP,2100000541,,A4_LEARN custom
+SequenceVariant,MP,2100000542,,A4_LEARN custom
+SequenceVariant,OSP,2100000543,,A4_LEARN custom
+SequenceVariant,SS,2100000544,,A4_LEARN custom
+SequenceVariant,NONE,2100000545,,A4_LEARN custom
+ScanOptions,IR,2100000546,,A4_LEARN custom
+ScanOptions,FS,2100000547,,A4_LEARN custom
+ScanOptions,SP,2100000548,,A4_LEARN custom
+ScanOptions,PFP,2100000549,,A4_LEARN custom
+ScanOptions,PFF,2100000550,,A4_LEARN custom
+ScanOptions,FC,2100000551,,A4_LEARN custom
+ScanOptions,PER,2100000552,,A4_LEARN custom
+ScanOptions,RG,2100000553,,A4_LEARN custom
+ScanOptions,CG,2100000554,,A4_LEARN custom
+InPlanePhaseEncodingDirectionDICOM,ROW,2100000555,,A4_LEARN custom
+InPlanePhaseEncodingDirectionDICOM,COL,2100000556,,A4_LEARN custom
+Units,BQML,2100000557,,A4_LEARN custom
+Units,KBQCC,2100000558,,A4_LEARN custom
+Units,CNTS,2100000559,,A4_LEARN custom
+Units,NONE,2100000560,,A4_LEARN custom
+Units,PROPCPS,2100000561,,A4_LEARN custom
+DecayCorrection,START,2100000562,,A4_LEARN custom
+DecayCorrection,ADMIN,2100000563,,A4_LEARN custom
+DecayCorrection,NONE,2100000564,,A4_LEARN custom
+PartialFourierDirection,FREQUENCY,2100000565,,A4_LEARN custom
+PartialFourierDirection,PHASE,2100000566,,A4_LEARN custom

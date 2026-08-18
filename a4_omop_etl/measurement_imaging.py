@@ -7,6 +7,22 @@ IMAGING_CONCEPTS = concepts.load_imaging_concepts()
 IMAGING_EXTENDED = concepts.load_imaging_extended()
 
 
+def _viscode(row):
+    """Zero-padded acquisition VISCODE for MI-CDM series matching, or None.
+
+    Sources like PET_VA date rows by the *read* date, which can fall years
+    after acquisition; the VISCODE names the scan visit and lets
+    image_feature link the measurement to the right image series.
+    """
+    v = row.get('VISCODE')
+    if v is None or (isinstance(v, float) and pd.isna(v)) or str(v).strip() == '':
+        return None
+    try:
+        return str(int(float(v))).zfill(3)
+    except (ValueError, TypeError):
+        return str(v).zfill(3)
+
+
 def create_measurement_imaging(
     mri_df: pd.DataFrame,
     amyloid_df: pd.DataFrame,
@@ -57,6 +73,7 @@ def create_measurement_imaging(
                     '_mi_cdm_modality': 'MR',
                     '_mi_cdm_series_type': 'T1_VOLUMETRIC',
                     '_mi_cdm_pipeline': 'VOLUMETRIC_MRI',
+                    '_mi_cdm_viscode': _viscode(row),
                 })
 
     mri_count = len(measurements)
@@ -91,6 +108,7 @@ def create_measurement_imaging(
                 '_mi_cdm_modality': 'PT',
                 '_mi_cdm_series_type': 'AMYLOID_PET',
                 '_mi_cdm_pipeline': 'SUVR_AMYLOID',
+                    '_mi_cdm_viscode': _viscode(row),
             })
 
     amyloid_count = len(measurements) - mri_count
@@ -126,6 +144,7 @@ def create_measurement_imaging(
                 '_mi_cdm_modality': 'PT',
                 '_mi_cdm_series_type': 'TAU_PET',
                 '_mi_cdm_pipeline': 'SUVR_TAU',
+                    '_mi_cdm_viscode': _viscode(row),
             })
 
     tau_count = len(measurements) - mri_count - amyloid_count
@@ -185,6 +204,7 @@ def create_measurement_imaging_extended(
                     '_mi_cdm_modality': 'MR',
                     '_mi_cdm_series_type': 'SWI_READS',
                     '_mi_cdm_pipeline': 'MRI_READS',
+                    '_mi_cdm_viscode': _viscode(row),
                 })
                 mri_count += 1
 
@@ -215,6 +235,7 @@ def create_measurement_imaging_extended(
                     '_mi_cdm_modality': 'MR',
                     '_mi_cdm_series_type': 'FLAIR',
                     '_mi_cdm_pipeline': 'FLAIR_WMH',
+                    '_mi_cdm_viscode': _viscode(row),
                 })
                 flair_count += 1
 
@@ -263,6 +284,7 @@ def create_measurement_imaging_extended(
                 '_mi_cdm_modality': 'PT',
                 '_mi_cdm_series_type': 'AMYLOID_PET',
                 '_mi_cdm_pipeline': 'PET_VA',
+                    '_mi_cdm_viscode': _viscode(row),
             })
             pet_count += 1
 
@@ -293,6 +315,7 @@ def create_measurement_imaging_extended(
                         '_mi_cdm_modality': 'PT',
                         '_mi_cdm_series_type': 'TAU_PET',
                         '_mi_cdm_pipeline': 'TAU_PETSURFER',
+                    '_mi_cdm_viscode': _viscode(row),
                     })
                     petsurfer_count += 1
 
@@ -322,6 +345,7 @@ def create_measurement_imaging_extended(
                         '_mi_cdm_modality': 'PT',
                         '_mi_cdm_series_type': 'TAU_PET',
                         '_mi_cdm_pipeline': 'TAU_STANFORD',
+                    '_mi_cdm_viscode': _viscode(row),
                     })
                     stanford_count += 1
 

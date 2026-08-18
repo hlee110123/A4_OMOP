@@ -87,3 +87,78 @@ def validate_etl(
     print(f"Drug exposure count: {actual_doses} (expected {expected_doses}{suffix}) - {'PASS' if results['drug_exposure_count'] else 'FAIL'}")
 
     return results
+
+
+def validate_mi_cdm(
+    image_occurrence: pd.DataFrame,
+    image_feature: pd.DataFrame,
+    measurement: pd.DataFrame,
+    procedure_occurrence: pd.DataFrame,
+    n_json_series: int,
+    n_metadata_meas: int,
+) -> dict:
+    """
+    MI-CDM data quality checks per the DICOM2OMOP guide section 9.
+
+    Completeness of required IMAGE_OCCURRENCE fields, sidecar count
+    reconciliation, and linkage integrity of the measurement-event and
+    image-feature relationships.
+    """
+    print("\n--- MI-CDM Validation ---")
+    results = {}
+    if len(image_occurrence) == 0:
+        print("No image_occurrence rows - skipping MI-CDM checks")
+        return results
+
+    io = image_occurrence
+
+    # Completeness: required fields per the guide DDL (visit is optional)
+    required = ['person_id', 'procedure_occurrence_id', 'image_occurrence_date',
+                'image_study_UID', 'image_series_UID', 'modality_concept_id']
+    incomplete = {c: int(io[c].isna().sum()) for c in required if io[c].isna().any()}
+    results['micdm_io_complete'] = not incomplete
+    print(f"IMAGE_OCCURRENCE required fields: "
+          f"{'all populated' if not incomplete else incomplete} - "
+          f"{'PASS' if results['micdm_io_complete'] else 'FAIL'}")
+
+    # Reconciliation: every sidecar series produced one row
+    n_sidecar_rows = int(io['local_path'].notna().sum())
+    results['micdm_sidecar_count'] = n_sidecar_rows == n_json_series
+    print(f"Sidecar series reconciliation: {n_sidecar_rows} rows "
+          f"(expected {n_json_series}) - "
+          f"{'PASS' if results['micdm_sidecar_count'] else 'FAIL'}")
+
+    # Linkage: procedures referenced by IMAGE_OCCURRENCE must exist
+    proc_ids = set(procedure_occurrence['procedure_occurrence_id'])
+    linked = io['procedure_occurrence_id'].dropna()
+    orphans = int((~linked.isin(proc_ids)).sum())
+    results['micdm_io_procedures_valid'] = orphans == 0
+    print(f"IMAGE_OCCURRENCE -> procedure orphans: {orphans} - "
+          f"{'PASS' if results['micdm_io_procedures_valid'] else 'FAIL'}")
+
+    # Linkage: DICOM metadata measurements point at real occurrences
+    io_ids = set(io['image_occurrence_id'])
+    if 'measurement_event_id' in measurement.columns:
+        ev = measurement['measurement_event_id'].dropna()
+        bad_events = int((~ev.isin(io_ids)).sum())
+        results['micdm_measurement_events_valid'] = bad_events == 0
+        print(f"MEASUREMENT event links: {len(ev):,} rows, {bad_events} orphans "
+              f"({n_metadata_meas:,} DICOM metadata) - "
+              f"{'PASS' if results['micdm_measurement_events_valid'] else 'FAIL'}")
+
+    # Linkage: image features point at real occurrences
+    if len(image_feature) > 0:
+        bad_feat = int((~image_feature['image_occurrence_id'].isin(io_ids)).sum())
+        results['micdm_feature_links_valid'] = bad_feat == 0
+        print(f"IMAGE_FEATURE -> occurrence orphans: {bad_feat} - "
+              f"{'PASS' if results['micdm_feature_links_valid'] else 'FAIL'}")
+
+    # Visit linkage rate on sidecar-derived rows (informational threshold)
+    sidecar = io[io['local_path'].notna()]
+    if len(sidecar) > 0:
+        rate = sidecar['visit_occurrence_id'].notna().mean()
+        results['micdm_visit_linkage'] = rate >= 0.99
+        print(f"Sidecar visit linkage: {rate:.2%} - "
+              f"{'PASS' if results['micdm_visit_linkage'] else 'FAIL'}")
+
+    return results

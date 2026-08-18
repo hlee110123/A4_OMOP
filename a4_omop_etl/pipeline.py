@@ -50,9 +50,19 @@ from .postprocessing import (
     expand_observation_periods,
 )
 from .procedure_occurrence import create_procedure_occurrence
-from .image_occurrence import create_image_occurrence
-from .image_feature import create_image_feature, strip_mi_cdm_annotations
-from .export import export_tables, export_mi_cdm_tables, validate_etl
+from .image_occurrence import create_image_occurrence, PRIVATE_COLUMNS
+from .image_feature import (
+    create_image_feature,
+    backfill_measurement_event_links,
+    strip_mi_cdm_annotations,
+)
+from .image_metadata import (
+    build_image_json_index,
+    extend_procedures_from_json,
+    create_dicom_metadata_measurements,
+    IMAGE_OCCURRENCE_FIELD_CONCEPT_ID,
+)
+from .export import export_tables, export_mi_cdm_tables, validate_etl, validate_mi_cdm
 
 
 def main():
@@ -194,22 +204,50 @@ def main():
     # ── Post-processing: unit mapping ────────────────────────────────
     measurement = map_unit_concepts(measurement)
 
-    # ── MI-CDM Extension (Park et al. 2025) ─────────────────────────
-    print("\n--- Phase 30: MI-CDM PROCEDURE_OCCURRENCE (Imaging) ---")
+    # ── MI-CDM Extension (Park et al. 2025 / DICOM2OMOP guide) ──────
+    print("\n--- Phase 30: MI-CDM DICOM Sidecar Index (A4_JSONS) ---")
+    json_index = build_image_json_index(person, visit_occurrence, date_anchor)
+
+    print("\n--- Phase 30b: MI-CDM PROCEDURE_OCCURRENCE (Imaging) ---")
     procedure_occurrence = create_procedure_occurrence(
         src, person, visit_occurrence, date_anchor
+    )
+    procedure_occurrence, json_index = extend_procedures_from_json(
+        json_index, procedure_occurrence
     )
 
     print("\n--- Phase 31: MI-CDM IMAGE_OCCURRENCE ---")
     image_occurrence = create_image_occurrence(
-        src, person, visit_occurrence, procedure_occurrence, date_anchor
+        src, person, visit_occurrence, procedure_occurrence, date_anchor,
+        json_index=json_index
     )
 
     print("\n--- Phase 32: MI-CDM IMAGE_FEATURE (Bridge) ---")
     image_feature = create_image_feature(measurement, image_occurrence)
+    measurement = backfill_measurement_event_links(
+        measurement, image_feature, IMAGE_OCCURRENCE_FIELD_CONCEPT_ID
+    )
 
     # Strip MI-CDM annotation columns before export
     measurement = strip_mi_cdm_annotations(measurement)
+
+    print("\n--- Phase 33: MI-CDM DICOM Metadata -> MEASUREMENT ---")
+    n_metadata_meas = 0
+    if len(json_index) > 0 and len(image_occurrence) > 0:
+        io_ids = image_occurrence.loc[
+            image_occurrence['_rel_path'].notna(),
+            ['image_occurrence_id', '_rel_path', '_elem_idx']
+        ]
+        index_with_io = json_index.merge(
+            io_ids, on=['_rel_path', '_elem_idx'], how='inner'
+        )
+        metadata_meas = create_dicom_metadata_measurements(
+            index_with_io, start_measurement_id=int(measurement['measurement_id'].max()) + 1
+        )
+        n_metadata_meas = len(metadata_meas)
+        if n_metadata_meas > 0:
+            measurement = pd.concat([measurement, metadata_meas], ignore_index=True)
+            print(f"Total MEASUREMENT records incl. DICOM metadata: {len(measurement):,}")
 
     # ── Observations ─────────────────────────────────────────────────
     print("\n--- Phase 11-12: OBSERVATION Table (Lifestyle & Family History) ---")
@@ -308,8 +346,11 @@ def main():
     })
 
     # Export MI-CDM extension tables (the two new tables from Park & Jeon et al. 2024)
+    # Private working columns (_sequence etc.) are for in-pipeline linkage only
+    image_occurrence_export = image_occurrence.drop(
+        columns=PRIVATE_COLUMNS + ['_date_str'], errors='ignore')
     export_mi_cdm_tables({
-        'image_occurrence': image_occurrence,
+        'image_occurrence': image_occurrence_export,
         'image_feature': image_feature,
     })
 
@@ -319,6 +360,11 @@ def main():
         src['subjinfo'], src['sv'],
         drug_exposure, src['dose']
     )
+    validation_results.update(validate_mi_cdm(
+        image_occurrence_export, image_feature, measurement,
+        procedure_occurrence, n_json_series=len(json_index),
+        n_metadata_meas=n_metadata_meas,
+    ))
 
     all_passed = all(validation_results.values())
     print(f"\n{'=' * 60}")

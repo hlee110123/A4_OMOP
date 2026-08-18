@@ -14,6 +14,9 @@ CONCEPT_DIR = BASE_DIR / "concept_maps"
 # MI-CDM extension output subdirectory
 MI_CDM_OUTPUT_DIR = OUTPUT_DIR / "mi_cdm"
 
+# DICOM sidecar JSON metadata (dcm2niix BIDS sidecars, one per series)
+IMAGE_JSON_DIR = BASE_DIR / "A4_JSONS"
+
 # Source file manifest: (variable_name, subdirectory, filename)
 # Grouped by pipeline phase for readability.
 SOURCE_FILES = [

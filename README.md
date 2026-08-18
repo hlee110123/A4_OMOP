@@ -33,10 +33,10 @@ python -m a4_omop_etl
 | `visit_occurrence.csv` | VISIT_OCCURRENCE | 99,795 | Clinical site visits |
 | `observation_period.csv` | OBSERVATION_PERIOD | 6,945 | Per-subject enrollment windows |
 | `drug_exposure.csv` | DRUG_EXPOSURE | 74,776 | Solanezumab and placebo infusion records |
-| `measurement.csv` | MEASUREMENT | 4,451,784 | Labs, vitals, cognitive tests, biomarkers, imaging |
+| `measurement.csv` | MEASUREMENT | 5,723,045 | Labs, vitals, cognitive tests, biomarkers, imaging, DICOM acquisition metadata |
 | `observation.csv` | OBSERVATION | 1,545,309 | Lifestyle, family history, questionnaires, treatment arm |
 | `condition_occurrence.csv` | CONDITION_OCCURRENCE | 14,925 | Abnormal exam findings |
-| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 20,783 | Imaging procedures (MRI, PET, retinal) |
+| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 23,881 | Imaging procedures (MRI, PET, retinal; incl. sidecar-only sessions) |
 | `cdm_source.csv` | CDM_SOURCE | 1 | Source and vocabulary metadata |
 | `date_anchor.csv` | _(utility)_ | 6,945 | De-identification offset reference |
 
@@ -46,8 +46,8 @@ The extension adds two tables. `procedure_occurrence` is a standard CDM table an
 
 | File | MI-CDM Table | Records | Description |
 |------|-----------|--------:|-------------|
-| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 23,898 | One row per DICOM series equivalent |
-| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 639,716 | Polymorphic bridge: image_occurrence ↔ measurement |
+| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 44,941 | One row per DICOM series (43,512 from A4_JSONS sidecars) |
+| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 662,276 | Polymorphic bridge: image_occurrence ↔ measurement |
 
 ## Data Domains
 

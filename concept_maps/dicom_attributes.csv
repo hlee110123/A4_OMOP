@@ -1,0 +1,58 @@
+source_code,concept_id,concept_name,domain,dicom_tag,tier,datatype,unit,unit_concept_id,scale_factor,multivalue,notes
+MagneticFieldStrength,2128000832,Magnetic Field Strength,Measurement,00180087,A,numeric,T,9646,1,,
+ImagingFrequency,2128000829,Imaging Frequency,Measurement,00180084,A,numeric,MHz,710229,1,,
+EchoTime,2128000826,Echo Time,Measurement,00180081,A,numeric,ms,9593,1000,,BIDS seconds converted to DICOM milliseconds
+RepetitionTime,2128000825,Repetition Time,Measurement,00180080,A,numeric,ms,9593,1000,,BIDS seconds converted to DICOM milliseconds
+InversionTime,2128000827,Inversion Time,Measurement,00180082,A,numeric,ms,9593,1000,,BIDS seconds converted to DICOM milliseconds
+FlipAngle,2128000999,Flip Angle,Measurement,00181314,A,numeric,deg,9484,1,,
+SliceThickness,2128000817,Slice Thickness,Measurement,00180050,A,numeric,mm,8588,1,,
+SpacingBetweenSlices,2128000833,Spacing Between Slices,Measurement,00180088,A,numeric,mm,8588,1,,
+PixelBandwidth,2128000839,Pixel Bandwidth,Measurement,00180095,A,numeric,Hz,9521,1,,Hz per pixel
+SAR,2128001001,SAR,Measurement,00181316,A,numeric,W/kg,0,1,,
+EchoTrainLength,2128000836,Echo Train Length,Measurement,00180091,A,numeric,,,1,,
+NumberOfAverages,2128000828,Number of Averages,Measurement,00180083,A,numeric,,,1,,
+PercentSampling,2128000837,Percent Sampling,Measurement,00180093,A,numeric,%,8554,1,,
+PercentPhaseFOV,2128000838,Percent Phase Field of View,Measurement,00180094,A,numeric,%,8554,1,,
+PhaseEncodingSteps,2128000834,Number of Phase Encoding Steps,Measurement,00180089,A,numeric,,,1,,
+FrequencyEncodingSteps,2128001239,MR Acquisition Frequency Encoding Steps,Measurement,00189058,A,numeric,,,1,,
+PhaseEncodingStepsOutOfPlane,2128001329,MR Acquisition Phase Encoding Steps out-of-plane,Measurement,00189232,A,numeric,,,1,,
+ParallelReductionFactorInPlane,2128001249,Parallel Reduction Factor In-plane,Measurement,00189069,A,numeric,,,1,,
+ParallelReductionFactorOutOfPlane,2128001293,Parallel Reduction Factor out-of-plane,Measurement,00189155,A,numeric,,,1,,
+PartialFourier,2128001259,Partial Fourier,Measurement,00189081,A,numeric,,,1,,BIDS sampling fraction stored under DICOM Partial Fourier attribute (documented convention)
+AcquisitionDuration,2128001251,Acquisition Duration,Measurement,00189073,A,numeric,s,8555,1,,
+InjectedRadioactivity,2128000893,Radionuclide Total Dose,Measurement,00181074,A,numeric,Bq,9469,1,,BIDS rename of DICOM Radionuclide Total Dose; DICOM PS3.3 unit is Bq
+RadionuclideHalfLife,2128000894,Radionuclide Half Life,Measurement,00181075,A,numeric,s,8555,1,,
+RadionuclidePositronFraction,2128000895,Radionuclide Positron Fraction,Measurement,00181076,A,numeric,,,1,,fraction
+ScatterFraction,2128003070,Scatter Fraction Factor,Measurement,00541323,A,numeric,,,1,,
+DoseCalibrationFactor,2128003069,Dose Calibration Factor,Measurement,00541322,A,numeric,,,1,,
+FrameDuration,2128000985,Actual Frame Duration,Measurement,00181242,A,numeric,ms,9593,1000,uniform,"Multi-frame array: single row when all frames equal, else source value only"
+FrameReferenceTime,2128003064,Frame Reference Time,Measurement,00541300,A,numeric,ms,9593,1,,dcm2niix passes DICOM milliseconds through unchanged
+MTState,2128001209,Magnetization Transfer,Measurement,00189020,A,bool,,,1,,BIDS boolean; 1=on 0=off
+SpoilingState,2128001205,Spoiling,Measurement,00189016,A,bool,,,1,,BIDS boolean; 1=spoiled 0=not
+Modality,2128000050,Modality,Measurement,00080060,B,coded,,,1,,
+PatientPosition,2128001097,Patient Position,Measurement,00185100,B,coded,,,1,,
+BodyPart,2128000792,Body Part Examined,Measurement,00180015,B,coded,,,1,,dcm2niix variant spelling of BodyPartExamined
+BodyPartExamined,2128000792,Body Part Examined,Measurement,00180015,B,coded,,,1,,
+MRAcquisitionType,2128000796,MR Acquisition Type,Measurement,00180023,C,coded,,,1,,
+ScanningSequence,2128000793,Scanning Sequence,Measurement,00180020,C,coded,,,1,split,Backslash-multi: one row per value
+SequenceVariant,2128000794,Sequence Variant,Measurement,00180021,C,coded,,,1,split,Backslash-multi: one row per value
+ScanOptions,2128000795,Scan Options,Measurement,00180022,C,coded,,,1,split,Backslash-multi: one row per value; vendor terms stay unmapped
+InPlanePhaseEncodingDirectionDICOM,2128000998,In-plane Phase Encoding Direction,Measurement,00181312,C,coded,,,1,,
+Units,2128003048,Units,Measurement,00541001,C,coded,,,1,,PET pixel value units
+DecayCorrection,2128003054,Decay Correction,Measurement,00541102,C,coded,,,1,,
+PartialFourierDirection,2128001223,Partial Fourier Direction,Measurement,00189036,C,coded,,,1,,
+SeriesDescription,2128000162,Series Description,Measurement,0008103E,D,text,,,1,,
+ProtocolName,2128000864,Protocol Name,Measurement,00181030,D,text,,,1,,
+StudyDescription,2128000160,Study Description,Measurement,00081030,D,text,,,1,,Often contains the BID (already in person_source_value)
+ProcedureStepDescription,2128002501,Performed Procedure Step Description,Measurement,00400254,D,text,,,1,,
+Manufacturer,2128000056,Manufacturer,Measurement,00080070,D,text,,,1,,
+SequenceName,2128000797,Sequence Name,Measurement,00180024,D,text,,,1,,
+PulseSequenceName,2128001196,Pulse Sequence Name,Measurement,00189005,D,text,,,1,,
+ReceiveCoilName,2128000988,Receive Coil Name,Measurement,00181250,D,text,,,1,,
+ReconstructionMethod,2128003055,Reconstruction Method,Measurement,00541103,D,text,,,1,,
+ConvolutionKernel,2128000983,Convolution Kernel,Measurement,00181210,D,text,,,1,,
+AttenuationCorrectionMethod,2128003053,Attenuation Correction Method,Measurement,00541101,D,text,,,1,,
+Radiopharmaceutical,2128000805,Radiopharmaceutical,Measurement,00180031,D,text,,,1,,value_as_concept_id normalized by filename sequence via radiopharmaceuticals.csv
+ImageComments,2128001740,Image Comments,Measurement,00204000,D,text,,,1,,
+DeidentificationMethod,2128000372,De-identification Method,Measurement,00120063,D,text,,,1,,
+ParallelAcquisitionTechnique,2128001256,Parallel Acquisition Technique,Measurement,00189078,D,text,,,1,,GRAPPA/SENSE vendor spellings vary

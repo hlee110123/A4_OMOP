@@ -286,3 +286,37 @@ def load_image_finding_concepts() -> dict:
     """source_code (str) → concept_id (int).  Finding grouping concepts."""
     rows = _load_csv('image_findings.csv')
     return {r['source_code']: int(r['concept_id']) for r in rows}
+
+
+# ─── DICOM Sidecar Metadata (DICOM2OMOP MI-CDM guide) ────────────────
+
+def load_dicom_attribute_map() -> dict:
+    """JSON sidecar key → attribute spec for metadata MEASUREMENT rows.
+
+    Returns {source_code: {concept_id, name, tier, datatype, unit,
+    unit_concept_id, scale_factor, multivalue}}.
+    """
+    rows = _load_csv('dicom_attributes.csv')
+    return {r['source_code']: {
+        'concept_id': int(r['concept_id']),
+        'name': r['concept_name'],
+        'tier': r['tier'],
+        'datatype': r['datatype'],
+        'unit': r['unit'],
+        'unit_concept_id': int(r['unit_concept_id']) if r['unit_concept_id'] else 0,
+        'scale_factor': float(r['scale_factor']) if r['scale_factor'] else 1.0,
+        'multivalue': r['multivalue'],
+    } for r in rows}
+
+
+def load_dicom_value_map() -> dict:
+    """(source_code, source_value) → value_concept_id for DICOM coded strings."""
+    rows = _load_csv('dicom_value_maps.csv')
+    return {(r['source_code'], r['source_value']): int(r['value_concept_id'])
+            for r in rows}
+
+
+def load_radiopharmaceutical_concepts() -> dict:
+    """Filename sequence (FBP/FTP) → normalized tracer concept_id."""
+    rows = _load_csv('radiopharmaceuticals.csv')
+    return {r['source_code']: int(r['concept_id']) for r in rows}

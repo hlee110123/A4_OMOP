@@ -47,12 +47,12 @@ All dates in the output are **synthetic**. The pipeline applies a deterministic 
 | `visit_occurrence.csv` | VISIT_OCCURRENCE | 99,795 | Clinical site visits |
 | `observation_period.csv` | OBSERVATION_PERIOD | 6,945 | Per-subject enrollment windows |
 | `drug_exposure.csv` | DRUG_EXPOSURE | 74,777 | Solanezumab infusion records |
-| `measurement.csv` | MEASUREMENT | 4,494,112 | Labs, vitals, cognitive tests + items, biomarkers, imaging, CogState (battery + MACQ + C-PATH items) |
+| `measurement.csv` | MEASUREMENT | 5,723,045 | Labs, vitals, cognitive tests + items, biomarkers, imaging, CogState, DICOM acquisition metadata |
 | `observation.csv` | OBSERVATION | 1,511,872 | Lifestyle, family history, C-SSRS, ADQS, questionnaire items (ADLPQ, GDS, IES, FTP, RSS, VIEWS, etc.) |
 | `condition_occurrence.csv` | CONDITION_OCCURRENCE | 7,391 | Abnormal physical & neurological exam findings from phyneuro |
-| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 20,783 | Imaging procedures (MRI brain, PET amyloid, PET tau, retinal) — standard OMOP CDM v5.4 table |
-| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 23,898 | DICOM series equivalents — MI-CDM extension (Park & Jeon et al. 2024) |
-| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 675,690 | Polymorphic bridge: image ↔ measurement — MI-CDM extension (Park & Jeon et al. 2024) |
+| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 23,881 | Imaging procedures (MRI brain, PET amyloid, PET tau, retinal; incl. sidecar-only sessions) — standard OMOP CDM v5.4 table |
+| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 44,941 | DICOM series (43,512 sidecar + 1,429 tabular) — MI-CDM extension (Park & Jeon et al. 2024) |
+| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 662,276 | Polymorphic bridge: image ↔ measurement — MI-CDM extension (Park & Jeon et al. 2024) |
 | `date_anchor.csv` | _(utility)_ | 6,945 | De-identification offset reference |
 
 **Total records across all files**: 7,003,365 (counts grew substantially across Rounds 1-5 with item-level mapping additions for ADLPQ, IES, GDS, CogState MACQ/C-PATH, FTP/RSS/VIEWS, and ADQS APOE genotypes)
@@ -506,7 +506,7 @@ MI-CDM extension table (Park et al. 2025). One row per DICOM series equivalent, 
 
 ## mi_cdm/image_feature.csv
 
-MI-CDM extension table (Park et al. 2025). Polymorphic bridge linking each imaging measurement to its source image_occurrence. Uses the OMOP event pattern: `image_feature_event_field_concept_id` identifies the target table's PK field (1147330 = measurement.measurement_id), and `image_feature_event_id` holds the actual measurement_id value.
+MI-CDM extension table (Park et al. 2025). Polymorphic bridge linking each imaging measurement to its source image_occurrence. Uses the OMOP event pattern: `image_feature_event_field_concept_id` identifies the target table's PK field (1147330 = the MEASUREMENT table concept per the DICOM2OMOP MI-CDM guide), and `image_feature_event_id` holds the actual measurement_id value.
 
 ### Column Schema
 
@@ -515,7 +515,7 @@ MI-CDM extension table (Park et al. 2025). Polymorphic bridge linking each imagi
 | `image_feature_id` | integer | No | Sequential identifier |
 | `person_id` | integer | No | FK to `person.person_id` |
 | `image_occurrence_id` | integer | No | FK to `image_occurrence.image_occurrence_id` |
-| `image_feature_event_field_concept_id` | integer | No | Always 1147330 (measurement.measurement_id) |
+| `image_feature_event_field_concept_id` | integer | No | Always 1147330 (MEASUREMENT table concept) |
 | `image_feature_event_id` | integer | No | Actual measurement_id value (polymorphic FK) |
 | `image_feature_concept_id` | integer | No | LOINC/custom concept for the specific feature measured |
 | `image_feature_type_concept_id` | integer | No | Always 32880 (Derived value) |
@@ -824,7 +824,7 @@ Frequently used concept IDs across all output files.
 
 | Concept ID | Label | Usage |
 |-----------:|-------|-------|
-| 1147330 | measurement.measurement_id | `image_feature_event_field_concept_id` (polymorphic FK target) |
+| 1147330 | measurement (Table concept) | `image_feature_event_field_concept_id` (polymorphic FK target) |
 | 32880 | Derived value | `image_feature_type_concept_id` (algorithm-derived) |
 
 ---

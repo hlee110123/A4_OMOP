@@ -956,3 +956,26 @@ These are the same 4 pending decisions from Round 4, now confirmed by independen
 - `a4_omop_etl/helpers.py` — VISCODE float64 fix
 - `a4_omop_etl/observation_adqs.py` — APOE hardcoded concept_ids
 - `a4_omop_etl/postprocessing.py` — case-insensitive unit lookup
+
+---
+
+## Task: image_feature_event_field_concept_id — 1147138 reverted to 1147330 ✅ (2026-08-18)
+
+### Findings
+- The 2026-07 audit (finding C11) changed `image_feature_event_field_concept_id` from 1147330
+  (`measurement`, concept_class Table) to 1147138 (`measurement.measurement_id`, concept_class
+  Field), reasoning that the polymorphic join needs a Field concept.
+- The DICOM2OMOP "ETL Guide for Loading DICOM Data into OMOP Using MI-CDM" (section 7, provided
+  by the MI-CDM author) explicitly specifies: "Set image_feature_event_field_concept_id to
+  1147330, representing the OMOP MEASUREMENT table."
+
+### Decision
+Follow the author's guide: **1147330**. Cross-network MI-CDM queries will expect the
+guide-specified value; conformance with the extension's own specification outweighs the
+Field-vs-Table precision argument. This supersedes audit finding C11.
+
+### Related (same guide, updated design)
+- DICOM header metadata is stored in IMAGE_OCCURRENCE + MEASUREMENT only — never IMAGE_FEATURE.
+- Metadata and derived measurements link back to their series via `measurement_event_id` +
+  `meas_event_field_concept_id` = 2100000532 (custom A4_LEARN Field concept for
+  `image_occurrence.image_occurrence_id`; no standard concept exists for extension-table fields).

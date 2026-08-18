@@ -825,7 +825,7 @@ Extends `observation_period_end_date` to cover the latest event date per person 
 | `image_feature_id` | Generated | Sequential 1..N |
 | `person_id` | measurement.person_id | Direct |
 | `image_occurrence_id` | Computed | Join measurement to image_occurrence on (person_id, date, modality) |
-| `image_feature_event_field_concept_id` | Constant | 1147330 (= measurement.measurement_id concept) |
+| `image_feature_event_field_concept_id` | Constant | 1147330 (= the MEASUREMENT table concept, per the DICOM2OMOP MI-CDM guide) |
 | `image_feature_event_id` | measurement.measurement_id | Direct (polymorphic FK) |
 | `image_feature_concept_id` | measurement.measurement_concept_id | Direct |
 | `image_feature_type_concept_id` | Constant | 32880 (Derived value) |

@@ -815,4 +815,4 @@ Each exam field is recorded as Normal (value_as_concept_id=4069590) or Abnormal 
 | RETINAL_AI | urn:a4:pipeline:retinal_ai | 2100000098 | Retinal imaging measurement |
 | PET_VA | urn:a4:pipeline:pet_visual_assessment | 2100000099 | PET visual assessment |
 
-**Polymorphic event**: `image_feature_event_field_concept_id` = 1147330 (measurement.measurement_id), `image_feature_event_id` = actual measurement_id value.
+**Polymorphic event**: `image_feature_event_field_concept_id` = 1147330 (the MEASUREMENT table concept per the DICOM2OMOP MI-CDM guide), `image_feature_event_id` = actual measurement_id value.

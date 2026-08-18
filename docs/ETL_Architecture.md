@@ -288,12 +288,12 @@ All output files are written to `OMOP_Output/` as CSV.
 | `visit_occurrence.csv` | VISIT_OCCURRENCE | 99,795 | Clinical visits excluding "Not Done" entries |
 | `observation_period.csv` | OBSERVATION_PERIOD | 6,945 | One continuous period per person (consent to last event) |
 | `drug_exposure.csv` | DRUG_EXPOSURE | 74,777 | Completed Solanezumab infusions |
-| `measurement.csv` | MEASUREMENT | 4,494,112 | All quantitative clinical data (combined from 9 measurement phases; includes item-level cognitive/CogState/biomarker data added in Rounds 1-5) |
+| `measurement.csv` | MEASUREMENT | 5,723,045 | All quantitative clinical data (9 measurement phases + 1,271,111 DICOM acquisition metadata rows from A4_JSONS sidecars) |
 | `observation.csv` | OBSERVATION | 1,511,872 | Qualitative observations including questionnaires (combined from 8 observation phases; includes item-level ADLPQ, GDS, IES, FTP, RSS, VIEWS added in Rounds 1-5) |
 | `condition_occurrence.csv` | CONDITION_OCCURRENCE | 7,391 | Abnormal physical & neurological exam findings from phyneuro |
-| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 20,783 | Imaging procedures (MRI brain, PET amyloid, PET tau, retinal) — standard OMOP CDM v5.4 table |
-| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 23,898 | DICOM series equivalents (MI-CDM extension table per Park & Jeon et al. 2024) |
-| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 675,690 | Polymorphic bridge to measurement (MI-CDM extension table per Park & Jeon et al. 2024) |
+| `procedure_occurrence.csv` | PROCEDURE_OCCURRENCE | 23,881 | Imaging procedures (MRI brain, PET amyloid, PET tau, retinal; incl. sidecar-only sessions) — standard OMOP CDM v5.4 table |
+| `mi_cdm/image_occurrence.csv` | IMAGE_OCCURRENCE | 44,941 | DICOM series (43,512 from A4_JSONS sidecars + 1,429 tabular fallback; MI-CDM extension per Park & Jeon et al. 2024) |
+| `mi_cdm/image_feature.csv` | IMAGE_FEATURE | 662,276 | Polymorphic bridge to measurement (MI-CDM extension table per Park & Jeon et al. 2024) |
 | `date_anchor.csv` | -- (utility) | 6,945 | BID-to-synthetic-date mapping (not an OMOP table) |
 
 **Total records across output tables: 7,003,365** (counts grew across Rounds 1-5 with item-level mapping expansions)
@@ -428,17 +428,19 @@ by exact VISCODE (or exact date for imaging) during extraction in
 `prepare_source_df()`. There is no fuzzy/day-window matching; unmatched records
 keep a null `visit_occurrence_id`.
 
-### Phases 30-32 -- MI-CDM Extension (Park et al. 2025)
+### Phases 30-33 -- MI-CDM Extension (Park et al. 2025 / DICOM2OMOP guide)
 
-The Medical Imaging CDM extension adds three tables linking imaging procedures to their derived measurements via the polymorphic event pattern.
+The Medical Imaging CDM extension links imaging procedures, series, acquisition metadata, and derived measurements. Series-level DICOM metadata comes from `A4_JSONS/` (~42.6k dcm2niix BIDS sidecar JSONs, one per acquired series; a few PET files hold multiple reconstruction series). Sidecars are de-identified (no dates, UIDs, or Patient ID), so persons/visits resolve from the filename `{A4|LEARN|SF}_{MR|PET}_{sequence}_{BID}_{VISCODE}` and dates come from the linked visit.
 
 | Phase | Function | Description |
 |-------|----------|-------------|
-| 30 | `create_procedure_occurrence()` | Imaging procedures (MRI, PET, retinal) deduped by (person, procedure, date) |
-| 31 | `create_image_occurrence()` | One row per DICOM series equivalent, with synthetic DICOM UIDs |
-| 32 | `create_image_feature()` | Links each imaging measurement to its image_occurrence via `image_feature_event_field_concept_id` (1147330) and `image_feature_event_id` (measurement_id) |
+| 30 | `build_image_json_index()` | Scan A4_JSONS into a series-level index linked to person/visit/date |
+| 30b | `create_procedure_occurrence()` + `extend_procedures_from_json()` | Imaging procedures from results files, deduped by (person, procedure, date); sidecar-only sessions (screen-fail screening PETs, MR-only visits) get new procedure rows (type 32817 EHR) |
+| 31 | `create_image_occurrence()` | One row per DICOM series. Sidecar series are authoritative (local_path = sidecar file, deterministic synthetic UIDs: study UID shared per person+visit+modality, series UID per file); tabular rows kept only where no sidecar covers the scan (retinal always) |
+| 32 | `create_image_feature()` | Links each derived imaging measurement to its image_occurrence via `image_feature_event_field_concept_id` (1147330, the MEASUREMENT table concept per the MI-CDM guide) and `image_feature_event_id` (measurement_id); occurrence matching prefers same visit + series type. `backfill_measurement_event_links()` then sets `measurement_event_id`/`meas_event_field_concept_id` on those derived measurements (guide section 7) |
+| 33 | `create_dicom_metadata_measurements()` | Whitelisted DICOM attributes (57 keys, `concept_maps/dicom_attributes.csv`) become MEASUREMENT rows: DICOM attribute concept as measurement_concept_id, numerics converted to DICOM-standard units (TR/TE/TI seconds→ms), coded strings mapped via `dicom_value_maps.csv`, raw values preserved as source values, `measurement_event_id` = image_occurrence_id with field concept 2100000532. Per the updated DICOM2OMOP design, metadata is NOT written to image_feature |
 
-After image_feature creation, `strip_mi_cdm_annotations()` removes temporary `_mi_cdm_*` columns from measurement before export.
+After image_feature creation, `strip_mi_cdm_annotations()` removes temporary `_mi_cdm_*` columns from measurement before export. `validate_mi_cdm()` adds completeness, reconciliation, and linkage checks per the guide's section 9.
 
 ### Phase 18 -- Export and Validation
 

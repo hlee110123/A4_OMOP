@@ -1,0 +1,3 @@
+source_code,concept_id,concept_name,domain,notes
+FBP,43532316,florbetapir,Drug,RxNorm ingredient; amyloid tracer (18F-florbetapir/AV-45)
+FTP,702008,flortaucipir,Drug,RxNorm ingredient; tau tracer (18F-flortaucipir/AV-1451)

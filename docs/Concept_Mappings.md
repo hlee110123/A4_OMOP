@@ -121,6 +121,9 @@ Some CSVs contain a `group` column that subdivides entries (for example, `core` 
 | 20 | `modalities.csv` | 3 | source_code, concept_id, concept_name, notes | (MI-CDM) | DICOM (DICOM2OMOP standard, Park & Jeon 2024) |
 | 21 | `image_feature_types.csv` | 2 | source_code, concept_id, concept_name, notes | (MI-CDM) | OMOP Type Concept |
 | 22 | `image_findings.csv` | 7 | source_code, concept_id, concept_name, notes | (MI-CDM) | A4_LEARN (custom) |
+| 23 | `dicom_attributes.csv` | 57 | source_code, concept_id, concept_name, domain, dicom_tag, tier, datatype, unit, unit_concept_id, scale_factor, multivalue, notes | Measurement | DICOM (DICOM2OMOP staging vocabulary) |
+| 24 | `dicom_value_maps.csv` | 46 | source_code, source_value, value_concept_id, concept_name, concept_source | Measurement | DICOM (DICOM2OMOP) + A4_LEARN customs |
+| 25 | `radiopharmaceuticals.csv` | 2 | source_code, concept_id, concept_name, domain, notes | Drug | RxNorm (florbetapir, flortaucipir) |
 
 ---
 
@@ -966,6 +969,38 @@ Maps finding categories to custom concept IDs for grouping related image feature
 | pet_visual_assessment | 2100000099 | PET visual assessment | Qualitative PET read |
 
 ---
+
+## 23. DICOM Attributes (`dicom_attributes.csv`)
+
+**Loader**: `load_dicom_attribute_map()` -- used by `image_metadata.py`
+
+The whitelist of dcm2niix BIDS-sidecar JSON properties (from `A4_JSONS/`) loaded into MEASUREMENT as DICOM acquisition metadata, per the DICOM2OMOP "ETL Guide for Loading DICOM Data into OMOP Using MI-CDM" section 5. Each row maps a JSON key to its DICOM tag and DICOM-vocabulary attribute concept (from `omop_table_staging_v5.csv`), with handling metadata:
+
+- **tier**: A = numeric (`value_as_number` + unit), B = coded with existing DICOM value concepts, C = coded with minted A4_LEARN value concepts, D = free text (source value only)
+- **datatype**: numeric / bool / coded / text
+- **scale_factor**: unit conversion to DICOM-standard units (e.g. 1000 for BIDS seconds -> DICOM milliseconds on TR/TE/TI/FrameDuration)
+- **multivalue**: `split` = backslash-multi coded strings become one row per value; `uniform` = array collapses to a single row when all elements are equal (FrameDuration)
+
+The 50 sidecar properties with no public DICOM tag (dcm2niix artifacts, vendor privates) and 5 structural attributes (ImageType, SeriesNumber, etc.) are deliberately excluded; the full JSON remains reachable via `image_occurrence.local_path`.
+
+Every metadata measurement row carries `measurement_event_id` = its `image_occurrence_id` and `meas_event_field_concept_id` = 2100000532, and `measurement_type_concept_id` = 32817 (EHR). DICOM metadata is NOT written to image_feature (updated DICOM2OMOP design).
+
+## 24. DICOM Value Maps (`dicom_value_maps.csv`)
+
+**Loader**: `load_dicom_value_map()` -- used by `image_metadata.py`
+
+Maps (attribute key, coded-string value) to `value_as_concept_id`. Sources:
+
+- **DICOM2OMOP**: existing DICOM staging value concepts linked via "Maps to value" (Modality MR/PT, PatientPosition HFS/FFS, BodyPartExamined BRAIN/HEAD/EXTREMITY/LUNG)
+- **A4_LEARN custom** (2100000533-2100000566): minted for closed DICOM defined-term sets with no staging value concepts -- MRAcquisitionType (2D/3D), ScanningSequence (SE/GR/IR/EP/RM), SequenceVariant, ScanOptions (DICOM-defined terms only; vendor `*_GEMS` terms stay unmapped), InPlanePhaseEncodingDirection (ROW/COL), Units (BQML etc.), DecayCorrection (START/ADMIN/NONE), PartialFourierDirection
+
+Unmapped values keep their raw string in `value_source_value` / `measurement_source_value`.
+
+## 25. Radiopharmaceuticals (`radiopharmaceuticals.csv`)
+
+**Loader**: `load_radiopharmaceutical_concepts()` -- used by `image_metadata.py`
+
+The sidecar `Radiopharmaceutical` field holds 40+ free-text spellings, so the tracer is normalized from the filename sequence instead: FBP -> florbetapir (RxNorm 43532316), FTP -> flortaucipir (RxNorm 702008). The raw string is preserved as the source value.
 
 ## Custom Concept ID Ranges
 
