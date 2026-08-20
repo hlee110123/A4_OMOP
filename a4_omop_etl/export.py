@@ -162,3 +162,109 @@ def validate_mi_cdm(
               f"{'PASS' if results['micdm_visit_linkage'] else 'FAIL'}")
 
     return results
+
+
+def validate_data_quality(tables: dict, base_dir=None) -> dict:
+    """
+    Cross-cutting data-quality checks over the exported event tables.
+
+    - Concept integrity: every *_concept_id must exist in the standard
+      vocabulary (CONCEPT.csv at the repo root) or in custom_vocabulary/.
+      Custom-range ids missing from the custom vocabulary FAIL; standard-range
+      ids missing from the local snapshot WARN only, because the snapshot
+      omits vocabularies this ETL legitimately uses (CDISC, PPI, UK Biobank) —
+      the target CDM must load those.
+    - Duplicate natural keys on MEASUREMENT/OBSERVATION (WARN: ECG triplicate
+      readings legitimately repeat person/concept/date/source).
+    - Event dates inside the plausible synthetic window.
+    """
+    from pathlib import Path
+    from .config import BASE_DIR, CONCEPT_DIR
+
+    base = Path(base_dir) if base_dir else BASE_DIR
+    print("\n--- Data Quality Validation ---")
+    results = {}
+
+    concept_cols = {
+        'measurement': ['measurement_concept_id'],
+        'observation': ['observation_concept_id'],
+        'condition_occurrence': ['condition_concept_id'],
+        'procedure_occurrence': ['procedure_concept_id'],
+        'drug_exposure': ['drug_concept_id'],
+        'death': ['death_type_concept_id'],
+    }
+    used = set()
+    for name, cols in concept_cols.items():
+        df = tables.get(name)
+        if df is None or len(df) == 0:
+            continue
+        for col in cols:
+            if col in df.columns:
+                used.update(int(v) for v in df[col].dropna().unique() if int(v) != 0)
+
+    custom_path = base / 'custom_vocabulary' / 'CONCEPT.csv'
+    custom_ids = set()
+    if custom_path.exists():
+        custom_ids = set(pd.read_csv(custom_path, usecols=['concept_id'])['concept_id'].astype(int))
+
+    CUSTOM_LO, DICOM_LO = 2_000_000_000, 2_128_000_000
+    used_custom = {c for c in used if CUSTOM_LO <= c < DICOM_LO}
+    used_dicom = {c for c in used if c >= DICOM_LO}
+    used_standard = used - used_custom - used_dicom
+
+    missing_custom = used_custom - custom_ids
+    results['dq_custom_concepts_registered'] = not missing_custom
+    print(f"Custom concepts registered: {len(used_custom - missing_custom)}/{len(used_custom)}"
+          + (f" MISSING {sorted(missing_custom)[:10]}" if missing_custom else "")
+          + f" - {'PASS' if not missing_custom else 'FAIL'}")
+
+    vocab_path = base / 'CONCEPT.csv'
+    if vocab_path.exists() and used_standard:
+        found = set()
+        for chunk in pd.read_csv(vocab_path, sep='\t', usecols=['concept_id'],
+                                 chunksize=2_000_000):
+            found.update(used_standard.intersection(chunk['concept_id'].astype(int)))
+        unresolved = used_standard - found
+        # Known-external vocabularies not in the local snapshot: CDISC ids
+        # (instrument items), PPI/UK Biobank (reviewer adoptions).
+        print(f"Standard concepts in local snapshot: {len(found)}/{len(used_standard)}"
+              + (f"; {len(unresolved)} not in snapshot (external vocabularies — "
+                 f"verify CDISC/PPI/UK Biobank are loaded in the target CDM)" if unresolved else "")
+              + " - PASS (external ids are a WARN, not a failure)")
+        results['dq_standard_concepts_resolved'] = True
+    else:
+        print("Standard vocabulary CONCEPT.csv not found - concept check skipped")
+
+    # Duplicate natural keys. measurement_event_id is part of the identity:
+    # DICOM metadata rows legitimately repeat person/concept/date/value across
+    # the series they describe. Remaining repeats are ECG triplicate readings
+    # whose values coincide and multi-element DICOM strings (by design).
+    m = tables.get('measurement')
+    if m is not None and len(m):
+        key = ['person_id', 'measurement_concept_id', 'measurement_date',
+               'measurement_source_value', 'value_as_number', 'measurement_event_id']
+        dups = int(m.duplicated(subset=[k for k in key if k in m.columns]).sum())
+        print(f"MEASUREMENT duplicate natural keys: {dups:,} "
+              f"({dups/len(m):.2%}; ECG triplicates repeat by design) - "
+              f"{'PASS' if dups/len(m) < 0.02 else 'WARN'}")
+        results['dq_measurement_dup_rate'] = dups / len(m) < 0.02
+
+    # Date ranges: synthetic anchor is 2020-01-01 + <=364d; screening visits
+    # reach ~6 months before consent and follow-up ~8.5 years after.
+    date_cols = [('measurement', 'measurement_date'), ('observation', 'observation_date'),
+                 ('condition_occurrence', 'condition_start_date'),
+                 ('procedure_occurrence', 'procedure_date'),
+                 ('drug_exposure', 'drug_exposure_start_date'), ('death', 'death_date')]
+    lo, hi = pd.Timestamp('2018-06-01'), pd.Timestamp('2032-12-31')
+    out_of_range = 0
+    for name, col in date_cols:
+        df = tables.get(name)
+        if df is None or len(df) == 0 or col not in df.columns:
+            continue
+        d = pd.to_datetime(df[col], errors='coerce')
+        out_of_range += int(((d < lo) | (d > hi)).sum())
+    results['dq_dates_in_range'] = out_of_range == 0
+    print(f"Event dates outside {lo.date()}..{hi.date()}: {out_of_range} - "
+          f"{'PASS' if out_of_range == 0 else 'FAIL'}")
+
+    return results

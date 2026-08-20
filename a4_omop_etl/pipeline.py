@@ -66,7 +66,10 @@ from .image_metadata import (
     create_dicom_metadata_measurements,
     IMAGE_OCCURRENCE_FIELD_CONCEPT_ID,
 )
-from .export import export_tables, export_mi_cdm_tables, validate_etl, validate_mi_cdm
+from .export import (
+    export_tables, export_mi_cdm_tables,
+    validate_etl, validate_mi_cdm, validate_data_quality,
+)
 
 
 def main():
@@ -383,10 +386,21 @@ def main():
         procedure_occurrence, n_json_series=len(json_index),
         n_metadata_meas=n_metadata_meas,
     ))
+    validation_results.update(validate_data_quality({
+        'measurement': measurement,
+        'observation': observation,
+        'condition_occurrence': condition_occurrence,
+        'procedure_occurrence': procedure_occurrence,
+        'drug_exposure': drug_exposure,
+        'death': death,
+    }))
 
     all_passed = all(validation_results.values())
     print(f"\n{'=' * 60}")
     print(f"ETL Complete - {'ALL VALIDATIONS PASSED' if all_passed else 'SOME VALIDATIONS FAILED'}")
+    if not all_passed:
+        failed = [k for k, v in validation_results.items() if not v]
+        print(f"FAILED CHECKS: {', '.join(failed)}")
     print(f"Output files in: {OUTPUT_DIR}")
     print(f"{'=' * 60}")
 
