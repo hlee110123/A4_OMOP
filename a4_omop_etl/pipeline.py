@@ -14,6 +14,7 @@ from .config import OUTPUT_DIR, load_all_sources
 from .helpers import create_date_anchor, concat_and_assign_ids, drop_undated
 from .person import create_person_table
 from .visit import create_visit_occurrence, create_observation_period
+from .death import create_death
 from .drug_exposure import create_drug_exposure
 from .measurement_clinical import create_measurement_clinical
 from .measurement_cognitive import (
@@ -272,6 +273,9 @@ def main():
         src['ds'], person, date_anchor
     )
 
+    print("\n--- Phase 15b: DEATH Table ---")
+    death = create_death(src['ds'], person, date_anchor)
+
     print("\n--- Phase 17b: OBSERVATION Table (C-SSRS) ---")
     observation_cssrs = create_observation_cssrs(
         src['cssrs'], src['cssrslv'], person, date_anchor, visit_occurrence
@@ -319,6 +323,7 @@ def main():
         (visit_occurrence, 'visit_end_date'),
         (procedure_occurrence, 'procedure_date'),
         (condition_occurrence, 'condition_start_date'),
+        (death, 'death_date'),
     ])
 
     # ── CDM_SOURCE metadata ──────────────────────────────────────────
@@ -350,6 +355,7 @@ def main():
         'visit_occurrence': visit_occurrence,
         'observation_period': observation_period,
         'drug_exposure': drug_exposure,
+        'death': death,
         'measurement': measurement,
         'observation': observation,
         'condition_occurrence': condition_occurrence,
@@ -389,6 +395,7 @@ def main():
         'visit_occurrence': visit_occurrence,
         'observation_period': observation_period,
         'drug_exposure': drug_exposure,
+        'death': death,
         'measurement': measurement,
         'observation': observation,
         'condition_occurrence': condition_occurrence,
