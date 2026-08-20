@@ -61,6 +61,9 @@ def create_measurement_imaging(
     for _, row in mri_filtered.iterrows():
         for roi in roi_cols:
             value = safe_float(row.get(roi))
+            # The source encodes missing values as -4; a volume cannot be negative.
+            if value is not None and value < 0:
+                value = None
             if value is not None:
                 measurements.append({
                     'person_id': row['person_id'],
@@ -175,8 +178,8 @@ def create_measurement_imaging_extended(
     Sources & Field Mappings (concept_maps/imaging.csv, group=extended):
         mri_reads    -> MCH (2100000070), LOBAR (2100000075), DEEP (2100000076)
         flair        -> WMH_VOL (2100000071), WMH_CORRECTED (2100000072), ICV (2100000077)
-        retinal      -> RETINAL_AI (2100000073)
-        pet_va       -> PET_VA_SUVR (2100000074)
+        retinal      -> RETINAL_AI (2100000073), Exclude=1 rows skipped
+        pet_va       -> no measurements (pmod_suvr duplicates the SUVR_AMYLOID composite)
         tau_petsurfer -> per-region SUVR (2100000078)
         tau_stanford  -> per-region SUVR (2100000079)
     """
@@ -188,7 +191,8 @@ def create_measurement_imaging_extended(
 
     mri_count = 0
     for _, row in mri_merged.iterrows():
-        obs_date = calc_days_to_date(row, 'STUDYDATE_DAYS_CONSENT') or row['synthetic_consent_date']
+        # No fallback: an undated row is dropped downstream rather than misdated.
+        obs_date = calc_days_to_date(row, 'STUDYDATE_DAYS_CONSENT')
 
         for field, col in [('MCH', 'Definite.MCH'), ('LOBAR', 'Lobar'), ('DEEP', 'Deep')]:
             if col in row and pd.notna(row[col]):
@@ -215,6 +219,9 @@ def create_measurement_imaging_extended(
 
     flair_count = 0
     for _, row in flair_merged.iterrows():
+        # Rows failing the pipeline's own quality control carry no usable volumes.
+        if str(row.get('QC', '')).strip().lower() == 'fail':
+            continue
         for field, col in [('WMH_VOL', 'WMHvol_masked'), ('WMH_CORRECTED', 'WMH_corrected'), ('ICV', 'ICV')]:
             val = safe_float(row.get(col)) if col in row else None
             # WMHvol_masked and ICV are supplied in cubic mm; convert to mL to match the
@@ -227,7 +234,7 @@ def create_measurement_imaging_extended(
                 measurements.append({
                     'person_id': row['person_id'],
                     'measurement_concept_id': concept['concept_id'],
-                    'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date'],
+                    'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else None,
                     'value_as_number': val,
                     'unit_source_value': concept['unit'],
                     'visit_occurrence_id': row.get('visit_occurrence_id'),
@@ -245,8 +252,11 @@ def create_measurement_imaging_extended(
 
     retinal_count = 0
     for _, row in retinal_merged.iterrows():
+        # Exclude=1 marks scans the reading center excluded from analysis.
+        if safe_float(row.get('Exclude')) == 1:
+            continue
         if pd.notna(row.get('RAIModelScore')):
-            obs_date = calc_days_to_date(row, 'ExamDate_DAYS_CONSENT') or row['synthetic_consent_date']
+            obs_date = calc_days_to_date(row, 'ExamDate_DAYS_CONSENT')
 
             concept = IMAGING_EXTENDED['RETINAL_AI']
             measurements.append({
@@ -264,29 +274,13 @@ def create_measurement_imaging_extended(
             retinal_count += 1
 
     # --- PET VA ---
-    pet_merged = prepare_source_df(pet_va_df, person_df, date_anchor_df)
-    print(f"  PET VA: {len(pet_va_df)} total -> {len(pet_merged)} matched")
-
+    # pmod_suvr is not extracted: it is the same screening Composite_Summary SUVR
+    # already loaded from imaging_SUVR_amyloid.csv, so loading it here duplicated
+    # every screening composite under a second concept. The file's unique content
+    # (visual reads: elig_vi_1/2, consensus, overall_score) is categorical and
+    # awaits reviewer concepts. pet_va_df is retained in the signature because
+    # procedure_occurrence/image_occurrence still consume the file.
     pet_count = 0
-    for _, row in pet_merged.iterrows():
-        if pd.notna(row.get('pmod_suvr')):
-            obs_date = calc_days_to_date(row, 'scan_date_DAYS_CONSENT') or row['synthetic_consent_date']
-
-            concept = IMAGING_EXTENDED['PET_VA_SUVR']
-            measurements.append({
-                'person_id': row['person_id'],
-                'measurement_concept_id': concept['concept_id'],
-                'measurement_date': obs_date,
-                'value_as_number': float(row['pmod_suvr']),
-                'unit_source_value': concept['unit'],
-                'visit_occurrence_id': None,
-                'measurement_source_value': f"PET_VA:ligand={row.get('ligand', 'NA')}",
-                '_mi_cdm_modality': 'PT',
-                '_mi_cdm_series_type': 'AMYLOID_PET',
-                '_mi_cdm_pipeline': 'PET_VA',
-                    '_mi_cdm_viscode': _viscode(row),
-            })
-            pet_count += 1
 
     # --- Tau PET PetSurfer (alternative pipeline) ---
     petsurfer_count = 0
@@ -307,7 +301,7 @@ def create_measurement_imaging_extended(
                     measurements.append({
                         'person_id': row['person_id'],
                         'measurement_concept_id': concept['concept_id'],
-                        'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date'],
+                        'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else None,
                         'value_as_number': val,
                         'unit_source_value': concept['unit'],
                         'visit_occurrence_id': row.get('visit_occurrence_id'),
@@ -337,7 +331,7 @@ def create_measurement_imaging_extended(
                     measurements.append({
                         'person_id': row['person_id'],
                         'measurement_concept_id': concept['concept_id'],
-                        'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date'],
+                        'measurement_date': row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else None,
                         'value_as_number': val,
                         'unit_source_value': concept['unit'],
                         'visit_occurrence_id': row.get('visit_occurrence_id'),

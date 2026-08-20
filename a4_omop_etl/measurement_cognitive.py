@@ -17,10 +17,6 @@ def create_measurement_pacc(
 
     Field Mappings (concept_maps/cognitive.csv, group=core):
         PACC.raw    -> PACC Raw Composite Score (2100000001)
-        FCTOTAL96   -> FCSRT-96 Total (2100000004)
-        LDELTOTAL   -> Logical Memory Delayed (2100000005)
-        DIGITTOTAL  -> Digit Symbol Total (2100000006)
-        MMSCORE     -> MMSE Total Score (42869860)
     """
     COGNITIVE_CONCEPTS = concepts.load_cognitive_concepts()
 
@@ -30,9 +26,12 @@ def create_measurement_pacc(
     pacc_filtered = prepare_source_df(pacc_filtered, person_df, date_anchor_df,
                                        visit_occurrence_df, visit_extra_cols=['visit_start_date'])
 
-    # Core scores (MMSCORE excluded — emitted by MMSE processing)
-    # PACC.raw is the raw composite; PACC (change-from-baseline) is derived and skipped
-    core_cols = ['PACC.raw', 'FCTOTAL96', 'LDELTOTAL', 'DIGITTOTAL']
+    # Only the composite. The component columns (FCTOTAL96, LDELTOTAL, DIGITTOTAL,
+    # MMSCORE) are copies of the raw instrument files (cogfcsr16, coglogic, cogdigit,
+    # mmse), which are the single source for those scores — loading them here too
+    # duplicated every component (~26k identical rows each).
+    # PACC.raw is the raw composite; PACC (change-from-baseline) is derived and skipped.
+    core_cols = ['PACC.raw']
 
     measurements = []
     core_count = 0
@@ -187,8 +186,8 @@ def create_measurement_cdr(
     Field Mappings (concept_maps/cognitive.csv):
         CDGLOBAL -> CDR Global Score (37546494)
         CDSOB    -> CDR Sum of Boxes (37524289)
-        7 domain fields (MEMORY, ORIENT, JUDGE, COMMUN, HOME, CARE, CDRSB)
-                 -> cdr_domain group
+        6 domain fields (MEMORY, ORIENT, JUDGE, COMMUN, HOME, CARE)
+                 -> cdr_domain group (CDRSB dropped: identical to CDSOB in all rows)
     """
     COGNITIVE_CONCEPTS = concepts.load_cognitive_concepts()
     CDR_DOMAIN_CONCEPTS = concepts.load_cognitive_cdr_domains()
@@ -238,7 +237,7 @@ def create_measurement_cdr(
                 })
                 core_count += 1
 
-        # Domain scores (MEMORY, ORIENT, JUDGE, COMMUN, HOME, CARE, CDRSB)
+        # Domain scores (MEMORY, ORIENT, JUDGE, COMMUN, HOME, CARE)
         for col in domain_cols:
             val = row.get(col)
             if val is not None and pd.notna(val):
@@ -339,8 +338,8 @@ def create_measurement_cognitive_extended(
             for field in score_fields:
                 if field in row and pd.notna(row[field]):
                     concept = COGNITIVE_EXTENDED.get(field, {'concept_id': 0, 'name': field, 'unit': 'score'})
-                    # Use visit_start_date when available, fall back to synthetic_consent_date
-                    meas_date = row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date']
+                    # No fallback: an undated row is dropped downstream rather than misdated.
+                    meas_date = row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else None
                     measurements.append({
                         'person_id': row['person_id'],
                         'measurement_concept_id': concept['concept_id'],

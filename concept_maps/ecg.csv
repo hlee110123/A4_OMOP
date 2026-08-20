@@ -4,3 +4,4 @@ QT,4116637,QT interval duration,ms,SNOMED standard
 QRS,3022022,QRS duration,ms,LOINC standard
 PR,4092020,PR interval duration,ms,SNOMED standard
 RR,3013078,R-R interval by EKG,ms,LOINC standard
+QTCB,46235174,Q-T interval corrected based on Bazett formula,ms,LOINC standard (corrected QT; primary ECG safety measure)

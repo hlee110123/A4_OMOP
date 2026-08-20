@@ -52,4 +52,3 @@ JUDGE,37530450,CDR Judgment Domain,score,cdr_domain,CDISC standard
 COMMUN,37538839,CDR Community Affairs Domain,score,cdr_domain,CDISC standard
 HOME,37545969,CDR Home and Hobbies Domain,score,cdr_domain,CDISC standard
 CARE,37546534,CDR Personal Care Domain,score,cdr_domain,CDISC standard
-CDRSB,2100000187,CDR Sum of Boxes Revised,score,cdr_domain,CDR Sum of Boxes from CDR form

@@ -14,7 +14,80 @@ Routing follows OMOP CDM v5.4 domain conventions:
 import pandas as pd
 
 from . import concepts
-from .helpers import prepare_source_df, finalize_measurement_df
+from .helpers import prepare_source_df, calc_days_to_date, finalize_measurement_df
+
+
+CONDITION_COLUMNS = [
+    'condition_occurrence_id', 'person_id', 'condition_concept_id',
+    'condition_start_date', 'condition_start_datetime',
+    'condition_end_date', 'condition_end_datetime',
+    'condition_type_concept_id', 'stop_reason', 'provider_id',
+    'visit_occurrence_id', 'visit_detail_id',
+    'condition_source_value', 'condition_source_concept_id',
+    'condition_status_source_value', 'condition_status_concept_id',
+]
+
+
+def _finalize_condition_df(conditions: list) -> pd.DataFrame:
+    """Build a CONDITION_OCCURRENCE frame with OMOP CDM v5.4 boilerplate."""
+    condition_df = pd.DataFrame(conditions) if conditions else pd.DataFrame()
+    if len(condition_df) > 0:
+        condition_df['condition_occurrence_id'] = range(1, 1 + len(condition_df))
+        condition_df['condition_type_concept_id'] = 32809  # Case Report Form
+        condition_df['condition_start_datetime'] = None
+        condition_df['condition_end_datetime'] = None
+        condition_df['stop_reason'] = None
+        condition_df['provider_id'] = None
+        condition_df['visit_detail_id'] = None
+        condition_df['condition_source_concept_id'] = 0
+        condition_df['condition_status_source_value'] = None
+        condition_df['condition_status_concept_id'] = 0
+        condition_df = condition_df[CONDITION_COLUMNS]
+    return condition_df
+
+
+def create_siderosis_conditions(
+    mri_reads_df: pd.DataFrame,
+    person_df: pd.DataFrame,
+    visit_occurrence_df: pd.DataFrame,
+    date_anchor_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Create CONDITION_OCCURRENCE records for definite superficial siderosis.
+
+    Source: imaging_MRI_reads.csv, Definite.SS > 0 | Date: STUDYDATE_DAYS_CONSENT
+    Concept: SNOMED 37116474 (concept_maps/conditions.csv, SIDEROSIS) —
+    reviewer-assigned. ARIA-H-relevant in an anti-amyloid trial; the site
+    count is preserved in condition_source_value.
+    """
+    PHYNEURO_CONCEPTS = concepts.load_condition_concepts()
+    concept_info = PHYNEURO_CONCEPTS.get('SIDEROSIS', {'concept_id': 0, 'name': 'Superficial siderosis'})
+
+    merged = prepare_source_df(mri_reads_df, person_df, date_anchor_df,
+                               visit_occurrence_df, visit_extra_cols=['visit_start_date'])
+
+    conditions = []
+    for _, row in merged.iterrows():
+        ss = row.get('Definite.SS')
+        if pd.isna(ss) or float(ss) <= 0:
+            continue
+        cond_date = calc_days_to_date(row, 'STUDYDATE_DAYS_CONSENT')
+        if cond_date is None and pd.notna(row.get('visit_start_date')):
+            cond_date = row.get('visit_start_date')
+        if cond_date is None:
+            continue  # no fabricated dates
+        conditions.append({
+            'person_id': row['person_id'],
+            'condition_concept_id': concept_info['concept_id'],
+            'condition_start_date': cond_date,
+            'condition_end_date': None,
+            'visit_occurrence_id': row.get('visit_occurrence_id'),
+            'condition_source_value': f'MRI_READS:Definite.SS={int(float(ss))}',
+        })
+
+    condition_df = _finalize_condition_df(conditions)
+    print(f"  Created {len(condition_df)} superficial siderosis condition_occurrence records")
+    return condition_df
 
 
 def create_phyneuro_observations_and_measurements(
@@ -91,28 +164,7 @@ def create_phyneuro_observations_and_measurements(
             })
 
     # Build CONDITION_OCCURRENCE DataFrame with all OMOP CDM v5.4 boilerplate
-    condition_df = pd.DataFrame(conditions) if conditions else pd.DataFrame()
-    if len(condition_df) > 0:
-        condition_df['condition_occurrence_id'] = range(1, 1 + len(condition_df))
-        condition_df['condition_type_concept_id'] = 32809  # Case Report Form
-        condition_df['condition_start_datetime'] = None
-        condition_df['condition_end_datetime'] = None
-        condition_df['stop_reason'] = None
-        condition_df['provider_id'] = None
-        condition_df['visit_detail_id'] = None
-        condition_df['condition_source_concept_id'] = 0
-        condition_df['condition_status_source_value'] = None
-        condition_df['condition_status_concept_id'] = 0
-        # Reorder columns to standard OMOP order
-        condition_df = condition_df[[
-            'condition_occurrence_id', 'person_id', 'condition_concept_id',
-            'condition_start_date', 'condition_start_datetime',
-            'condition_end_date', 'condition_end_datetime',
-            'condition_type_concept_id', 'stop_reason', 'provider_id',
-            'visit_occurrence_id', 'visit_detail_id',
-            'condition_source_value', 'condition_source_concept_id',
-            'condition_status_source_value', 'condition_status_concept_id',
-        ]]
+    condition_df = _finalize_condition_df(conditions)
 
     # Build measurement DataFrame
     measurement_df = pd.DataFrame(measurements) if measurements else pd.DataFrame()

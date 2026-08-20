@@ -1,4 +1,5 @@
 source_code,concept_id,concept_name,notes
+0,36852349,Solanezumab,"RxNorm Extension standard ingredient. BLINDDOSE=0 marks partial/aborted infusions of the assigned drug,  not a different product; placebo arm is overridden downstream"
 400,36852349,Solanezumab,RxNorm Extension standard ingredient
 800,36852349,Solanezumab,RxNorm Extension standard ingredient
 1600,36852349,Solanezumab,RxNorm Extension standard ingredient

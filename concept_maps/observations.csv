@@ -3,7 +3,7 @@ SMOKE,43054909,Tobacco smoking status,lifestyle,packs/day,0,SNOMED standard. CRF
 ALCOHOL,44786671,Alcoholic drinks per day,lifestyle,drinks/day,0,LOINC. CRF asks drinks per day; no UCUM count-per-day concept exists
 CAFFEINE,40767275,Caffeinated beverages per day,lifestyle,cups/day,0,LOINC/PhenX. CRF asks cups per day; no UCUM count-per-day concept exists
 AEROBIC,4312325,Active physical exercise,lifestyle,hours/week,0,SNOMED standard. CRF asks hours per week; no UCUM hour-per-week concept exists
-WALKING,2100000300,Walking exercise frequency,lifestyle,minute,8550,Custom (no standard SNOMED/LOINC equivalent). CRF asks minutes of walking per day
+WALKING,903630,Time spent walking (minutes per day),lifestyle,minute,8550,PPI standard (ipaq_6_cope_a_85; reviewer-assigned). CRF asks minutes of walking per day. Replaces custom 2100000300 which collided with C-PATH Q11
 SLEEP,40768255,Sleep duration,lifestyle,hour,8505,LOINC standard. CRF asks hours slept at night
 SLEEPDAY,40768262,Daytime nap duration,lifestyle,minute,8550,LOINC. CRF asks minutes napped during the day
 SUBUSE,37162238,Substance use behavior,lifestyle,,,"SNOMED. Yes/No response,  no unit"

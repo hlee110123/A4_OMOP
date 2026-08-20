@@ -23,7 +23,7 @@ HMT95,3013498,Atypical/Variant lymphocytes,LOINC 733-6
 HMT98,3034708,Nucleated erythrocytes/100 leukocytes [Ratio] in Blood,LOINC 19048-8 (RPTU is '%' so ratio form)
 HMT370,3004410,Hemoglobin A1c,LOINC 4548-4
 RCT1,3006140,Bilirubin.total [Moles/volume] in Serum or Plasma,LOINC 14631-6. Source reports umol/L
-RCT3,3004077,GGT,LOINC 2324-2
+RCT3,3026910,Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma,"LOINC 2324-2. Was 3004077 (capillary glucose) — transcription error,  the note always cited 2324-2"
 RCT5,3013721,AST,LOINC 1920-8
 RCT6,3024641,Urea nitrogen [Moles/volume] in Serum or Plasma,LOINC 14937-7. Source reports mmol/L
 RCT14,3007220,Creatine kinase [Enzymatic activity/volume] in Serum or Plasma,LOINC 2157-6

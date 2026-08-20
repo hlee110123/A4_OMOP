@@ -67,7 +67,11 @@ def create_drug_exposure(
         'drug_exposure_end_datetime': None,
         'verbatim_end_date': None,
         'drug_type_concept_id': 32809,  # Case Report Form
-        'stop_reason': dose_filtered['COMPLETE'],
+        # stop_reason is varchar(20) in CDM v5.4; the full COMPLETE sentence (72
+        # chars) overflowed it. PARTIAL marks infusions stopped before the full dose.
+        'stop_reason': dose_filtered['COMPLETE'].map(
+            lambda s: 'PARTIAL' if isinstance(s, str) and s.startswith('Partial') else None
+        ),
         'refills': None,
         # Dose in mg, NULL for placebo where BLINDDOSE is a blinding level rather than a mass
         'quantity': dose_filtered['BLINDDOSE'].astype(float).mask(is_placebo),

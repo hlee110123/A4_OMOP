@@ -129,6 +129,7 @@ def create_measurement_ecg(
     Field Mappings (concept_maps/ecg.csv):
         RATE -> Heart rate (3027018, beats/min)
         QT   -> QT interval (4116637, ms)
+        QTCB -> QT corrected, Bazett (46235174, ms)
         QRS  -> QRS duration (3022022, ms)
         PR   -> PR interval (4092020, ms)
         RR   -> R-R interval (3013078, ms)
@@ -136,7 +137,7 @@ def create_measurement_ecg(
     ECG_CONCEPTS = concepts.load_ecg_concepts()
 
     # Filter to numeric ECG measurements only (exclude text assessments)
-    numeric_tests = ['RATE', 'QT', 'QRS', 'PR', 'RR']
+    numeric_tests = ['RATE', 'QT', 'QTCB', 'QRS', 'PR', 'RR']
     ecg_filtered = ecg_df[
         (ecg_df['TSTSTAT'] == 'D') &
         (ecg_df['LBTESTCD'].isin(numeric_tests))

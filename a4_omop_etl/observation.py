@@ -287,8 +287,17 @@ def create_observation_cssrs(
     # Items to extract from each file (using standard concept keys)
     cssrs_items = ['WISHLIFE', 'ACTLIFE', 'METHOD', 'INTENT', 'PLAN',
                    'ATTMPT', 'ATTMPT5', 'ATTMPTN', 'NONSUI', 'NONSUI5',
-                   'INTER', 'ABORT', 'PREP', 'BEHAVLIF', 'SEVLIFE',
-                   'RECENTDAM', 'RECENTPOT', 'LETHALDAM', 'LETHALPOT']
+                   'INTER', 'INTERN', 'ABORT', 'ABORTN', 'PREP', 'BEHAVLIF',
+                   'SEVLIFE', 'FREQLIF', 'DURATLIF', 'CONTROLLIF', 'DETERLIF',
+                   'REASONLIF',
+                   'RECENTDAM', 'RECENTPOT', 'LETHALDAM', 'LETHALPOT',
+                   'FIRSTDAM', 'FIRSTPOT']
+
+    # Yes/No value concepts apply only to genuinely binary items; intensity
+    # (1-5), lethality (0-5) and attempt-count items keep value_as_number only.
+    binary_items = {'WISHLIFE', 'ACTLIFE', 'METHOD', 'INTENT', 'PLAN',
+                    'ATTMPT', 'ATTMPT5', 'NONSUI', 'NONSUI5',
+                    'INTER', 'ABORT', 'PREP', 'BEHAVLIF', 'SUICIDE'}
 
     # Items for lifetime file (subset - no ATTMPT5/NONSUI5/BEHAVLIF)
     cssrslv_items = ['WISHLIFE', 'ACTLIFE', 'METHOD', 'INTENT', 'PLAN',
@@ -318,6 +327,10 @@ def create_observation_cssrs(
                 if src_col in row and pd.notna(row[src_col]):
                     concept = CSSRS_CONCEPTS.get(concept_key, {'concept_id': 0, 'name': f'C-SSRS {concept_key}'})
                     val = row[src_col]
+                    if concept_key in binary_items:
+                        value_concept = 4188539 if val == 1 else 4188540 if val == 0 else 0
+                    else:
+                        value_concept = 0  # ordinal/count items: value_as_number carries the answer
                     observations.append(build_observation_record(
                         person_id=row['person_id'],
                         observation_concept_id=concept['concept_id'],
@@ -325,7 +338,7 @@ def create_observation_cssrs(
                         visit_occurrence_id=row.get('visit_occurrence_id'),
                         value_as_number=float(val) if not isinstance(val, str) else None,
                         value_as_string=str(val),
-                        value_as_concept_id=4188539 if val == 1 else 4188540 if val == 0 else 0,
+                        value_as_concept_id=value_concept,
                         qualifier_concept_id=qualifier_concept_id,
                         observation_source_value=f"{file_name}:{concept_key}",
                         qualifier_source_value=qualifier_label,
@@ -564,7 +577,8 @@ def create_observation_secondary_questionnaires(
     ruib_merged = _with_visit_dates(ruib_done, person_df, date_anchor_df, visit_occurrence_df, 'ruib')
     ruib_count = 0
     for _, row in ruib_merged.iterrows():
-        # Hospital admission indicator
+        # Hospital admissions in the past year — a count (0-4), not a yes/no:
+        # coding val==1 as the only 'Yes' inverted patients with 2+ admissions.
         val = safe_float(row.get('BRADMIT'))
         if val is not None:
             observations.append(build_observation_record(
@@ -573,10 +587,8 @@ def create_observation_secondary_questionnaires(
                 observation_date=row['visit_start_date'],
                 visit_occurrence_id=row.get('visit_occurrence_id'),
                 value_as_number=val,
-                value_as_string='Yes' if val == 1 else 'No',
-                value_as_concept_id=4188539 if val == 1 else 4188540,
                 observation_source_value=f"RUIB:BRADMIT:{row.get('VISCODE', 'NA')}",
-                unit_source_value='binary',
+                unit_source_value='count',
             ))
             ruib_count += 1
 

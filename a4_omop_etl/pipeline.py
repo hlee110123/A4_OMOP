@@ -44,7 +44,10 @@ from .observation_adqs import (
 )
 from .observation_questionnaires import create_observation_questionnaires
 from .measurement_questionnaire_scores import create_measurement_questionnaire_scores
-from .condition import create_phyneuro_observations_and_measurements
+from .condition import (
+    create_phyneuro_observations_and_measurements,
+    create_siderosis_conditions,
+)
 from .postprocessing import (
     map_unit_concepts,
     expand_observation_periods,
@@ -188,6 +191,14 @@ def main():
         src['phyneuro'], person, visit_occurrence, date_anchor
     )
 
+    print("\n--- Phase 22b: Superficial Siderosis Conditions (MRI Reads) ---")
+    siderosis_cond = create_siderosis_conditions(
+        src['imaging_mri_reads'], person, visit_occurrence, date_anchor
+    )
+    condition_occurrence = concat_and_assign_ids(
+        [phyneuro_cond, siderosis_cond], 'condition_occurrence_id'
+    )
+
     # ── Combine all measurements ─────────────────────────────────────
     measurement = concat_and_assign_ids([
         measurement_clinical, measurement_cognitive, measurement_biomarkers,
@@ -307,7 +318,7 @@ def main():
         (visit_occurrence, 'visit_start_date'),
         (visit_occurrence, 'visit_end_date'),
         (procedure_occurrence, 'procedure_date'),
-        (phyneuro_cond, 'condition_start_date'),
+        (condition_occurrence, 'condition_start_date'),
     ])
 
     # ── CDM_SOURCE metadata ──────────────────────────────────────────
@@ -326,12 +337,12 @@ def main():
     }])
 
     # ── Export ────────────────────────────────────────────────────────
-    # condition_occurrence holds phyneuro abnormal exam findings (SNOMED
-    # Clinical Finding concepts belong in this table per OMOP CDM v5.4).
+    # condition_occurrence holds phyneuro abnormal exam findings plus
+    # superficial siderosis from MRI reads (SNOMED Clinical Finding concepts
+    # belong in this table per OMOP CDM v5.4).
     # procedure_occurrence is a standard OMOP CDM v5.4 table populated with
     # imaging procedures; per Park & Jeon et al. 2024 the MI-CDM extension
     # itself only adds image_occurrence and image_feature.
-    condition_occurrence = phyneuro_cond
     export_tables({
         'cdm_source': cdm_source,
         'date_anchor': date_anchor,

@@ -96,14 +96,23 @@ def create_measurement_cogstate_battery(
 
     # Filter to only BPET and FNFT (not in COGSTATE_COMPUTERIZED)
     battery_filtered = battery_df[battery_df['TCode'].isin(['BPET', 'FNFT'])].copy()
-    print(f"  CogState Battery: {len(battery_df)} total -> {len(battery_filtered)} BPET/FNFT rows")
+
+    # QC per the external data dictionary: ExcludeData=1 means exclude,
+    # Completion/SessionCompletion 1 means fail (0 = pass). NaN flags pass.
+    qc_fail = (
+        (battery_filtered['ExcludeData'] == 1)
+        | (battery_filtered['Completion'] == 1)
+        | (battery_filtered['SessionCompletion'] == 1)
+    )
+    battery_filtered = battery_filtered[~qc_fail]
+    print(f"  CogState Battery: {len(battery_df)} total -> {len(battery_filtered)} "
+          f"BPET/FNFT rows passing QC ({int(qc_fail.sum())} failed-QC rows dropped)")
 
     merged = prepare_source_df(battery_filtered, person_df, date_anchor_df, visit_occurrence_df)
 
-    # Calculate measurement date
+    # No fallback: an undated row is dropped downstream rather than misdated.
     merged['measurement_date'] = merged.apply(
-        lambda row: (calc_days_to_date(row, 'TDate_DAYS_CONSENT') or row['synthetic_consent_date']),
-        axis=1
+        calc_days_to_date, args=('TDate_DAYS_CONSENT',), axis=1
     )
 
     measurements = []
