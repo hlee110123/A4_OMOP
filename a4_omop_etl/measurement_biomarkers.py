@@ -39,14 +39,22 @@ def create_measurement_biomarkers(
     for _, row in ab_filtered.iterrows():
         testcd = row.get('LBTESTCD', '')
         concept = BIOMARKER_CONCEPTS.get(testcd, {})
-        value = safe_float(row['LBORRES']) if pd.notna(row.get('LBORRES')) and row.get('LBORRES') != '' else None
+        raw = row.get('LBORRES')
+        value = safe_float(raw) if pd.notna(raw) and raw != '' else None
 
-        if value is not None:
+        # BLQ (below limit of quantification) has no numeric result and no
+        # recorded quantification limit; the row is kept with a NULL value,
+        # '<' operator, and 'BLQ' in value_source_value so the performed
+        # test stays visible. 'NOR' (no valid result) rows are dropped.
+        is_blq = str(raw).strip().upper() == 'BLQ'
+        if value is not None or is_blq:
             measurements.append({
                 'person_id': row['person_id'],
                 'measurement_concept_id': concept.get('concept_id', 0),
                 'measurement_date': row.get('visit_start_date'),
                 'value_as_number': value,
+                'operator_concept_id': 4171756 if is_blq else None,  # '<'
+                'value_source_value': 'BLQ' if is_blq else None,
                 'unit_source_value': row.get('LBORRESU', concept.get('unit', '')),
                 'visit_occurrence_id': row.get('visit_occurrence_id'),
                 'measurement_source_value': f"AB:{testcd}|{row.get('LBSPEC', '')}|{row.get('LBMETHOD', '')}",
@@ -61,10 +69,14 @@ def create_measurement_biomarkers(
 
     concept = BIOMARKER_CONCEPTS.get('PTAU217', {})
     for _, row in ptau_filtered.iterrows():
-        # Handle <LLOQ values - use raw value if available
+        # <LLOQ results carry the raw instrument value in ORRESRAW; keep it
+        # with the '<' operator and the censoring flag in value_source_value.
+        # >ULOQ rows also have ORRESRAW but are deliberately excluded:
+        # COMMENT2 states ">2x ULOQ data not reported per medical director".
         orres = row.get('ORRES', '')
         orresraw = row.get('ORRESRAW', '')
-        if str(orres).startswith('<'):
+        is_lloq = str(orres).startswith('<')
+        if is_lloq:
             value = safe_float(orresraw)
         else:
             value = safe_float(orres) if pd.notna(orres) and orres != '' else None
@@ -75,6 +87,8 @@ def create_measurement_biomarkers(
                 'measurement_concept_id': concept.get('concept_id', 0),
                 'measurement_date': row.get('measurement_date'),
                 'value_as_number': value,
+                'operator_concept_id': 4171756 if is_lloq else None,  # '<'
+                'value_source_value': str(orres) if is_lloq else None,
                 'unit_source_value': row.get('ORRESU', concept.get('unit', '')),
                 'visit_occurrence_id': row.get('visit_occurrence_id'),
                 'measurement_source_value': f"PTAU217|{row.get('SPEC', '')}|{row.get('METHOD', '')}",
@@ -93,12 +107,18 @@ def create_measurement_biomarkers(
         concept = BIOMARKER_CONCEPTS.get(testcd, {})
         value = safe_float(row.get('LABRESN'))
 
-        if value is not None:
+        # BLQ rows have no numeric result and the source records no
+        # quantification limit (LBMTDL is the test name, not a limit), so
+        # the row is kept with a NULL value, '<' operator, and 'BLQ' flag.
+        is_blq = str(row.get('LABRESC', '')).strip().upper() == 'BLQ' and value is None
+        if value is not None or is_blq:
             measurements.append({
                 'person_id': row['person_id'],
                 'measurement_concept_id': concept.get('concept_id', 0),
                 'measurement_date': row.get('measurement_date'),
                 'value_as_number': value,
+                'operator_concept_id': 4171756 if is_blq else None,  # '<'
+                'value_source_value': 'BLQ' if is_blq else None,
                 'unit_source_value': row.get('LABORESU', concept.get('unit', '')),
                 'visit_occurrence_id': row.get('visit_occurrence_id'),
                 'measurement_source_value': f"ROCHE:{testcd}|{row.get('LBSPEC', '')}|{row.get('LBMETHOD', '')}",
