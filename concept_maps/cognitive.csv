@@ -6,7 +6,6 @@ CDSOB,37524289,CDR Sum of Boxes,score,core,CDISC standard
 FCTOTAL96,4151971,Buschke selective reminding test,score,core,SNOMED 311477008 (FCSRT and Buschke selective reminding test are the same instrument)
 LDELTOTAL,2100000005,Logical Memory Delayed,score,core,Custom concept
 DIGITTOTAL,2100000006,Digit Symbol Total,score,core,Custom concept
-LIMMTOTAL,2100000007,Logical Memory Immediate,score,core,Custom concept
 CFIPTTOTAL,2100000050,CFI Patient Total,score,extended,
 CFSPTTOTAL,2100000051,CFI Study Partner Total,score,extended,
 DIGITTOTAL,2100000052,Digit Symbol Total,score,extended,Extended version

@@ -3,9 +3,6 @@ DET,2100000040,CogState Detection,log10(ms),test,
 IDN,2100000041,CogState Identification,log10(ms),test,
 ONB,2100000042,CogState One-Back correct responses,count,test,"Count of correct responses out of TRIAL. Higher is better,  unlike the log10(ms) reaction-time measures DET and IDN."
 OCL,2100000043,CogState One-Card Learning correct responses,count,test,"Count of correct responses out of TRIAL,  not the arcsine-transformed proportion."
-CPAL,2100000044,CogState CPAL,arcsine(sqrt(proportion)),test,
-LNS,2100000045,CogState Letter-Number Sequencing,score,test,
-COGSTATE_COMPOSITE,2100000046,CogState Composite Score,z-score,composite,
 FNMT,2100000047,CogState Face-Name Memory Test correct responses,count,test,Count 0-12 out of TRIAL
 FNLT,2100000048,CogState Face-Name Learning Test correct responses,count,test,Count 0-12 out of TRIAL
 FSBT,2100000049,CogState Face-Symbol Binding Test correct responses,count,test,Count 0-12 out of TRIAL
@@ -21,11 +18,9 @@ FNFT,2100000148,CogState Face-Name Feature Test,arcsine(sqrt(proportion)),batter
 BPET_lmn,2100000270,CogState BPET Log Mean RT,log10(ms),battery_metric,Battery expanded metric
 BPET_cor,2100000271,CogState BPET Correct Responses,count,battery_metric,Battery expanded metric
 BPET_err,2100000272,CogState BPET Errors,count,battery_metric,Battery expanded metric
-BPET_percor,2100000273,CogState BPET Percent Correct,%,battery_metric,Battery expanded metric
 FNFT_lmn,2100000274,CogState FNFT Log Mean RT,log10(ms),battery_metric,Battery expanded metric
 FNFT_cor,2100000275,CogState FNFT Correct Responses,count,battery_metric,Battery expanded metric
 FNFT_err,2100000276,CogState FNFT Errors,count,battery_metric,Battery expanded metric
-FNFT_percor,2100000277,CogState FNFT Percent Correct,%,battery_metric,Battery expanded metric
 MCQT_TOTAL,2100000090,CogState MACQ Total,score,questionnaire,
 MACQ_Q1,2100000280,MACQ Q1 Remember New Name,score,macq_item,Names verified against question text + custom vocabulary (canonical MAC-Q order)
 MACQ_Q2,2100000281,MACQ Q2 Recall Phone Numbers,score,macq_item,Individual MACQ item
@@ -60,5 +55,3 @@ CPATH_Q23,2100000312,C-PATH Q23,score,cpath_item,Individual C-PATH item
 CPATH_Q24,2100000313,C-PATH Q24,score,cpath_item,Individual C-PATH item
 CPATH_Q25,2100000314,C-PATH Q25,score,cpath_item,Individual C-PATH item
 CPATH_Q26,2100000315,C-PATH Q26,score,cpath_item,Individual C-PATH item
-CPATH_CADL,2100000316,C-PATH Complex ADL Domain,score,cpath_domain,C-PATH domain score
-CPATH_IF,2100000317,C-PATH Interpersonal Functioning Domain,score,cpath_domain,C-PATH domain score

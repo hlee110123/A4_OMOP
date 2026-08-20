@@ -89,7 +89,6 @@ def create_measurement_cogstate_battery(
         BPET/FNFT lmn    -> 2100000270/2100000274 (log10(ms))
         BPET/FNFT cor    -> 2100000271/2100000275 (count)
         BPET/FNFT err    -> 2100000272/2100000276 (count)
-        BPET/FNFT percor -> 2100000273/2100000277 (%)
     """
     COGSTATE_CONCEPTS = concepts.load_cogstate_battery_concepts()
     BATTERY_METRIC_CONCEPTS = concepts.load_cogstate_battery_metric_concepts()

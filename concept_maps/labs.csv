@@ -73,15 +73,14 @@ IMT1669_2,37173542,ANA,repeat 2
 IMT1669_3,37173542,ANA,repeat 3
 IMT1754,4217559,Anti-Smooth Muscle Antibody IgG,SNOMED
 CLT1878,3029139,APOE genotype,LOINC 33327-0
-ROCHE:,2100000500,Roche biomarker panel category marker,Custom (panel-level grouping)
 SRT20477,2100000501,Anti-Solanezumab antibody level,Custom (investigational drug ADA)
 SRT16102,2100000502,Solanezumab plasma concentration,Custom (investigational drug PK)
 SRT21423,2100000503,Anti-Solanezumab neutralizing antibody,Custom (investigational drug ADA)
 SRT20478,2100000504,Anti-Solanezumab antibody titer,Custom (investigational drug ADA)
 ORT13169,2100000505,Solanezumab CSF concentration,Custom (investigational drug PK)
-AB:FP40/TP40,2100000510,Free/Total plasma Abeta-40 ratio,Custom (research-specific assay ratio)
-AB:FP42/FP40,2100000511,Free plasma Abeta-42/40 ratio,Custom (research-specific assay ratio)
-AB:FP42/TP42,2100000512,Free/Total plasma Abeta-42 ratio,Custom (research-specific assay ratio)
+AB:FP40/TP40,2100000510,Free/Total Plasma Abeta-40 Ratio,Custom (research-specific assay ratio)
+AB:FP42/FP40,2100000511,Free Plasma Abeta-42/40 Ratio,Custom (research-specific assay ratio)
+AB:FP42/TP42,2100000512,Free/Total Plasma Abeta-42 Ratio,Custom (research-specific assay ratio)
 SRT15753,2100000520,CSF modified Abeta-40,Custom (research-specific assay)
 SRT15754,2100000521,CSF modified Abeta-42,Custom (research-specific assay)
 SRT10631,43055225,CSF pTau-181,LOINC 72260-3
@@ -89,9 +88,9 @@ SRT10630,3000242,Tau protein [Mass/volume] in Cerebral spinal fluid,LOINC 30160-
 SRT18142,2100000524,CSF free Abeta-40,Custom (research-specific assay)
 SRT18047,2100000525,CSF free Abeta-42,Custom (research-specific assay)
 ORT11360,2100000530,Hep E IgG/IgM interpretation,Custom (interpretation field)
-ORT11360_1,2100000530,Hep E interpretation,repeat 1
-ORT11360_2,2100000530,Hep E interpretation,repeat 2
-ORT11360_3,2100000530,Hep E interpretation,repeat 3
-ORT11360_4,2100000530,Hep E interpretation,repeat 4
-ORT11360_5,2100000530,Hep E interpretation,repeat 5
+ORT11360_1,2100000530,Hep E IgG/IgM interpretation,repeat 1
+ORT11360_2,2100000530,Hep E IgG/IgM interpretation,repeat 2
+ORT11360_3,2100000530,Hep E IgG/IgM interpretation,repeat 3
+ORT11360_4,2100000530,Hep E IgG/IgM interpretation,repeat 4
+ORT11360_5,2100000530,Hep E IgG/IgM interpretation,repeat 5
 GET1881,2100000531,HCV RNA viral load,Custom

@@ -32,7 +32,7 @@ def create_observation_lifestyle(
         ALCOHOL  -> Alcoholic drinks per day (44786671)
         CAFFEINE -> Caffeinated beverages per day (40767275)
         AEROBIC  -> Active physical exercise (4312325)
-        WALKING  -> Walking exercise frequency (2100000300)
+        WALKING  -> Time spent walking, minutes per day (PPI 903630)
         SLEEP    -> Sleep duration (40768255)
         SLEEPDAY -> Daytime nap duration (40768262)
         SUBUSE   -> Substance use behavior (37162238)
@@ -379,8 +379,7 @@ def create_observation_study_partner(
     Field Mappings (concept_maps/observations.csv, group=study_partner):
         RELATIONSHIP  -> Study Partner Relationship (2100000080)
         COHABITATION  -> Study Partner Cohabitation (2100000082)
-        SP_AGE        -> Study Partner Age (2100000083)
-        SP_GENDER     -> Study Partner Gender (2100000084)
+        (INFAGE/INFGENDER are not extracted; map rows removed until they are)
     """
     STUDY_PARTNER_CONCEPTS = concepts.load_study_partner_concepts()
 

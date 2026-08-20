@@ -52,7 +52,7 @@ ASCBOOK,4268404,ADL-PQ Manage Finances,,adlpq_item,SNOMED from reviewer mapping
 ASTRAVL,37539747,ADL-PQ Drive Car,,adlpq_item,CDISC ADL03 from reviewer mapping
 ASAPPLI,37539138,ADL-PQ Use Household Appliance,,adlpq_item,CDISC ADL03 from reviewer mapping
 ASLAUN,37534726,ADL-PQ Clean Laundry,,adlpq_item,CDISC ADL03 from reviewer mapping
-ASPAY,2100000213,ADL-PQ Pay Bills,,adlpq_item,Custom concept (not in reviewer spreadsheet)
+ASPAY,2100000213,ADL-PQ Shop and Pay for Items,,adlpq_item,Custom concept (not in reviewer spreadsheet)
 ASSNACK,37541473,ADL-PQ Make a Meal,,adlpq_item,CDISC ADL03 from reviewer mapping
 ASTIMES,2100000214,ADL-PQ Keep Appointments,,adlpq_item,Custom concept (not in reviewer spreadsheet)
 ASFIND,37537935,ADL-PQ Find Personal Belongings,,adlpq_item,CDISC ADL03 from reviewer mapping
@@ -71,7 +71,7 @@ AICBOOK,4268404,ADL-PQ Manage Finances,,adlpq_item,Study partner version (ADLPQS
 AITRAVL,37539747,ADL-PQ Drive Car,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 AIAPPLI,37539138,ADL-PQ Use Household Appliance,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 AILAUN,37534726,ADL-PQ Clean Laundry,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
-AIPAY,2100000213,ADL-PQ Pay Bills,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIPAY,2100000213,ADL-PQ Shop and Pay for Items,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 AISNACK,37541473,ADL-PQ Make a Meal,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 AITIMES,2100000214,ADL-PQ Keep Appointments,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 AIFIND,37537935,ADL-PQ Find Personal Belongings,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
@@ -98,12 +98,12 @@ FTNEW,2100000223,FTP New Things,,secondary,Custom - teal instrument
 FTRUNOUT,2100000224,FTP Running Out of Time,,secondary,Custom - teal instrument
 FTLIMIT,2100000225,FTP Limited Possibilities,,secondary,Custom - teal instrument
 FTGETOLD,2100000226,FTP Getting Old,,secondary,Custom - teal instrument
-RSSCOMP,2100000227,RSS Comprehension,,secondary,Custom - teal instrument
+RSSCOMP,2100000227,RSS Survey Completed By,,secondary,Custom - teal instrument
 RSSEXPECT,2100000228,RSS Met Expectations,,secondary,Custom - teal instrument
 RSSREDO,2100000229,RSS Would Redo,,secondary,Custom - teal instrument
 RSSBEST,2100000230,RSS Best Part,,secondary,Custom - teal instrument
 RSSLEAST,2100000231,RSS Least Liked,,secondary,Custom - teal instrument
-RSSMED,2100000232,RSS Medical Care,,secondary,Custom - teal instrument
+RSSMED,2100000232,RSS Study Medication,,secondary,Custom - teal instrument
 RSSTST,4322976,RSS Testing Procedure,,secondary,SNOMED from reviewer mapping
 RSSVIS,2100000233,RSS Visit Experience,,secondary,Custom - teal instrument
 RSSOTH,2100000234,RSS Other Comments,,secondary,Custom - teal instrument

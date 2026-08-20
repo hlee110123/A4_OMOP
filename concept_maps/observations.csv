@@ -13,5 +13,3 @@ FAMHX_SIBLING,2100000212,Family history - Sibling,family_history,,,Custom concep
 RELATIONSHIP,2100000080,Study Partner Relationship,study_partner,,,
 CONTACT_HRS,2100000081,Study Partner Contact Hours,measurement,,,Moved to measurement (numeric hours/week)
 COHABITATION,2100000082,Study Partner Cohabitation,study_partner,,,
-SP_AGE,2100000083,Study Partner Age,study_partner,,,
-SP_GENDER,2100000084,Study Partner Gender,study_partner,,,
