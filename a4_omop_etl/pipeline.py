@@ -295,7 +295,8 @@ def main():
     print("\n--- Phase 25: OBSERVATION Table (Questionnaires - AD Concerns, ADLPQ Items, GDS Items) ---")
     observation_questionnaires = create_observation_questionnaires(
         src['concerns'], src['adlpq'], src['psychwell'],
-        person, visit_occurrence, date_anchor
+        person, visit_occurrence, date_anchor,
+        adlpqsp_df=src['adlpqsp'],
     )
 
     # ── Combine all observations ─────────────────────────────────────

@@ -67,6 +67,25 @@ ASCELL,37532760,ADL-PQ Use Cell Phone,,adlpq_item,CDISC ADL01 from reviewer mapp
 ASCELLUSE,37542292,ADL-PQ Cell Phone Use Level,,adlpq_item,CDISC ADL03 from reviewer mapping
 ASCALL,36309019,ADL-PQ Make Phone Calls,,adlpq_item,LOINC from reviewer mapping
 ASTEXT,37079157,ADL-PQ Text Messaging,,adlpq_item,LOINC from reviewer mapping
+AICBOOK,4268404,ADL-PQ Manage Finances,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AITRAVL,37539747,ADL-PQ Drive Car,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIAPPLI,37539138,ADL-PQ Use Household Appliance,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AILAUN,37534726,ADL-PQ Clean Laundry,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIPAY,2100000213,ADL-PQ Pay Bills,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AISNACK,37541473,ADL-PQ Make a Meal,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AITIMES,2100000214,ADL-PQ Keep Appointments,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIFIND,37537935,ADL-PQ Find Personal Belongings,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIWDOWN,2100000215,ADL-PQ Write Down Messages,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIMOVIE,2100000216,ADL-PQ Follow Movie Plot,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AICEVNT,37541905,ADL-PQ Talk About Current Events,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIPHONE,37522529,ADL-PQ Telephone Use,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIMEDS,37524736,ADL-PQ Take Medications Regularly,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AIPLAN,37534530,ADL-PQ Initiate Complex Activities,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AICOMPL,37540569,ADL-PQ Complete Complex Activities,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AICELL,37532760,ADL-PQ Use Cell Phone,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AICELLUSE,37542292,ADL-PQ Cell Phone Use Level,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AICALL,36309019,ADL-PQ Make Phone Calls,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
+AITEXT,37079157,ADL-PQ Text Messaging,,adlpq_item,Study partner version (ADLPQSP); same concept as patient item per reviewer suggestion — respondent distinguished by qualifier_source_value
 EMPHRS,44786817,Work hours per week (employment),,secondary,LOINC from reviewer mapping
 VOLHRS,44786817,Work hours per week (volunteer),,secondary,LOINC from reviewer mapping
 FTOPPS,2100000217,FTP Opportunities,,secondary,Custom - teal instrument

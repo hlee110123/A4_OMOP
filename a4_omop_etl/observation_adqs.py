@@ -17,7 +17,7 @@ import pandas as pd
 
 from . import concepts
 from .helpers import (
-    prepare_source_df, finalize_measurement_df,
+    prepare_source_df, finalize_measurement_df, calc_days_to_date,
     build_observation_record, finalize_observation_df, safe_float,
 )
 
@@ -114,7 +114,7 @@ def create_observation_treatment_arm(
     """
     Create OMOP OBSERVATION records for treatment arm assignment (TX).
 
-    Source: adqs.csv (subject-level) | Date: synthetic_consent_date
+    Source: adqs.csv (subject-level) | Date: RNDMDT_DAYS_CONSENT (randomization)
 
     Field Mappings (concept_maps/adqs.csv):
         TX -> Treatment assignment (2100000400)
@@ -130,16 +130,19 @@ def create_observation_treatment_arm(
     TX_CONCEPT_ID = 2100000400
 
     # Get one row per subject with TX
-    tx_df = adqs_df[['BID', 'TX']].dropna(subset=['TX']).drop_duplicates()
+    tx_df = adqs_df[['BID', 'TX', 'RNDMDT_DAYS_CONSENT']].dropna(subset=['TX']).drop_duplicates('BID')
     tx_df = prepare_source_df(tx_df, person_df, date_anchor_df)
 
     observations = []
     for _, row in tx_df.iterrows():
         tx_value = str(row['TX'])
+        # The assignment happened at randomization, not consent. RNDMDT is
+        # present for every TX-assigned subject; consent date is a safety net.
+        obs_date = calc_days_to_date(row, 'RNDMDT_DAYS_CONSENT') or row['synthetic_consent_date']
         observations.append(build_observation_record(
             person_id=row['person_id'],
             observation_concept_id=TX_CONCEPT_ID,
-            observation_date=row['synthetic_consent_date'],
+            observation_date=obs_date,
             value_as_string=tx_value,
             value_as_concept_id=TX_VALUE_CONCEPTS.get(tx_value, 0),
             observation_source_value=f'ADQS:TX={tx_value}',

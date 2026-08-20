@@ -140,7 +140,8 @@ def create_measurement_questionnaire_scores(
     print(f"  SPINFO (INFHRS): {len(spinfo_df)} total -> {len(sp_merged)} matched")
     infhrs_count = 0
     for _, row in sp_merged.iterrows():
-        if pd.notna(row.get('INFHRS')) and row.get('INFHRS') > 0:
+        # Dictionary range is 0..168: zero in-person hours is a valid answer.
+        if pd.notna(row.get('INFHRS')) and row.get('INFHRS') >= 0:
             meas_date = row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date']
             measurements.append({
                 'person_id': row['person_id'],

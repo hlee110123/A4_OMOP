@@ -22,11 +22,13 @@ def create_observation_questionnaires(
     person_df: pd.DataFrame,
     visit_occurrence_df: pd.DataFrame,
     date_anchor_df: pd.DataFrame,
+    adlpqsp_df: pd.DataFrame = None,
 ) -> pd.DataFrame:
     """
     Create OMOP OBSERVATION records from questionnaire files.
 
     Sources: concerns.csv (AD Concerns), adlpq.csv (ADL-PQ items),
+             adlpqsp.csv (ADL-PQ study partner items),
              psychwell.csv (GDS individual items)
     Filter: DONE=1/Yes | Date: visit_start_date
 
@@ -37,8 +39,11 @@ def create_observation_questionnaires(
                          CADCNCRN (2100000066)
             GDS items (15): LOINC 3048xxx-3053xxx (binary 0/1 depression screen)
         group=adlpq_item:
-            19 individual ADL-PQ items (CDISC/SNOMED/custom concepts)
-            from reviewer mapping spreadsheet
+            19 patient AS* items + 19 study-partner AI* items. The AI* items
+            reuse the patient concepts (same questions per the FAQ and data
+            dictionary); the respondent is distinguished by
+            qualifier_source_value='Study partner report' and the ADLPQSP
+            source prefix.
 
     Note: GDTOTAL/STAITOTAL/ASSCORE/AISCORE totals moved to measurement domain.
     """
@@ -82,31 +87,46 @@ def create_observation_questionnaires(
                                       visit_extra_cols=['visit_start_date'])
 
     # Binary Yes/No items get value_as_concept_id (4188539=Yes, 4188540=No)
-    adlpq_binary_fields = {'ASCELL', 'ASCELLUSE', 'ASCALL', 'ASTEXT'}
+    adlpq_binary_fields = {'ASCELL', 'ASCELLUSE', 'ASCALL', 'ASTEXT',
+                           'AICELL', 'AICELLUSE', 'AICALL', 'AITEXT'}
 
-    adlpq_count = 0
-    for _, row in adlpq_merged.iterrows():
-        for field, concept in ADLPQ_ITEM_CONCEPTS.items():
-            if field in row and pd.notna(row[field]):
-                obs_date = row.get('visit_start_date')
-                if pd.isna(obs_date):
-                    obs_date = row['synthetic_consent_date']
+    def emit_adlpq_items(merged, source_label, qualifier=None):
+        count = 0
+        for _, row in merged.iterrows():
+            for field, concept in ADLPQ_ITEM_CONCEPTS.items():
+                if field in row and pd.notna(row[field]):
+                    obs_date = row.get('visit_start_date')
+                    if pd.isna(obs_date):
+                        obs_date = row['synthetic_consent_date']
 
-                val_str = str(row[field])
-                val_concept_id = None
-                if field in adlpq_binary_fields:
-                    val_concept_id = 4188539 if val_str == 'Yes' else 4188540 if val_str == 'No' else 0
+                    val_str = str(row[field])
+                    val_concept_id = None
+                    if field in adlpq_binary_fields:
+                        val_concept_id = 4188539 if val_str == 'Yes' else 4188540 if val_str == 'No' else 0
 
-                observations.append(build_observation_record(
-                    person_id=row['person_id'],
-                    observation_concept_id=concept['concept_id'],
-                    observation_date=obs_date,
-                    value_as_string=val_str,
-                    value_as_concept_id=val_concept_id,
-                    visit_occurrence_id=row.get('visit_occurrence_id'),
-                    observation_source_value=f"ADLPQ:{field}",
-                ))
-                adlpq_count += 1
+                    observations.append(build_observation_record(
+                        person_id=row['person_id'],
+                        observation_concept_id=concept['concept_id'],
+                        observation_date=obs_date,
+                        value_as_string=val_str,
+                        value_as_concept_id=val_concept_id,
+                        visit_occurrence_id=row.get('visit_occurrence_id'),
+                        observation_source_value=f"{source_label}:{field}",
+                        qualifier_source_value=qualifier,
+                    ))
+                    count += 1
+        return count
+
+    adlpq_count = emit_adlpq_items(adlpq_merged, 'ADLPQ')
+
+    # --- ADLPQSP item-level responses (study partner) ---
+    adlpqsp_count = 0
+    if adlpqsp_df is not None:
+        sp_filtered = adlpqsp_df[adlpqsp_df['DONE'] == 'Yes'].copy() if 'DONE' in adlpqsp_df.columns else adlpqsp_df.copy()
+        print(f"  ADLPQSP items: {len(adlpqsp_df)} total -> {len(sp_filtered)} (DONE=Yes)")
+        sp_merged = prepare_source_df(sp_filtered, person_df, date_anchor_df, visit_occurrence_df,
+                                      visit_extra_cols=['visit_start_date'])
+        adlpqsp_count = emit_adlpq_items(sp_merged, 'ADLPQSP', qualifier='Study partner report')
 
     # --- GDS individual items (binary Yes/No depression screen) ---
     gds_filtered = psychwell_df[psychwell_df['DONE'] == 1].copy() if 'DONE' in psychwell_df.columns else psychwell_df.copy()
@@ -143,5 +163,5 @@ def create_observation_questionnaires(
     observation_df = pd.DataFrame(observations) if observations else pd.DataFrame()
     observation_df = finalize_observation_df(observation_df)
 
-    print(f"Created questionnaire OBSERVATION with {len(observation_df)} records (AD Concerns: {concern_count}, ADLPQ items: {adlpq_count}, GDS items: {gds_count})")
+    print(f"Created questionnaire OBSERVATION with {len(observation_df)} records (AD Concerns: {concern_count}, ADLPQ items: {adlpq_count}, ADLPQSP items: {adlpqsp_count}, GDS items: {gds_count})")
     return observation_df

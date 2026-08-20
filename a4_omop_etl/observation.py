@@ -666,20 +666,29 @@ def create_observation_secondary_questionnaires(
         # BR1NIGHT (number of nights) — moved to MEASUREMENT domain
         # See measurement_questionnaire_scores.py
 
-        # Type of stay
-        val = safe_float(row.get('BR1TYPE'))
-        if val is not None:
-            observations.append(build_observation_record(
-                person_id=row['person_id'],
-                observation_concept_id=SECONDARY_QUESTIONNAIRE_CONCEPTS['RUIB1_TYPE']['concept_id'],
-                observation_date=row['visit_start_date'],
-                visit_occurrence_id=row.get('visit_occurrence_id'),
-                value_as_number=val,
-                value_as_string=str(int(val)),
-                observation_source_value=f"RUIB1:BR1TYPE:{row.get('VISCODE', 'NA')}",
-                unit_source_value='code',
-            ))
-            ruib1_count += 1
+        # Type of stay. Dictionary: 1=Infection 2=Surgery 3=Metabolic
+        # 4=Behavioral/Psychiatric 5=Other 6=Elective, "Select all that
+        # apply" — multi-code values like '2:6' are by design, so each
+        # selected code becomes its own observation.
+        br1type_labels = {1: 'Infection', 2: 'Surgery', 3: 'Metabolic',
+                          4: 'Behavioral/Psychiatric', 5: 'Other', 6: 'Elective'}
+        raw_type = row.get('BR1TYPE')
+        if pd.notna(raw_type):
+            codes = [safe_float(c) for c in str(raw_type).split(':')]
+            for val in codes:
+                if val is None:
+                    continue
+                observations.append(build_observation_record(
+                    person_id=row['person_id'],
+                    observation_concept_id=SECONDARY_QUESTIONNAIRE_CONCEPTS['RUIB1_TYPE']['concept_id'],
+                    observation_date=row['visit_start_date'],
+                    visit_occurrence_id=row.get('visit_occurrence_id'),
+                    value_as_number=val,
+                    value_as_string=br1type_labels.get(int(val), str(int(val))),
+                    observation_source_value=f"RUIB1:BR1TYPE:{row.get('VISCODE', 'NA')}",
+                    unit_source_value='code',
+                ))
+                ruib1_count += 1
 
     observation_df = pd.DataFrame(observations) if observations else pd.DataFrame()
     observation_df = finalize_observation_df(observation_df)
