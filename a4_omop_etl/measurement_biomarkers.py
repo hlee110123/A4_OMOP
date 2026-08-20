@@ -106,6 +106,20 @@ def create_measurement_biomarkers(
         testcd = str(row.get('LBTESTCD', ''))
         concept = BIOMARKER_CONCEPTS.get(testcd, {})
         value = safe_float(row.get('LABRESN'))
+        unit = row.get('LABORESU', concept.get('unit', ''))
+        value_source = None
+
+        # The Abeta analytes share standard LOINC plasma concepts with the
+        # immunoassay path (pg/mL), so ng/mL Roche values are converted
+        # x1000. Unit-driven: AMYLB40 arrives in NG/ML, AMYLB42 already in
+        # PG/ML — converting by test code alone corrupted Abeta-42 by 1000x.
+        # Pure unit conversion; original value and unit in value_source_value.
+        if testcd in ('AMYLB40', 'AMYLB42'):
+            source_unit = str(unit).strip().upper()
+            if value is not None and source_unit == 'NG/ML':
+                value_source = f"{row.get('LABRESN')} {unit}"
+                value = value * 1000.0
+            unit = 'pg/mL'
 
         # BLQ rows have no numeric result and the source records no
         # quantification limit (LBMTDL is the test name, not a limit), so
@@ -118,8 +132,8 @@ def create_measurement_biomarkers(
                 'measurement_date': row.get('measurement_date'),
                 'value_as_number': value,
                 'operator_concept_id': 4171756 if is_blq else None,  # '<'
-                'value_source_value': 'BLQ' if is_blq else None,
-                'unit_source_value': row.get('LABORESU', concept.get('unit', '')),
+                'value_source_value': 'BLQ' if is_blq else value_source,
+                'unit_source_value': unit,
                 'visit_occurrence_id': row.get('visit_occurrence_id'),
                 'measurement_source_value': f"ROCHE:{testcd}|{row.get('LBSPEC', '')}|{row.get('LBMETHOD', '')}",
             })

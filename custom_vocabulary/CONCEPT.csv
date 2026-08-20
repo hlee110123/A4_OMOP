@@ -16,8 +16,6 @@ concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concep
 2100000005,Logical Memory Delayed,Measurement,A4_LEARN,Clinical Test,S,A4_LOGMEM_DELAYED,2020-01-01,2099-12-31,
 2100000006,Digit Symbol Total,Measurement,A4_LEARN,Clinical Test,S,A4_DIGIT_SYMBOL,2020-01-01,2099-12-31,
 2100000010,Amyloid-beta 42/40 Ratio,Measurement,A4_LEARN,Lab Test,S,A4_ABETA_RATIO,2020-01-01,2099-12-31,
-2100000011,Total Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_TOTAL,2020-01-01,2099-12-31,
-2100000012,Total Plasma Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_TOTAL,2020-01-01,2099-12-31,
 2100000013,Bound Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_BOUND,2020-01-01,2099-12-31,
 2100000014,Bound Plasma Abeta-42,Measurement,A4_LEARN,Lab Test,S,A4_ABETA42_BOUND,2020-01-01,2099-12-31,
 2100000015,Free Plasma Abeta-40,Measurement,A4_LEARN,Lab Test,S,A4_ABETA40_FREE,2020-01-01,2099-12-31,
