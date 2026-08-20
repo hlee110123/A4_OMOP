@@ -217,7 +217,7 @@ def main():
 
     # ── MI-CDM Extension (Park et al. 2025 / DICOM2OMOP guide) ──────
     print("\n--- Phase 30: MI-CDM DICOM Sidecar Index (A4_JSONS) ---")
-    json_index = build_image_json_index(person, visit_occurrence, date_anchor)
+    json_index = build_image_json_index(person, visit_occurrence, date_anchor, sources=src)
 
     print("\n--- Phase 30b: MI-CDM PROCEDURE_OCCURRENCE (Imaging) ---")
     procedure_occurrence = create_procedure_occurrence(

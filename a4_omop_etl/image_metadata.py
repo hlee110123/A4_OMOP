@@ -17,8 +17,11 @@ This module:
      (create_dicom_metadata_measurements).
 
 Sidecars are fully de-identified: no dates, no DICOM UIDs, no Patient ID.
-Dates come from the linked visit (consent-date fallback), UIDs are
-synthetic, and person/visit resolve from the filename BID/VISCODE.
+Dates come from the linked visit; series whose visit code has no SV row
+(early termination, code 999) are dated from the scan dates in the tabular
+results files, and series with no resolvable date at all are dropped and
+reported rather than stamped with a fabricated date. UIDs are synthetic,
+and person/visit resolve from the filename BID/VISCODE.
 """
 
 import json
@@ -51,10 +54,45 @@ SEQUENCE_TO_PROC = {
 _FILENAME_MODALITY = {'MR': 'MR', 'PET': 'PT'}
 
 
+def _tabular_scan_dates(sources) -> dict:
+    """
+    (BID, zero-padded VISCODE, modality) -> earliest scan-day offset,
+    from the dated tabular results files.
+
+    Used to date sidecar series whose visit code has no SV row (early
+    termination, code 999): the SUVR/volumetric files record scan dates
+    for those same scans on the shared days-from-consent scale.
+    """
+    if not sources:
+        return {}
+    specs = [
+        ('imaging_tau',       'scan_date_DAYS_CONSENT',  'PT'),
+        ('imaging_amyloid',   'scan_date_DAYS_CONSENT',  'PT'),
+        ('imaging_mri',       'Date_DAYS_CONSENT',       'MR'),
+        ('imaging_mri_reads', 'STUDYDATE_DAYS_CONSENT',  'MR'),
+    ]
+    lookup = {}
+    for name, col, modality in specs:
+        df = sources.get(name)
+        if df is None or col not in df.columns:
+            continue
+        sub = df[['BID', 'VISCODE', col]].dropna()
+        for bid, viscode, days in sub.itertuples(index=False):
+            try:
+                key = (bid, str(int(float(viscode))).zfill(3), modality)
+                days = int(days)
+            except (TypeError, ValueError):
+                continue
+            if key not in lookup or days < lookup[key]:
+                lookup[key] = days
+    return lookup
+
+
 def build_image_json_index(
     person_df: pd.DataFrame,
     visit_occurrence_df: pd.DataFrame,
     date_anchor_df: pd.DataFrame,
+    sources: dict = None,
 ) -> pd.DataFrame:
     """
     Scan A4_JSONS into a series-level index DataFrame.
@@ -124,16 +162,37 @@ def build_image_json_index(
     ]
     index = index.merge(visit_lookup, on=['visit_source_value', 'person_id'], how='left')
 
-    # Scan date: visit date when linked, consent date otherwise (sidecars
-    # carry no dates). The unlinked remainder is the small set of
-    # early-termination files with no SV row.
-    index['_scan_date'] = index['visit_start_date'].where(
-        index['visit_start_date'].notna(), index['synthetic_consent_date'])
+    # Scan date: visit date when linked; otherwise the tabular results
+    # files' scan date for the same (BID, VISCODE, modality) — this dates
+    # the early-termination series (VISCODE 999 has no SV row). Sidecars
+    # carry no dates themselves, and a consent date is never substituted:
+    # a series with no resolvable date is dropped and reported, because a
+    # fabricated date poisons downstream feature links and procedures.
+    scan_days = _tabular_scan_dates(sources)
+    index['_scan_date'] = index['visit_start_date']
+    unlinked = index['_scan_date'].isna()
+    if unlinked.any() and scan_days:
+        def _from_tabular(r):
+            modality = 'PT' if r['_modality_code'] == 'PT' else 'MR'
+            days = scan_days.get((r['BID'], r['VISCODE'], modality))
+            if days is None:
+                return pd.NaT
+            return r['synthetic_consent_date'] + pd.Timedelta(days=days)
+        index.loc[unlinked, '_scan_date'] = index[unlinked].apply(_from_tabular, axis=1)
+    n_tabular = int((index['_scan_date'].notna() & unlinked).sum())
+
+    undated = index['_scan_date'].isna()
+    if undated.any():
+        by_seq = index.loc[undated, '_sequence'].value_counts()
+        detail = ", ".join(f"{k} x{v}" for k, v in by_seq.head(5).items())
+        print(f"  dropped {int(undated.sum())} series with no visit link and "
+              f"no tabular scan date ({detail})")
+        index = index[~undated].copy()
     index['_date_str'] = pd.to_datetime(index['_scan_date']).dt.strftime('%Y-%m-%d')
 
-    unlinked = index['visit_occurrence_id'].isna().sum()
-    print(f"  Linked: {len(index)} series to persons; "
-          f"{len(index) - unlinked} to visits ({unlinked} on consent-date fallback)")
+    n_visit = int(index['visit_occurrence_id'].notna().sum())
+    print(f"  Linked: {len(index)} series to persons; {n_visit} to visits, "
+          f"{n_tabular} dated from tabular scan dates")
     return index
 
 

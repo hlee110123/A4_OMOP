@@ -475,8 +475,8 @@ MI-CDM extension table (Park et al. 2025). One row per DICOM series equivalent, 
 | `visit_occurrence_id` | float | Yes | FK to `visit_occurrence.visit_occurrence_id` |
 | `anatomic_site_concept_id` | integer | No | SNOMED body structure (4007117=Brain, 4103720=Eye) |
 | `wadors_uri` | string | Yes | Always NULL (no PACS available) |
-| `local_path` | string | Yes | Always NULL (no local DICOM files) |
-| `image_occurrence_date` | date | No | Imaging date (synthetic) |
+| `local_path` | string | Yes | Sidecar JSON path for archive-backed series; NULL for tabular-only rows |
+| `image_occurrence_date` | date | No | Imaging date (synthetic; see date-semantics note below) |
 | `image_study_UID` | string | No | Synthetic DICOM Study UID (format: `2.25.{integer}`) |
 | `image_series_UID` | string | No | Synthetic DICOM Series UID (format: `2.25.{integer}`) |
 | `modality_concept_id` | integer | No | DICOM modality concept |
@@ -500,6 +500,20 @@ MI-CDM extension table (Park et al. 2025). One row per DICOM series equivalent, 
 
 - Synthetic DICOM UIDs use the `2.25.{integer}` format derived from MD5 hash of (BID, date, modality, series_type).
 - 100% of rows are linked to a procedure_occurrence record.
+- **Date semantics.** All dates share each person's synthetic consent anchor, so
+  offsets between tables are true relative-time differences and carry no PHI.
+  The sidecar JSONs are date-free by de-identification, so
+  `image_occurrence_date` is *visit-level*: the linked visit's start date, or —
+  for series whose visit code has no SV row (early termination, code 999) — the
+  scan date recorded in the tabular results files. Imaging MEASUREMENT rows are
+  instead dated from the analysis files' scan-day offsets. Expect the two to
+  agree within days, not exactly (median offset ±5–7 days: a scan happens
+  within a visit window, not on its nominal start day). A small tail of
+  larger offsets reflects source-level drift (scans recorded under a visit
+  code whose SV start date is far from the actual scan day); these links are
+  faithful to the source's own visit labeling and are intentionally retained.
+  Series with no resolvable date at all are dropped and reported at ETL time,
+  never stamped with a placeholder date.
 - Multiple image_occurrences may share the same image_study_UID (same study, different series).
 
 ---
