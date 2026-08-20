@@ -179,7 +179,7 @@ def create_measurement_imaging_extended(
         mri_reads    -> MCH (2100000070), LOBAR (2100000075), DEEP (2100000076)
         flair        -> WMH_VOL (2100000071), WMH_CORRECTED (2100000072), ICV (2100000077)
         retinal      -> RETINAL_AI (2100000073), Exclude=1 rows skipped
-        pet_va       -> no measurements (pmod_suvr duplicates the SUVR_AMYLOID composite)
+        pet_va       -> categorical visual reads (2100000570-573, value_as_concept_id)
         tau_petsurfer -> per-region SUVR (2100000078)
         tau_stanford  -> per-region SUVR (2100000079)
     """
@@ -273,14 +273,44 @@ def create_measurement_imaging_extended(
             })
             retinal_count += 1
 
-    # --- PET VA ---
+    # --- PET VA visual reads ---
     # pmod_suvr is not extracted: it is the same screening Composite_Summary SUVR
-    # already loaded from imaging_SUVR_amyloid.csv, so loading it here duplicated
-    # every screening composite under a second concept. The file's unique content
-    # (visual reads: elig_vi_1/2, consensus, overall_score) is categorical and
-    # awaits reviewer concepts. pet_va_df is retained in the signature because
-    # procedure_occurrence/image_occurrence still consume the file.
+    # already loaded from imaging_SUVR_amyloid.csv. The file's unique content is
+    # the categorical amyloid-eligibility visual reads, emitted here with
+    # value_as_concept_id (9191 Positive / 9189 Negative; rare 'no agreement'
+    # kept as string with concept 0).
+    pet_merged = prepare_source_df(pet_va_df, person_df, date_anchor_df)
+    print(f"  PET VA: {len(pet_va_df)} total -> {len(pet_merged)} matched")
+
+    READ_VALUE_CONCEPTS = {'positive': 9191, 'negative': 9189}
+    read_fields = [('PET_VA_READ1', 'elig_vi_1'), ('PET_VA_READ2', 'elig_vi_2'),
+                   ('PET_VA_CONSENSUS', 'consensus'), ('PET_VA_OVERALL', 'overall_score')]
     pet_count = 0
+    for _, row in pet_merged.iterrows():
+        obs_date = calc_days_to_date(row, 'scan_date_DAYS_CONSENT')
+        if obs_date is None:
+            continue
+        for key, col in read_fields:
+            raw = row.get(col)
+            if pd.isna(raw):
+                continue
+            concept = IMAGING_EXTENDED[key]
+            measurements.append({
+                'person_id': row['person_id'],
+                'measurement_concept_id': concept['concept_id'],
+                'measurement_date': obs_date,
+                'value_as_number': None,
+                'value_as_concept_id': READ_VALUE_CONCEPTS.get(str(raw).strip().lower(), 0),
+                'value_source_value': str(raw),
+                'unit_source_value': '',
+                'visit_occurrence_id': None,
+                'measurement_source_value': f"PET_VA:{col}|ligand={row.get('ligand', 'NA')}",
+                '_mi_cdm_modality': 'PT',
+                '_mi_cdm_series_type': 'AMYLOID_PET',
+                '_mi_cdm_pipeline': 'PET_VA',
+                '_mi_cdm_viscode': _viscode(row),
+            })
+            pet_count += 1
 
     # --- Tau PET PetSurfer (alternative pipeline) ---
     petsurfer_count = 0

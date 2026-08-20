@@ -1,5 +1,5 @@
 source_code,concept_id,concept_name,group,unit,unit_concept_id,notes
-SMOKE,43054909,Tobacco smoking status,lifestyle,packs/day,0,SNOMED standard. CRF asks packs per day; no UCUM count-per-day concept exists
+SMOKE,35810373,Number of cigarettes currently smoked daily (current cigarette smokers),lifestyle,cigarettes/day,0,"UK Biobank standard (reviewer-suggested). CRF asks packs/day; ETL converts x20 (dictionary: 20 cigarettes/pack); original packs value kept in observation_source_value"
 ALCOHOL,44786671,Alcoholic drinks per day,lifestyle,drinks/day,0,LOINC. CRF asks drinks per day; no UCUM count-per-day concept exists
 CAFFEINE,40767275,Caffeinated beverages per day,lifestyle,cups/day,0,LOINC/PhenX. CRF asks cups per day; no UCUM count-per-day concept exists
 AEROBIC,4312325,Active physical exercise,lifestyle,hours/week,0,SNOMED standard. CRF asks hours per week; no UCUM hour-per-week concept exists

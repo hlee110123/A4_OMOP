@@ -28,7 +28,7 @@ def create_observation_lifestyle(
     Source: habits.csv | Filter: DONE=1 | Date: visit_start_date
 
     Field Mappings (concept_maps/observations.csv, group=lifestyle):
-        SMOKE    -> Tobacco smoking status (43054909)
+        SMOKE    -> Cigarettes per day (UK Biobank 35810373; packs x20)
         ALCOHOL  -> Alcoholic drinks per day (44786671)
         CAFFEINE -> Caffeinated beverages per day (40767275)
         AEROBIC  -> Active physical exercise (4312325)
@@ -56,13 +56,21 @@ def create_observation_lifestyle(
                 # SLEEP is hours, SLEEPDAY and WALKING are minutes.
                 unit_concept_id = concept.get('unit_concept_id', 0)
                 unit_source_value = concept.get('unit')
+                value = float(row[col])
+                source_value = f'HABITS:{col}'
+                # The CRF records packs/day; the standard concept (UK Biobank
+                # 35810373) counts cigarettes/day. Dictionary: 20 cigarettes
+                # per pack. Original packs value kept in the source value.
+                if col == 'SMOKE':
+                    source_value = f'HABITS:SMOKE={row[col]}packs/day'
+                    value = value * 20.0
                 observations.append(build_observation_record(
                     person_id=row['person_id'],
                     observation_concept_id=concept.get('concept_id', 0),
                     observation_date=row.get('visit_start_date'),
-                    value_as_number=float(row[col]),
+                    value_as_number=value,
                     visit_occurrence_id=row.get('visit_occurrence_id'),
-                    observation_source_value=f'HABITS:{col}',
+                    observation_source_value=source_value,
                     unit_source_value=unit_source_value,
                     unit_concept_id=unit_concept_id,
                 ))

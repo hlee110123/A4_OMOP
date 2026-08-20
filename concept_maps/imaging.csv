@@ -9,6 +9,10 @@ WMH_VOL,2100000071,White Matter Hyperintensity Volume,mL,extended,Source is cubi
 WMH_CORRECTED,2100000072,WMH volume normalized to ICV 1300,mm3_per_ICV1300,extended,Not a percentage: computed as (WMHvol_masked/ICV)*1300. Percentage of ICV is value/13
 ICV,2100000077,Intracranial Volume,mL,extended,Source is cubic mm; converted to mL
 RETINAL_AI,2100000073,Retinal AI Score,score,extended,
-PET_VA_SUVR,2100000074,PET Visual Assessment SUVR,ratio,extended,
+PET_VA_SUVR,2100000074,PET Visual Assessment SUVR,ratio,extended,"Retained for image_findings linkage; pmod_suvr itself is no longer extracted (duplicate of SUVR_AMYLOID composite)"
+PET_VA_READ1,2100000570,PET Amyloid Visual Read - Reader 1,,extended,"Categorical eligibility read; value_as_concept_id positive 9191 / negative 9189"
+PET_VA_READ2,2100000571,PET Amyloid Visual Read - Reader 2,,extended,Categorical eligibility read
+PET_VA_CONSENSUS,2100000572,PET Amyloid Visual Read - Consensus,,extended,"Categorical; rare 'no agreement' kept as string with value concept 0"
+PET_VA_OVERALL,2100000573,PET Amyloid Eligibility Overall Score,,extended,"Categorical; the trial's screening amyloid-eligibility determination"
 TAU_PETSURFER,2100000078,Tau PET SUVR PetSurfer,SUVR,extended,
 TAU_STANFORD,2100000079,Tau PET SUVR Stanford,SUVR,extended,

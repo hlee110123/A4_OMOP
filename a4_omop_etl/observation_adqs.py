@@ -118,18 +118,21 @@ def create_observation_treatment_arm(
 
     Field Mappings (concept_maps/adqs.csv):
         TX -> Clinical trial arm (SNOMED 618771)
-             Placebo=2100000401, Solanezumab=2100000402
+             values: Placebo=44804245 (SNOMED), Solanezumab=36852349 (RxNorm Ext)
 
     TX is not derivable from DRUG_EXPOSURE because the trial was blinded —
     both solanezumab and placebo arms have identical dose records.
     """
+    # Standard value concepts: SNOMED "Placebo" qualifier and the RxNorm
+    # Extension solanezumab ingredient. The pair is stylistically asymmetric
+    # (a Drug-domain concept as an answer value) but both are standard and
+    # the arm name stays in value_as_string/observation_source_value.
     TX_VALUE_CONCEPTS = {
-        'Placebo': 2100000401,
-        'Solanezumab': 2100000402,
+        'Placebo': 44804245,
+        'Solanezumab': 36852349,
     }
     # SNOMED 876783001 "Clinical trial arm" (standard Observable Entity),
-    # replacing the study-specific custom. Arm values stay custom pending a decision
-    # on the asymmetric standard pair (SNOMED Placebo / RxNorm solanezumab).
+    # replacing the study-specific custom.
     TX_CONCEPT_ID = 618771
 
     # Get one row per subject with TX

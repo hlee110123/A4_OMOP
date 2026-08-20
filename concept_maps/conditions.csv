@@ -15,5 +15,5 @@ NXFINGER,4139442,Dysmetria,observation,SNOMED 32566006 (finger-to-nose test asse
 NXHEEL,4139442,Dysmetria,observation,SNOMED 32566006 (heel-to-shin test assesses dysmetria; test name preserved in source_value)
 NXNERVE,4024014,Cranial nerve finding,observation,SNOMED 106150003
 NXOTHER,4011630,Neurological finding,observation,SNOMED 102957003 (generic neurological catch-all)
-PXEDSEV,2100000500,Edema Severity Score,measurement,Custom (ordinal 0-4 grading; no LOINC equivalent for this scale)
+PXEDSEV,2100000500,Edema Severity Score,measurement,"Custom (ordinal 0-4 grading). Could be better captured as SNOMED 4313204 Grade of edema with standard 1+-4+ pitting value concepts (4227224/4222871/4227981/4222079) — kept custom for now because Trace (=0) has no standard value and the domain would shift to Observation"
 SIDEROSIS,37116474,Superficial siderosis of central nervous system,condition,"SNOMED 733200004 standard. Reviewer-assigned for imaging_MRI_reads Definite.SS>0; site count preserved in condition_source_value"
