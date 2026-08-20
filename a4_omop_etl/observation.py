@@ -211,7 +211,7 @@ def create_observation_milestones(
 
     Field Mappings (concept_maps/milestones.csv, 16 entries):
         DSDECOD lookup -> milestone concept_id
-        (e.g. RANDOMIZED=2000000010, COMPLETED=2000000011, DEATH=4306655)
+        (e.g. RANDOMIZED=2000000010, COMPLETED=40482840 SNOMED, DEATH=4306655)
     """
     MILESTONE_CONCEPTS = concepts.load_milestone_concepts()
 

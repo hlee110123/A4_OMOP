@@ -117,7 +117,7 @@ def create_observation_treatment_arm(
     Source: adqs.csv (subject-level) | Date: RNDMDT_DAYS_CONSENT (randomization)
 
     Field Mappings (concept_maps/adqs.csv):
-        TX -> Treatment assignment (2100000400)
+        TX -> Clinical trial arm (SNOMED 618771)
              Placebo=2100000401, Solanezumab=2100000402
 
     TX is not derivable from DRUG_EXPOSURE because the trial was blinded —
@@ -127,7 +127,10 @@ def create_observation_treatment_arm(
         'Placebo': 2100000401,
         'Solanezumab': 2100000402,
     }
-    TX_CONCEPT_ID = 2100000400
+    # SNOMED 876783001 "Clinical trial arm" (standard Observable Entity),
+    # replacing the study-specific custom. Arm values stay custom pending a decision
+    # on the asymmetric standard pair (SNOMED Placebo / RxNorm solanezumab).
+    TX_CONCEPT_ID = 618771
 
     # Get one row per subject with TX
     tx_df = adqs_df[['BID', 'TX', 'RNDMDT_DAYS_CONSENT']].dropna(subset=['TX']).drop_duplicates('BID')

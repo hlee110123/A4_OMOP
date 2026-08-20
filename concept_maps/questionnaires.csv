@@ -15,7 +15,7 @@ GDWORTH,3051419,Do you feel pretty worthless the way you are now [GDS],score,pri
 GDENERGY,3050101,Do you feel full of energy [GDS],score,primary,LOINC standard from GDS panel
 GDHOPE,3048841,Do you feel that your situation is hopeless [GDS],score,primary,LOINC standard from GDS panel
 GDBETTER,3053256,Do you think that most people are better off than you are [GDS],score,primary,LOINC standard from GDS panel
-STAITOTAL,2100000060,STAI Total Score,score,measurement,Moved from observation to measurement (numeric score)
+STAITOTAL,40219573,STAI: STATE score,score,measurement,"OMOP Extension standard (replaced custom 2100000060). A4 uses the 6-item state short form (calm/tense/upset/relaxed/content/worry), so the STATE score concept, not the instrument-level 4169477"
 ASSCORE,37525066,ADL01-Total ADCS-ADL Score,score,measurement,CDISC standard (replaced custom 2100000061 per reviewer mapping)
 AISCORE,2100000067,ADL-PQ Study Partner Total Score,score,measurement,Study partner informant score - moved to measurement
 CADDVLP,2100000062,AD Concern Development,score,primary,

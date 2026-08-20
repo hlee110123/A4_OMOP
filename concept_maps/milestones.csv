@@ -1,13 +1,13 @@
 source_code,concept_id,concept_name,notes
 INFORMED CONSENT OBTAINED,3018196,Informed consent obtained,LOINC standard
 RANDOMIZED,2000000010,Study randomization,Custom concept
-COMPLETED,2000000011,Study completion,Custom concept
-SCREEN FAILURE,2000000012,Screen failure,Custom concept
-WITHDRAWAL BY SUBJECT,2000000013,Withdrawal by subject,Custom concept
+COMPLETED,40482840,Completion of clinical trial,SNOMED 443729008 standard (replaced custom 2000000011)
+SCREEN FAILURE,40480675,Does not meet eligibility criteria for clinical trial,"SNOMED 444734003 standard (replaced custom 2000000012); disposition label in observation_source_value"
+WITHDRAWAL BY SUBJECT,4087907,Patient withdrawn from trial,"SNOMED 185924006 standard (replaced custom 2000000013). Who-initiated stays in source_value; PHYSICIAN DECISION keeps its own custom"
 STUDY TERMINATED BY SPONSOR,2000000014,Study termination by sponsor,Custom concept
 ADVERSE EVENT,2000000015,Discontinuation due to adverse event,Custom concept
 DEATH,4306655,Death,SNOMED standard
-LOST TO FOLLOW UP,2000000016,Lost to follow-up,Custom concept
+LOST TO FOLLOW UP,4163894,Lost to follow-up,SNOMED 399307001 standard (replaced custom 2000000016)
 OTHER,2000000017,Discontinuation for other reason,Custom concept
 WITHDRAWAL BY PARENT/GUARDIAN,2000000018,Withdrawal by parent/guardian,Custom concept
 LACK OF EFFICACY,2000000019,Discontinuation due to lack of efficacy,Custom concept

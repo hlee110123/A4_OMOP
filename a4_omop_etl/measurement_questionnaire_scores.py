@@ -34,7 +34,7 @@ def create_measurement_questionnaire_scores(
 
     Sources & Field Mappings (concept_maps/questionnaires.csv group=measurement,
                               concept_maps/observations.csv group=measurement):
-        psychwell -> GDTOTAL (3051694, GDS total) | STAITOTAL (2100000060, STAI total)
+        psychwell -> GDTOTAL (3051694, GDS total) | STAITOTAL (40219573, STAI state score)
         adlpq    -> ASSCORE (2100000061, ADL-PQ patient total)
         adlpqsp  -> AISCORE (2100000067, ADL-PQ study partner total)
         ies      -> IESCORE (1761510, IES-R total) | Date: IEDATE_DAYS_CONSENT

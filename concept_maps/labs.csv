@@ -87,10 +87,10 @@ SRT10631,43055225,CSF pTau-181,LOINC 72260-3
 SRT10630,3000242,Tau protein [Mass/volume] in Cerebral spinal fluid,LOINC 30160-6
 SRT18142,2100000524,CSF free Abeta-40,Custom (research-specific assay)
 SRT18047,2100000525,CSF free Abeta-42,Custom (research-specific assay)
-ORT11360,2100000530,Hep E IgG/IgM interpretation,Custom (interpretation field)
-ORT11360_1,2100000530,Hep E IgG/IgM interpretation,repeat 1
-ORT11360_2,2100000530,Hep E IgG/IgM interpretation,repeat 2
-ORT11360_3,2100000530,Hep E IgG/IgM interpretation,repeat 3
-ORT11360_4,2100000530,Hep E IgG/IgM interpretation,repeat 4
-ORT11360_5,2100000530,Hep E IgG/IgM interpretation,repeat 5
-GET1881,2100000531,HCV RNA viral load,Custom
+ORT11360,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,LOINC 95240-8 standard (replaced custom 2100000530; combined IgG/IgM interpretation)
+ORT11360_1,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,repeat 1
+ORT11360_2,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,repeat 2
+ORT11360_3,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,repeat 3
+ORT11360_4,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,repeat 4
+ORT11360_5,36660435,Hepatitis E virus Ab [Interpretation] in Serum or Plasma,repeat 5
+GET1881,3018447,HCV RNA [Units/volume] (viral load) by NAA,LOINC 11011-4 standard (replaced custom 2100000531; source reports IU/mL)
