@@ -26,13 +26,13 @@ FNFT_lmn,2100000274,CogState FNFT Log Mean RT,log10(ms),battery_metric,Battery e
 FNFT_cor,2100000275,CogState FNFT Correct Responses,count,battery_metric,Battery expanded metric
 FNFT_err,2100000276,CogState FNFT Errors,count,battery_metric,Battery expanded metric
 FNFT_percor,2100000277,CogState FNFT Percent Correct,%,battery_metric,Battery expanded metric
-MCQT_TOTAL,2100000090,MACQ Memory Complaint Total,score,questionnaire,
-MACQ_Q1,2100000280,MACQ Q1 Remember Things,score,macq_item,Individual MACQ item
-MACQ_Q2,2100000281,MACQ Q2 Where Placed Things,score,macq_item,Individual MACQ item
-MACQ_Q3,2100000282,MACQ Q3 Remember Names,score,macq_item,Individual MACQ item
-MACQ_Q4,2100000283,MACQ Q4 Remember Phone Numbers,score,macq_item,Individual MACQ item
-MACQ_Q5,2100000284,MACQ Q5 Remember What Read,score,macq_item,Individual MACQ item
-MACQ_Q6,2100000285,MACQ Q6 Remember Experiences,score,macq_item,Individual MACQ item
+MCQT_TOTAL,2100000090,CogState MACQ Total,score,questionnaire,
+MACQ_Q1,2100000280,MACQ Q1 Remember New Name,score,macq_item,Names verified against question text + custom vocabulary (canonical MAC-Q order)
+MACQ_Q2,2100000281,MACQ Q2 Recall Phone Numbers,score,macq_item,Individual MACQ item
+MACQ_Q3,2100000282,MACQ Q3 Where Placed Objects,score,macq_item,Individual MACQ item
+MACQ_Q4,2100000283,MACQ Q4 Recall Article Facts,score,macq_item,Individual MACQ item
+MACQ_Q5,2100000284,MACQ Q5 Recall Shopping Items,score,macq_item,Individual MACQ item
+MACQ_Q6,2100000285,MACQ Q6 Memory vs High School,score,macq_item,Individual MACQ item
 CPATH_TOTAL,2100000091,C-PATH Total Score,score,questionnaire,
 CPATH_Q1,2100000290,C-PATH Q1,score,cpath_item,Individual C-PATH item
 CPATH_Q2,2100000291,C-PATH Q2,score,cpath_item,Individual C-PATH item

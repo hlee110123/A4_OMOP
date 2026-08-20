@@ -217,31 +217,43 @@ def create_measurement_cogstate_questionnaires(
         lambda row: calc_days_to_date(row, 'Date_DAYS_CONSENT') or row['synthetic_consent_date'], axis=1
     )
 
-    macq_item_count = 0
-    # Group by session and assign Q numbers by row order within each session
-    for (_, _, _), group in macq_items_merged.groupby(['BID', 'VISCODE', 'Session_ID']):
-        group_sorted = group.reset_index(drop=True)
-        for idx, (_, row) in enumerate(group_sorted.iterrows()):
-            q_num = idx + 1
-            if q_num > 6:
-                break
-            value = safe_float(row.get('Score'))
-            if value is not None:
-                concept_key = f"MACQ_Q{q_num}"
-                item_concept = MACQ_ITEM_CONCEPTS.get(concept_key)
-                if item_concept:
-                    measurements.append({
-                        'person_id': row['person_id'],
-                        'measurement_concept_id': item_concept['concept_id'],
-                        'measurement_date': row['measurement_date'],
-                        'value_as_number': value,
-                        'unit_source_value': 'score',
-                        'visit_occurrence_id': row.get('visit_occurrence_id'),
-                        'measurement_source_value': f"cogstate_macq:Q{q_num}:{row.get('Session_ID', 'NA')}",
-                    })
-                    macq_item_count += 1
+    # Items are keyed on the question text: the file has no question-number
+    # column (per the external data dictionary), and text is the identity.
+    # The numbering follows the canonical MAC-Q order, which is also the
+    # verified presentation order in every session.
+    MACQ_QUESTION_NUMBERS = {
+        'Remembering the name of a person just introduced to you?': 1,
+        'Recalling telephone numbers or postcodes that you use on a daily or weekly basis?': 2,
+        'Recalling where you have put objects (such as keys) in your home or office?': 3,
+        'Remembering specific facts from a magazine or a newspaper article you have just finished reading?': 4,
+        'Remembering the item(s) you intended to buy when you arrive at the grocery store or pharmacy?': 5,
+        'In general, how would you describe your memory as compared to when you were in high school?': 6,
+    }
 
-    print(f"  MACQ measurements: totals={macq_total_count}, items={macq_item_count}")
+    macq_item_count = 0
+    macq_unrecognized = 0
+    for _, row in macq_items_merged.iterrows():
+        q_num = MACQ_QUESTION_NUMBERS.get(str(row.get('Question', '')).strip())
+        if q_num is None:
+            macq_unrecognized += 1
+            continue
+        value = safe_float(row.get('Score'))
+        if value is not None:
+            item_concept = MACQ_ITEM_CONCEPTS.get(f"MACQ_Q{q_num}")
+            if item_concept:
+                measurements.append({
+                    'person_id': row['person_id'],
+                    'measurement_concept_id': item_concept['concept_id'],
+                    'measurement_date': row['measurement_date'],
+                    'value_as_number': value,
+                    'unit_source_value': 'score',
+                    'visit_occurrence_id': row.get('visit_occurrence_id'),
+                    'measurement_source_value': f"cogstate_macq:Q{q_num}:{row.get('Session_ID', 'NA')}",
+                })
+                macq_item_count += 1
+
+    print(f"  MACQ measurements: totals={macq_total_count}, items={macq_item_count}"
+          + (f" ({macq_unrecognized} unrecognized question texts skipped)" if macq_unrecognized else ""))
 
     # ========== C-PATH Processing ==========
     print(f"  C-PATH: {len(cogstate_cpath_df)} total rows")
