@@ -6,7 +6,7 @@ Cel,586323,
 kg,9529,
 cm,8582,
 mL,8587,
-msec,8588,
+msec,9593,millisecond (8588 was millimeter — fixed)
 mmol/L,8753,
 GI/L,9444,"billion per liter (10^9/L) — used for WBC,  neutrophils,  lymphocytes,  etc."
 U/L,8645,
