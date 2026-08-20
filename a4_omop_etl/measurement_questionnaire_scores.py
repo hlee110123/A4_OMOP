@@ -1,14 +1,14 @@
 """
 Questionnaire score measurements — numeric totals moved from OBSERVATION.
 
-Per OMOP CDM alignment, numeric instrument total scores belong in MEASUREMENT:
-- GDTOTAL (GDS total 0-15)
-- STAITOTAL (STAI total)
+Measurement-domain totals and counts:
+- STAITOTAL (STAI state score, 40219573)
 - ASSCORE (ADL-PQ patient total)
 - AISCORE (ADL-PQ study partner total)
-- IESCORE (Impact of Events Scale total)
 - BR1NIGHT (hospital overnight stay count)
 - INFHRS (study partner contact hours)
+GDTOTAL and IESCORE have Observation-domain concepts and are emitted as
+OBSERVATION in observation_questionnaires.py / observation.py.
 """
 
 import pandas as pd
@@ -34,10 +34,9 @@ def create_measurement_questionnaire_scores(
 
     Sources & Field Mappings (concept_maps/questionnaires.csv group=measurement,
                               concept_maps/observations.csv group=measurement):
-        psychwell -> GDTOTAL (3051694, GDS total) | STAITOTAL (40219573, STAI state score)
+        psychwell -> STAITOTAL (40219573, STAI state score)
         adlpq    -> ASSCORE (2100000061, ADL-PQ patient total)
         adlpqsp  -> AISCORE (2100000067, ADL-PQ study partner total)
-        ies      -> IESCORE (1761510, IES-R total) | Date: IEDATE_DAYS_CONSENT
         ruib1    -> BR1NIGHT (2100000208, hospital overnight stays)
         spinfo   -> INFHRS (2100000081, study partner contact hours/week)
     """
@@ -67,11 +66,10 @@ def create_measurement_questionnaire_scores(
     psych_merged = prepare_source_df(psychwell_df[psychwell_df['DONE'] == 1].copy() if 'DONE' in psychwell_df.columns else psychwell_df.copy(),
                                       person_df, date_anchor_df, visit_occurrence_df, visit_extra_cols=['visit_start_date'])
     print(f"  PSYCHWELL: {len(psychwell_df)} total -> {len(psych_merged)} valid")
-    gds_count = stai_count = 0
+    stai_count = 0
     for _, row in psych_merged.iterrows():
-        if pd.notna(row.get('GDTOTAL')):
-            _add_measurement(row, 'GDTOTAL', MEAS_CONCEPTS['GDTOTAL'], 'PSYCHWELL')
-            gds_count += 1
+        # GDTOTAL is emitted as OBSERVATION (Observation-domain concept)
+        # in observation_questionnaires.py, alongside the GDS items.
         if pd.notna(row.get('STAITOTAL')):
             _add_measurement(row, 'STAITOTAL', MEAS_CONCEPTS['STAITOTAL'], 'PSYCHWELL')
             stai_count += 1
@@ -96,24 +94,8 @@ def create_measurement_questionnaire_scores(
             _add_measurement(row, 'AISCORE', MEAS_CONCEPTS['AISCORE'], 'ADLPQSP')
             adlpqsp_count += 1
 
-    # --- IES Total Score ---
-    ies_done = ies_df[ies_df['DONE'] == 1].copy() if 'DONE' in ies_df.columns else ies_df.copy()
-    ies_merged = prepare_source_df(ies_done, person_df, date_anchor_df)
-    print(f"  IES: {len(ies_df)} total -> {len(ies_merged)} valid")
-    ies_count = 0
-    for _, row in ies_merged.iterrows():
-        if pd.notna(row.get('IESCORE')):
-            meas_date = calc_days_to_date(row, 'IEDATE_DAYS_CONSENT') or row['synthetic_consent_date']
-            measurements.append({
-                'person_id': row['person_id'],
-                'measurement_concept_id': MEAS_CONCEPTS['IESCORE']['concept_id'],
-                'measurement_date': meas_date,
-                'value_as_number': float(row['IESCORE']),
-                'unit_source_value': 'score',
-                'visit_occurrence_id': None,
-                'measurement_source_value': f"IES:IESCORE:{row.get('VISCODE', 'NA')}",
-            })
-            ies_count += 1
+    # IESCORE is emitted as OBSERVATION (Observation-domain concept)
+    # in observation.py, alongside the IES items.
 
     # --- BR1NIGHT (hospital overnight stays count) ---
     ruib1_merged = prepare_source_df(ruib1_df, person_df, date_anchor_df, visit_occurrence_df,
@@ -159,7 +141,6 @@ def create_measurement_questionnaire_scores(
     measurement_df = finalize_measurement_df(measurement_df)
 
     print(f"Created questionnaire score MEASUREMENT with {len(measurement_df)} records")
-    print(f"  GDS: {gds_count}, STAI: {stai_count}, ADL-PQ: {adlpq_count}, ADL-PQ SP: {adlpqsp_count}")
-    print(f"  IES: {ies_count}, BR1NIGHT: {ruib1_count}, INFHRS: {infhrs_count}")
+    print(f"  STAI: {stai_count}, ADL-PQ: {adlpq_count}, ADL-PQ SP: {adlpqsp_count}")
 
     return measurement_df

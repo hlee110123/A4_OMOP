@@ -1,8 +1,9 @@
 """
 Questionnaire observations — AD Concern items and ADLPQ item-level responses.
 
-Numeric total scores (GDTOTAL, STAITOTAL, ASSCORE, AISCORE, IESCORE)
-have been moved to MEASUREMENT domain per OMOP CDM alignment.
+Measurement-domain totals (STAITOTAL, ASSCORE, AISCORE) live in
+measurement_questionnaire_scores.py; GDTOTAL stays here because its
+LOINC concept (3051694) is Observation-domain.
 AD Concern items remain in OBSERVATION as qualitative concern ratings.
 ADLPQ individual items are categorical functional assessments.
 """
@@ -45,7 +46,8 @@ def create_observation_questionnaires(
             qualifier_source_value='Study partner report' and the ADLPQSP
             source prefix.
 
-    Note: GDTOTAL/STAITOTAL/ASSCORE/AISCORE totals moved to measurement domain.
+    Note: STAITOTAL/ASSCORE/AISCORE totals live in measurement domain;
+    GDTOTAL (Observation-domain concept) is emitted here with the items.
     """
     observations = []
 
@@ -138,7 +140,25 @@ def create_observation_questionnaires(
     gds_fields = [k for k in QUESTIONNAIRE_CONCEPTS if k.startswith('GD') and k != 'GDTOTAL']
 
     gds_count = 0
+    gds_total_count = 0
     for _, row in gds_merged.iterrows():
+        # GDS total (3051694 is Observation-domain, so it lives here, not
+        # in MEASUREMENT). Items cannot be naively summed to the total:
+        # five positively-worded items are reverse-scored.
+        if pd.notna(row.get('GDTOTAL')):
+            total_date = row.get('visit_start_date')
+            if pd.isna(total_date):
+                total_date = row['synthetic_consent_date']
+            observations.append(build_observation_record(
+                person_id=row['person_id'],
+                observation_concept_id=QUESTIONNAIRE_CONCEPTS['GDTOTAL']['concept_id'],
+                observation_date=total_date,
+                value_as_number=float(row['GDTOTAL']),
+                visit_occurrence_id=row.get('visit_occurrence_id'),
+                observation_source_value='PSYCHWELL:GDTOTAL',
+                unit_source_value='score',
+            ))
+            gds_total_count += 1
         for field in gds_fields:
             if field in row and pd.notna(row[field]):
                 concept = QUESTIONNAIRE_CONCEPTS[field]

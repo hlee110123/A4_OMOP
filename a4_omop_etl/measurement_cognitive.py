@@ -1,7 +1,11 @@
 import pandas as pd
 
 from . import concepts
-from .helpers import prepare_source_df, calc_days_to_date, finalize_measurement_df, safe_float, concat_and_assign_ids
+from .helpers import (
+    prepare_source_df, calc_days_to_date, finalize_measurement_df,
+    build_observation_record, finalize_observation_df,
+    safe_float, concat_and_assign_ids,
+)
 
 
 def create_measurement_pacc(
@@ -68,14 +72,18 @@ def create_measurement_mmse(
     date_anchor_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Create OMOP MEASUREMENT records from mmse.csv.
+    Create OMOP MEASUREMENT + OBSERVATION records from mmse.csv.
 
     Source: mmse.csv | Filter: DONE='Yes' | Date: visit_start_date
 
     Field Mappings (concept_maps/cognitive.csv):
-        MMSCORE           -> MMSE Total Score (42869860)
+        MMSCORE           -> MMSE Total Score (42869860) — OBSERVATION:
+                             the LOINC concept is Observation-domain, so the
+                             total routes there while items stay measurements
         26 item fields    -> mmse_item group (37xxxxxx CDISC codes)
         5 DLROW letters   -> mmse_letter group (text values)
+
+    Returns (measurement_df, observation_df).
     """
     COGNITIVE_CONCEPTS = concepts.load_cognitive_concepts()
     MMSE_ITEM_CONCEPTS = concepts.load_cognitive_mmse_items()
@@ -94,6 +102,7 @@ def create_measurement_mmse(
     mmse_letter_fields = list(MMSE_LETTER_CONCEPTS.keys())
 
     measurements = []
+    observations = []
     total_count = 0
     item_count = 0
     letter_count = 0
@@ -101,18 +110,18 @@ def create_measurement_mmse(
     for _, row in mmse_filtered.iterrows():
         meas_date = row.get('visit_start_date')
 
-        # MMSCORE total
-        if pd.notna(row.get('MMSCORE')):
+        # MMSCORE total -> OBSERVATION (42869860 is Observation-domain)
+        if pd.notna(row.get('MMSCORE')) and pd.notna(meas_date):
             concept = COGNITIVE_CONCEPTS['MMSCORE']
-            measurements.append({
-                'person_id': row['person_id'],
-                'measurement_concept_id': concept['concept_id'],
-                'measurement_date': meas_date,
-                'value_as_number': float(row['MMSCORE']),
-                'unit_source_value': 'score',
-                'visit_occurrence_id': row.get('visit_occurrence_id'),
-                'measurement_source_value': 'MMSE:MMSCORE',
-            })
+            observations.append(build_observation_record(
+                person_id=row['person_id'],
+                observation_concept_id=concept['concept_id'],
+                observation_date=meas_date,
+                value_as_number=float(row['MMSCORE']),
+                visit_occurrence_id=row.get('visit_occurrence_id'),
+                observation_source_value='MMSE:MMSCORE',
+                unit_source_value='score',
+            ))
             total_count += 1
 
         # Individual MMSE items
@@ -167,9 +176,12 @@ def create_measurement_mmse(
 
     measurement_df = pd.DataFrame(measurements) if measurements else pd.DataFrame()
     measurement_df = finalize_measurement_df(measurement_df)
+    observation_df = pd.DataFrame(observations) if observations else pd.DataFrame()
+    observation_df = finalize_observation_df(observation_df)
 
-    print(f"  Created {len(measurement_df)} MMSE measurements (totals: {total_count}, items: {item_count}, letters: {letter_count})")
-    return measurement_df
+    print(f"  Created {len(measurement_df)} MMSE measurements (items: {item_count}, letters: {letter_count}) "
+          f"+ {total_count} MMSCORE total observations")
+    return measurement_df, observation_df
 
 
 def create_measurement_cdr(
@@ -278,7 +290,7 @@ def create_measurement_cognitive(
         pacc_df, person_df, visit_occurrence_df, date_anchor_df
     )
 
-    mmse_meas = create_measurement_mmse(
+    mmse_meas, mmse_obs = create_measurement_mmse(
         mmse_df, person_df, visit_occurrence_df, date_anchor_df
     )
 
@@ -292,7 +304,7 @@ def create_measurement_cognitive(
     print(f"Created cognitive MEASUREMENT with {len(cognitive_meas)} total records")
     print(f"  - PACC: {len(pacc_meas)}, MMSE: {len(mmse_meas)}, CDR: {len(cdr_meas)}")
 
-    return cognitive_meas
+    return cognitive_meas, mmse_obs
 
 
 def create_measurement_cognitive_extended(

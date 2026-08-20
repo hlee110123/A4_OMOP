@@ -1,5 +1,5 @@
 source_code,concept_id,concept_name,unit,group,notes
-GDTOTAL,3051694,Geriatric depression scale (GDS) total,score,measurement,LOINC standard - moved from observation to measurement (numeric score)
+GDTOTAL,3051694,Geriatric depression scale (GDS) total,score,primary,LOINC standard - Observation domain; total emitted as OBSERVATION alongside the GDS items
 GDSATIS,3048479,Are you basically satisfied with your life [GDS],score,primary,LOINC standard from GDS panel
 GDDROP,3049765,Have you dropped many of your activities and interests [GDS],score,primary,LOINC standard from GDS panel
 GDEMPTY,3052362,Do you feel that your life is empty [GDS],score,primary,LOINC standard from GDS panel
@@ -23,7 +23,7 @@ CADKNOW,2100000063,AD Concern Knowledge,score,primary,
 CADBLIEV,2100000064,AD Concern Belief,score,primary,
 CADWRST,2100000065,AD Concern Worry,score,primary,
 CADCNCRN,2100000066,AD Concern Total,score,primary,
-IESCORE,1761510,Total score [Impact of Event Scale-Revised],score,measurement,LOINC standard - moved from secondary observation to measurement
+IESCORE,1761510,Total score [Impact of Event Scale-Revised],score,secondary,LOINC standard - Observation domain; total emitted as OBSERVATION alongside the IES items
 IETHINK,1761742,Thought about adverse event unintentionally,,secondary,LOINC standard from IES-R panel
 IEAVOID,1761406,Avoided getting upset when unintentionally thought about adverse event,,secondary,LOINC standard from IES-R panel
 IEREMOVE,1761453,Tried to remove adverse event from memory,,secondary,LOINC standard from IES-R panel

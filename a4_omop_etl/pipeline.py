@@ -64,6 +64,7 @@ from .image_metadata import (
     build_image_json_index,
     extend_procedures_from_json,
     create_dicom_metadata_measurements,
+    relink_tau_pipeline_measurements,
     IMAGE_OCCURRENCE_FIELD_CONCEPT_ID,
 )
 from .export import (
@@ -112,7 +113,7 @@ def main():
     )
 
     print("\n--- Phase 7: MEASUREMENT Table (Cognitive) ---")
-    measurement_cognitive = create_measurement_cognitive(
+    measurement_cognitive, observation_mmse = create_measurement_cognitive(
         src['pacc'], src['mmse'], src['cdr'],
         person, visit_occurrence, date_anchor
     )
@@ -231,6 +232,11 @@ def main():
         json_index, procedure_occurrence
     )
 
+    # PetSurfer/Stanford tau rows are visit-2 stamped in their sources;
+    # re-date them to the person's baseline FTP sidecar session so
+    # image_feature links them to the real series (with metadata).
+    measurement = relink_tau_pipeline_measurements(measurement, json_index)
+
     print("\n--- Phase 31: MI-CDM IMAGE_OCCURRENCE ---")
     image_occurrence = create_image_occurrence(
         src, person, visit_occurrence, procedure_occurrence, date_anchor,
@@ -309,7 +315,7 @@ def main():
         observation_lifestyle, observation_milestones,
         observation_cssrs, observation_study_partner, observation_secondary,
         observation_questionnaires, observation_tx, observation_education,
-        observation_retirement,
+        observation_retirement, observation_mmse,
     ], 'observation_id')
     print(f"\nTotal OBSERVATION records: {len(observation)}")
 

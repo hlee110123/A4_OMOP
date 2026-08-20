@@ -464,7 +464,7 @@ def create_observation_secondary_questionnaires(
 
     observations = []
 
-    # --- IES: Individual items as OBSERVATION, IESCORE total in MEASUREMENT ---
+    # --- IES: items and IESCORE total (1761510 is Observation-domain) ---
     print(f"  IES: {len(ies_df)} total rows")
     ies_done = ies_df[ies_df['DONE'] == 1].copy() if 'DONE' in ies_df.columns else ies_df.copy()
     ies_merged = _with_visit_dates(ies_done, person_df, date_anchor_df, visit_occurrence_df, 'ies')
@@ -477,6 +477,17 @@ def create_observation_secondary_questionnaires(
     }
     ies_count = 0
     for _, row in ies_merged.iterrows():
+        if pd.notna(row.get('IESCORE')):
+            observations.append(build_observation_record(
+                person_id=row['person_id'],
+                observation_concept_id=SECONDARY_QUESTIONNAIRE_CONCEPTS['IESCORE']['concept_id'],
+                observation_date=row['visit_start_date'],
+                visit_occurrence_id=row.get('visit_occurrence_id'),
+                value_as_number=float(row['IESCORE']),
+                observation_source_value=f"IES:IESCORE:{row.get('VISCODE', 'NA')}",
+                unit_source_value='score',
+            ))
+            ies_count += 1
         for src_col, concept_key in ies_fields.items():
             val = safe_float(row.get(src_col))
             if val is not None:
