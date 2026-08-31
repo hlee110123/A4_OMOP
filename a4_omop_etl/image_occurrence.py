@@ -172,6 +172,7 @@ def _build_tabular_rows(
                 'BID': bid,
                 'VISCODE': row.get('VISCODE'),
                 '_proc_type': proc_type,
+                '_src_key': src_key,
                 'visit_occurrence_id': row.get('visit_occurrence_id'),
             })
 
@@ -236,6 +237,14 @@ def create_image_occurrence(
                 (r['person_id'], r['_sequence'], r['VISCODE']) in by_visit or
                 (r['person_id'], r['_sequence'], r['_date_str']) in by_date),
             axis=1)
+        # PetSurfer/Stanford rows are person-level covered: their VISCODE=2
+        # ("Screening PET") stamp is not the tau acquisition visit, and each
+        # row is the person's baseline FTP scan, which the sidecar series
+        # already provide (see relink_tau_pipeline_measurements and
+        # docs/Concept_Mapping_Decisions.md "Tau pipeline relink").
+        ftp_persons = set(json_io.loc[json_io['_sequence'] == 'FTP', 'person_id'])
+        covered |= (tab_io['_src_key'].isin(['tau_petsurfer', 'tau_stanford'])
+                    & tab_io['person_id'].isin(ftp_persons))
         n_dropped = int(covered.sum())
         tab_io = tab_io[~covered].copy()
 

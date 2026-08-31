@@ -196,6 +196,64 @@ def build_image_json_index(
     return index
 
 
+def relink_tau_pipeline_measurements(
+    measurement_df: pd.DataFrame,
+    json_index: pd.DataFrame,
+) -> pd.DataFrame:
+    """Re-date PetSurfer/Stanford tau measurements to the baseline FTP scan.
+
+    The imaging_Tau_PET_{PetSurfer,Stanford}.csv exports stamp every row
+    VISCODE=2 ("Visit 2 (Screening PET)" - the florbetapir screening visit),
+    which is not the tau acquisition visit; dating rows by that visit lands
+    a median 28 days before the scan and orphans them from the FTP sidecar
+    series. The files' methods PDF documents one scan per participant, and
+    both pipelines processed the same realigned+summed PET volume, so each
+    row belongs to the person's earliest FTP session. Persons with no FTP
+    sidecar keep their visit-dated fallback. See
+    docs/Concept_Mapping_Decisions.md ("Tau pipeline relink").
+    """
+    if ('_mi_cdm_pipeline' not in measurement_df.columns
+            or json_index is None or len(json_index) == 0):
+        return measurement_df
+    ftp = json_index[json_index['_sequence'] == 'FTP']
+    if len(ftp) == 0:
+        return measurement_df
+
+    baseline = (ftp.dropna(subset=['_scan_date'])
+                .sort_values('_scan_date')
+                .drop_duplicates('person_id')
+                .set_index('person_id')[['_scan_date', 'VISCODE',
+                                         'visit_occurrence_id']])
+
+    mask = measurement_df['_mi_cdm_pipeline'].isin(
+        ['TAU_PETSURFER', 'TAU_STANFORD'])
+    # Guardrail: the one-scan-per-participant interpretation only holds
+    # while the exports stay cross-sectional. Any person with multiple
+    # dated row groups per pipeline is left visit-dated and reported.
+    per_person = measurement_df[mask].groupby(
+        ['person_id', '_mi_cdm_pipeline'])['measurement_date'].nunique()
+    multi = per_person[per_person > 1]
+    if len(multi) > 0:
+        print(f"  WARNING: {len(multi)} tau person-pipeline groups have "
+              f"multiple dates; relink assumes one scan/person - skipped them")
+        mask &= ~measurement_df['person_id'].isin(
+            multi.index.get_level_values('person_id'))
+
+    pids = measurement_df.loc[mask, 'person_id']
+    new_date = pids.map(baseline['_scan_date'])
+    has = new_date.notna()
+    rows = new_date.index[has]
+    measurement_df.loc[rows, 'measurement_date'] = new_date[has]
+    measurement_df.loc[rows, 'visit_occurrence_id'] = pids.map(
+        baseline['visit_occurrence_id'])[has]
+    measurement_df.loc[rows, '_mi_cdm_viscode'] = pids.map(
+        baseline['VISCODE'])[has]
+    print(f"  Relinked {int(has.sum()):,} PetSurfer/Stanford tau measurements "
+          f"({pids[has].nunique()} persons) to their baseline FTP session; "
+          f"{pids[~has].nunique()} persons have no FTP sidecar (kept fallback)")
+    return measurement_df
+
+
 def extend_procedures_from_json(
     index: pd.DataFrame,
     procedure_df: pd.DataFrame,

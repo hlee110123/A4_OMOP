@@ -979,3 +979,43 @@ Field-vs-Table precision argument. This supersedes audit finding C11.
 - Metadata and derived measurements link back to their series via `measurement_event_id` +
   `meas_event_field_concept_id` = 2100000532 (custom A4_LEARN Field concept for
   `image_occurrence.image_occurrence_id`; no standard concept exists for extension-table fields).
+
+---
+
+## Task — Tau pipeline relink: PetSurfer/Stanford → baseline FTP sidecar series ✅ (2026-08-20)
+
+### Findings
+
+- `imaging_Tau_PET_PetSurfer.csv` / `imaging_Tau_PET_Stanford.csv` stamp **every row
+  `VISCODE = 2`**, which `visits_datadic.csv` defines as "Visit 2 (Screening PET)" — the
+  *florbetapir* screening visit, not the tau acquisition. Dating rows by that visit landed a
+  median 28 days (IQR 21–37) before the true scan, so the sidecar-authoritative dedup and
+  `_pick_occurrence` matching (both keyed on VISCODE/date) never linked them: 443/447
+  pipeline occurrences were duplicate tabular rows with no `local_path` and no metadata,
+  while 1,657 FTP sidecar series (all with metadata) sat unlinked alongside.
+- `imaging_Tau_PET_methods.pdf` (Young & Mormino, Stanford) documents: one download per
+  participant ("data are for 447 participants"), and the PetSurfer PVC pipeline ran on
+  "the **same realigned and summed PET file** that was used in the non-PVC [Stanford]
+  pipeline" — i.e. both files are dual processings of one physical scan.
+- Empirically, the nearest FTP session equals the person's **earliest** FTP session for
+  444/444 PetSurfer subjects with sidecars. `external_datadic.csv` documents no VISCODE
+  field for these files at all.
+
+### Decision
+
+Treat each PetSurfer/Stanford row as the person's **baseline (earliest) FTP tau scan**:
+
+1. `relink_tau_pipeline_measurements` (image_metadata.py) re-dates the TAU_PETSURFER /
+   TAU_STANFORD measurements to the earliest FTP sidecar session and adopts its
+   VISCODE + `visit_occurrence_id`, so `image_feature` links them to the real series.
+   Guardrail: any person with >1 dated row group per pipeline (future longitudinal drops)
+   is left visit-dated with a warning; persons with no FTP sidecar keep the tabular fallback.
+2. `create_image_occurrence` drops the visit-2-dated tabular rows for these two sources
+   at person level when the person has any FTP sidecar (`_src_key` rule).
+3. Both pipelines therefore share the same `image_occurrence` as `suvr_tau`, with pipeline
+   identity carried by `image_feature.alg_system` — the intended MI-CDM pattern (one
+   occurrence per physical series; processing provenance on the feature).
+
+### Notes from the methods PDF worth carrying forward
+- 111 participants received an extra 4 mm FWHM smoothing (noisy data) — potential QC covariate.
+- Subject B34660963 has documented off-target frontal binding ("consider excluding").

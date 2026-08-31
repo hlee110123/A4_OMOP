@@ -31,7 +31,7 @@ CSV_DIR = Path(__file__).parent / "OMOP_Output"
 
 TABLES = ["person", "observation_period", "visit_occurrence", "condition_occurrence",
           "drug_exposure", "measurement", "observation", "procedure_occurrence",
-          "cdm_source", "image_occurrence", "image_feature"]
+          "death", "cdm_source", "image_occurrence", "image_feature"]
 
 
 def connect():
