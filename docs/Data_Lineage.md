@@ -313,7 +313,7 @@ All five files are processed with a shared `process_cognitive_file()` function:
 | ORRESU | unit_source_value | |
 | COLLECTION_DATE_DAYS_CONSENT | measurement_date | `synthetic_consent_date + COLLECTION_DATE_DAYS_CONSENT` |
 
-**measurement_source_value:** "PTAU217"
+**measurement_source_value:** `"PTAU217|{SPEC}|{METHOD}"`
 
 #### Roche Panel
 
@@ -324,7 +324,7 @@ All five files are processed with a shared `process_cognitive_file()` function:
 | LABORESU | unit_source_value | |
 | LABD_DAYS_CONSENT | measurement_date | `synthetic_consent_date + LABD_DAYS_CONSENT` |
 
-**measurement_source_value:** `"ROCHE:{LBTESTCD}"`
+**measurement_source_value:** `"ROCHE:{LBTESTCD}|{LBSPEC}|{LBMETHOD}"`
 
 ### 6.9 Imaging (Core)
 
@@ -350,7 +350,7 @@ All non-metadata columns are treated as brain region volumes. Each row x region 
 | Source Column | OMOP Column | Notes |
 |---|---|---|
 | suvr_cer | value_as_number | Cerebellar-referenced SUVR |
-| brain_region | measurement_source_value | `"AMYLOID:{brain_region}"` |
+| brain_region | measurement_source_value | `"AMYLOID|{ligand}|{brain_region}|scan{N}"` |
 | scan_date_DAYS_CONSENT | measurement_date | |
 
 #### Tau PET SUVR
@@ -360,7 +360,7 @@ All non-metadata columns are treated as brain region volumes. Each row x region 
 | Source Column | OMOP Column | Notes |
 |---|---|---|
 | suvr_persi (preferred) or suvr_cer | value_as_number | Uses suvr_persi if available, falls back to suvr_cer |
-| brain_region | measurement_source_value | `"TAU:{brain_region}"` |
+| brain_region | measurement_source_value | `"TAU|{ligand}|{brain_region}|scan{N}"` |
 
 ### 6.10 Imaging Extended
 
@@ -400,7 +400,7 @@ All non-metadata columns are treated as brain region volumes. Each row x region 
 | pmod_suvr | value_as_number | |
 | scan_date_DAYS_CONSENT | measurement_date | |
 
-**measurement_source_value:** `"PET_VA:ligand={ligand}"`
+**measurement_source_value:** `"PET_VA:{read_column}|ligand={ligand}"` (visual reads; pmod_suvr no longer extracted)
 
 #### Tau PetSurfer / Tau Stanford
 
@@ -794,7 +794,7 @@ Extends `observation_period_end_date` to cover the latest event date per person 
 
 **Module:** `image_occurrence.py` / `create_image_occurrence()`
 **Sources:** Same imaging sources as procedure_occurrence
-**Records:** 23,898
+**Records:** ~44,900 (one row per sidecar series, ~43.4k; plus tabular-only fallback rows)
 
 | Output Column | Source | Transformation |
 |---|---|---|
@@ -802,9 +802,9 @@ Extends `observation_period_end_date` to cover the latest event date per person 
 | `person_id` | Source BID | Lookup via person table |
 | `procedure_occurrence_id` | Computed | Join on (person_id, procedure_concept_id, date) |
 | `visit_occurrence_id` | BID + VISCODE | Visit lookup |
-| `anatomic_site_concept_id` | Series type | 4007117 (Brain) for MRI/PET, 4103720 (Eye) for retinal |
+| `anatomic_site_concept_id` | Series type | 4133034 (Brain structure) for MRI/PET, 4305329 (Eye structure) for retinal |
 | `wadors_uri` | -- | Always NULL (no PACS) |
-| `local_path` | -- | Always NULL (no local DICOM) |
+| `local_path` | sidecar path | Sidecar JSON path for archive-backed series; NULL for tabular-only rows |
 | `image_occurrence_date` | `*_DAYS_CONSENT` | Anchored date |
 | `image_study_UID` | BID + date + modality | Synthetic: `2.25.{int(MD5(seed)[:24], 16)}` |
 | `image_series_UID` | BID + date + modality + series_type | Synthetic: `2.25.{int(MD5(seed)[:24], 16)}` |
@@ -824,7 +824,7 @@ Extends `observation_period_end_date` to cover the latest event date per person 
 |---|---|---|
 | `image_feature_id` | Generated | Sequential 1..N |
 | `person_id` | measurement.person_id | Direct |
-| `image_occurrence_id` | Computed | Join measurement to image_occurrence on (person_id, date, modality) |
+| `image_occurrence_id` | Computed | Matched per measurement group via a preference cascade: acquisition VISCODE + series type, then visit + series type, then date + series type, then visit/date + modality (see image_feature._pick_occurrence; carried on the _mi_cdm_* annotation columns incl. _mi_cdm_viscode) |
 | `image_feature_event_field_concept_id` | Constant | 1147330 (= the MEASUREMENT table concept, per the DICOM2OMOP MI-CDM guide) |
 | `image_feature_event_id` | measurement.measurement_id | Direct (polymorphic FK) |
 | `image_feature_concept_id` | measurement.measurement_concept_id | Direct |

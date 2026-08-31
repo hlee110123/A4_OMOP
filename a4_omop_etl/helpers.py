@@ -5,7 +5,7 @@ Shared utilities used across domain modules.
 - Person and visit lookup construction
 - Date calculation from days-from-consent
 - Visit concept mapping
-- OMOP record factories and table finalization
+- OMOP observation record factory and table finalization
 - Standard source-data preparation (merge chains)
 """
 
@@ -196,32 +196,6 @@ def prepare_source_df(
 
 
 # ─── OMOP Record Factories ──────────────────────────────────────────
-
-def build_measurement_record(
-    person_id, measurement_concept_id, measurement_date,
-    value_as_number=None, unit_source_value='',
-    visit_occurrence_id=None, measurement_source_value='',
-    **overrides
-) -> dict:
-    """
-    Build a measurement dict with standard fields.
-
-    Only the 7 core fields are set here; OMOP boilerplate columns
-    (measurement_datetime, type_concept_id, etc.) are filled later
-    by finalize_measurement_df().
-    """
-    record = {
-        'person_id': person_id,
-        'measurement_concept_id': measurement_concept_id,
-        'measurement_date': measurement_date,
-        'value_as_number': value_as_number,
-        'unit_source_value': unit_source_value,
-        'visit_occurrence_id': visit_occurrence_id,
-        'measurement_source_value': measurement_source_value,
-    }
-    record.update(overrides)
-    return record
-
 
 def build_observation_record(
     person_id, observation_concept_id, observation_date,

@@ -77,10 +77,10 @@ def create_measurement_labs(
 
     Source: clrm_lab.csv | Filter: TSTSTAT='D' | Date: LBDTM_DAYS_CONSENT
 
-    Field Mappings (concept_maps/labs.csv, 97 entries):
+    Field Mappings (concept_maps/labs.csv, 95 entries):
         LBTESTCD lookup -> concept_id (hematology, chemistry,
         urinalysis, coagulation, immunology, drug-related panels)
-        value_as_number = LBORRES (numeric) or LBSTRESN
+        value_as_number = SIRESN (SI-unit family; unit from SIU, ranges from SINRLO/HI)
     """
     LAB_CONCEPTS = concepts.load_lab_concepts()
 

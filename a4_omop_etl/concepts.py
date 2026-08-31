@@ -154,11 +154,6 @@ def load_cogstate_cpath_item_concepts() -> dict:
     return _load_dict_of_dicts('cogstate.csv', group_filter='cpath_item')
 
 
-def load_cogstate_cpath_domain_concepts() -> dict:
-    """Load C-PATH domain score concepts."""
-    return _load_dict_of_dicts('cogstate.csv', group_filter='cpath_domain')
-
-
 def load_biomarker_concepts() -> dict:
     return _load_dict_of_dicts('biomarkers.csv')
 

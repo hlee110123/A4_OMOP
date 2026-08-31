@@ -215,9 +215,9 @@ def create_observation_milestones(
     """
     Create OMOP OBSERVATION records from DS.csv (Disposition).
 
-    Source: ds.csv | Date: DS_DAYS_CONSENT
+    Source: ds.csv | Date: DSSTDTC_DAYS_CONSENT
 
-    Field Mappings (concept_maps/milestones.csv, 16 entries):
+    Field Mappings (concept_maps/milestones.csv, 15 entries):
         DSDECOD lookup -> milestone concept_id
         (e.g. RANDOMIZED=2000000010, COMPLETED=40482840 SNOMED, DEATH=4306655)
     """
@@ -279,7 +279,7 @@ def create_observation_cssrs(
     Sources: cssrs.csv (current visit), cssrslv.csv (lifetime)
     Date: visit_start_date
 
-    Field Mappings (concept_maps/cssrs.csv, 30 entries):
+    Field Mappings (concept_maps/cssrs.csv, 29 entries):
         Ideation: WISHLIFE, ACTLIFE, METHOD, INTENT, PLAN
         Attempts: ATTMPT, ATTMPT5, ATTMPTN
         Behavior: INTER, ABORT, PREP, BEHAVLIF + counts
@@ -450,7 +450,8 @@ def create_observation_secondary_questionnaires(
     Sources: ies.csv, ftpscale.csv, rss.csv, views.csv, ruib.csv, ruib1.csv
 
     Field Mappings (concept_maps/questionnaires.csv, group=secondary):
-        IES items (15) -> LOINC 1761xxx (individual item scores, NOT total)
+        IES items (15) -> LOINC 1761xxx + IESCORE total (1761510 is
+                          Observation-domain, so the total is emitted here too)
         FTP (11 items) -> FTP_METHOD (2100000201) + 10 item-level (2100000217-226)
         RSS (12 items) -> RSS_QUALITY/RECOMMEND + RSSTST (4322976) + 9 custom (2100000227-235)
         VIEWS (10 items) -> VIEWS_SEEK (2100000204) + 9 item-level (2100000236-244)

@@ -70,7 +70,7 @@ def create_measurement_mmse(
     person_df: pd.DataFrame,
     visit_occurrence_df: pd.DataFrame,
     date_anchor_df: pd.DataFrame,
-) -> pd.DataFrame:
+) -> tuple:
     """
     Create OMOP MEASUREMENT + OBSERVATION records from mmse.csv.
 
@@ -279,11 +279,14 @@ def create_measurement_cognitive(
     person_df: pd.DataFrame,
     visit_occurrence_df: pd.DataFrame,
     date_anchor_df: pd.DataFrame,
-) -> pd.DataFrame:
+) -> tuple:
     """
     Create combined OMOP MEASUREMENT table from cognitive assessment sources.
 
     Combines PACC, MMSE, and CDR into cognitive measurements.
+
+    Returns (measurement_df, mmse_observation_df): the MMSE total routes to
+    OBSERVATION because its LOINC concept (42869860) is Observation-domain.
     """
     # Create each measurement type
     pacc_meas = create_measurement_pacc(

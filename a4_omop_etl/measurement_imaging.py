@@ -1,3 +1,14 @@
+"""Imaging-derived MEASUREMENT records (volumetric MRI, PET SUVR, reads).
+
+MI-CDM ANNOTATION CONTRACT: every measurement dict in this module also stamps
+four private columns — _mi_cdm_modality, _mi_cdm_series_type, _mi_cdm_pipeline,
+_mi_cdm_viscode — that ride through pipeline concatenation and ID assignment so
+image_feature.create_image_feature() can match each measurement to its
+image_occurrence series. They are internal only: strip_mi_cdm_annotations()
+removes them before export. If you add a new imaging source here, stamp all
+four (see _SERIES_CONFIG in image_occurrence.py for valid series types).
+"""
+
 import pandas as pd
 
 from . import concepts
@@ -36,11 +47,11 @@ def create_measurement_imaging(
 
     Sources & Field Mappings (concept_maps/imaging.csv, group=core):
         imaging_mri.csv     -> dynamic ROI columns (2100000030, Brain Region Volume, mL)
-                               | Date: EXAMD_DAYS_CONSENT
-        imaging_amyloid.csv -> SUVR composite (2100000031, Amyloid PET SUVR, ratio)
-                               | Date: EXAMD_DAYS_CONSENT
+                               | Date: Date_DAYS_CONSENT
+        imaging_amyloid.csv -> SUVR per region (2100000031, Amyloid PET SUVR, ratio)
+                               | Date: scan_date_DAYS_CONSENT, visit-date fallback
         imaging_tau.csv     -> SUVR per region (2100000032, Tau PET SUVR, ratio)
-                               | Date: EXAMD_DAYS_CONSENT
+                               | Date: scan_date_DAYS_CONSENT, visit-date fallback
     """
     measurements = []
 

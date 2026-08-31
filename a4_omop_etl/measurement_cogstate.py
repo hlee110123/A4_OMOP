@@ -13,7 +13,7 @@ def create_measurement_cogstate(
     """
     Create OMOP MEASUREMENT records from COGSTATE_COMPUTERIZED.csv.
 
-    Source: cogstate.csv | Filter: VALUE not null | Date: visit_start_date
+    Source: cogstate.csv | Filter: VALUE not null | Date: TESTDATE_DAYS_CONSENT (consent-date fallback)
     Visit linking: VISIT -> visit_occurrence
 
     Field Mappings (concept_maps/cogstate.csv, group=test,composite):
@@ -82,7 +82,7 @@ def create_measurement_cogstate_battery(
     """
     Create OMOP MEASUREMENT records from cogstate_battery.csv for BPET/FNFT tests.
 
-    Source: cogstate_battery.csv | Filter: TCode in (BPET, FNFT) | Date: visit_start_date
+    Source: cogstate_battery.csv | Filter: TCode in (BPET, FNFT) + QC | Date: TDate_DAYS_CONSENT (no fallback)
 
     Field Mappings (concept_maps/cogstate.csv, group=battery,battery_metric):
         BPET/FNFT acc    -> 2100000147/2100000148 (arcsine(sqrt(proportion)))
@@ -136,8 +136,9 @@ def create_measurement_cogstate_battery(
             })
             acc_count += 1
 
-        # Expanded metrics: lmn, cor, err, percor
-        for metric in ['lmn', 'cor', 'err', 'percor']:
+        # Expanded metrics: lmn, cor, err (percor exists in the source but is
+        # entirely null for BPET/FNFT and has no concept mapped)
+        for metric in ['lmn', 'cor', 'err']:
             val = row.get(metric)
             if val is not None and pd.notna(val):
                 concept_key = f"{test_code}_{metric}"

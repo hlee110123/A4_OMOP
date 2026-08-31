@@ -1,9 +1,14 @@
 """
 Main ETL orchestration.
 
-Reads like a table of contents: load sources → build core tables →
-build measurements → build observations → build conditions →
+Reads like a table of contents: load sources → core tables →
+measurements → conditions → MI-CDM imaging extension → observations →
 postprocess → export → validate.
+
+ORDERING: measurement IDs must be final (concat + drop_undated + unit
+mapping) before the MI-CDM bridge stores them as image_feature event ids,
+and the DICOM metadata measurements append after that with fresh ids.
+The observation block is independent of MI-CDM; it simply runs late.
 """
 
 import datetime
@@ -85,70 +90,70 @@ def main():
     # ── Load all source files ────────────────────────────────────────
     src = load_all_sources()
 
-    # ── Phase 1: Date Anchoring ──────────────────────────────────────
-    print("\n--- Phase 1: Date Anchoring ---")
+    # ── Date Anchoring ──────────────────────────────────────
+    print("\n--- Date Anchoring ---")
     date_anchor = create_date_anchor(src['subjinfo'])
 
-    # ── Phase 2: PERSON ──────────────────────────────────────────────
-    print("\n--- Phase 2: PERSON Table ---")
+    # ── PERSON ──────────────────────────────────────────────
+    print("\n--- PERSON ---")
     person = create_person_table(src['subjinfo'], date_anchor, src['ptdemog'])
 
-    # ── Phase 3: VISIT_OCCURRENCE ────────────────────────────────────
-    print("\n--- Phase 3: VISIT_OCCURRENCE Table ---")
+    # ── VISIT_OCCURRENCE ────────────────────────────────────
+    print("\n--- VISIT_OCCURRENCE ---")
     visit_occurrence = create_visit_occurrence(src['sv'], person, date_anchor)
 
-    # ── Phase 4: OBSERVATION_PERIOD ──────────────────────────────────
-    print("\n--- Phase 4: OBSERVATION_PERIOD Table ---")
+    # ── OBSERVATION_PERIOD ──────────────────────────────────
+    print("\n--- OBSERVATION_PERIOD ---")
     observation_period = create_observation_period(src['subjinfo'], person, date_anchor, src['sv'])
 
-    # ── Phase 5: DRUG_EXPOSURE ───────────────────────────────────────
-    print("\n--- Phase 5: DRUG_EXPOSURE Table ---")
+    # ── DRUG_EXPOSURE ───────────────────────────────────────
+    print("\n--- DRUG_EXPOSURE ---")
     drug_exposure = create_drug_exposure(src['dose'], person, visit_occurrence, date_anchor, src['subjinfo'])
 
     # ── Measurements ─────────────────────────────────────────────────
-    print("\n--- Phase 6: MEASUREMENT Table (Clinical) ---")
+    print("\n--- MEASUREMENT: Clinical (vitals, labs, ECG) ---")
     measurement_clinical = create_measurement_clinical(
         src['vitals'], src['clrm_lab'], src['clrm_ecg'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 7: MEASUREMENT Table (Cognitive) ---")
+    print("\n--- MEASUREMENT: Cognitive (PACC, MMSE, CDR) ---")
     measurement_cognitive, observation_mmse = create_measurement_cognitive(
         src['pacc'], src['mmse'], src['cdr'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 8: MEASUREMENT Table (Biomarkers) ---")
+    print("\n--- MEASUREMENT: Biomarkers ---")
     measurement_biomarkers = create_measurement_biomarkers(
         src['biomarker_ab'], src['biomarker_ptau'], src['biomarker_roche'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 9: MEASUREMENT Table (Imaging) ---")
+    print("\n--- MEASUREMENT: Imaging (MRI volumes, PET SUVR) ---")
     measurement_imaging = create_measurement_imaging(
         src['imaging_mri'], src['imaging_amyloid'], src['imaging_tau'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 10: MEASUREMENT Table (CogState) ---")
+    print("\n--- MEASUREMENT: CogState computerized ---")
     measurement_cogstate = create_measurement_cogstate(
         src['cogstate'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 10b: MEASUREMENT Table (CogState Battery BPET/FNFT) ---")
+    print("\n--- MEASUREMENT: CogState battery (BPET/FNFT) ---")
     measurement_cogstate_battery = create_measurement_cogstate_battery(
         src['cogstate_battery'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 16: MEASUREMENT Table (Extended Cognitive) ---")
+    print("\n--- MEASUREMENT: Extended cognitive (CFI, digit, FCSR, logic) ---")
     measurement_cog_extended = create_measurement_cognitive_extended(
         src['cfi'], src['cfisp'], src['cogdigit'], src['cogfcsr'], src['coglogic'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 17: MEASUREMENT Table (Extended Imaging) ---")
+    print("\n--- MEASUREMENT: Extended imaging (reads, FLAIR, retinal, tau pipelines) ---")
     measurement_imaging_extended = create_measurement_imaging_extended(
         src['imaging_mri_reads'], src['imaging_flair'],
         src['imaging_retinal'], src['imaging_pet_va'],
@@ -157,30 +162,30 @@ def main():
         tau_stanford_df=src['tau_stanford'],
     )
 
-    print("\n--- Phase 19: MEASUREMENT Table (CogState Questionnaires) ---")
+    print("\n--- MEASUREMENT: CogState questionnaires (MACQ, C-PATH) ---")
     measurement_cogstate_quest = create_measurement_cogstate_questionnaires(
         src['cogstate_macq'], src['cogstate_cpath'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 20: MEASUREMENT Table (Questionnaire Scores) ---")
+    print("\n--- MEASUREMENT: Questionnaire scores (STAI, ADL-PQ, RUIB) ---")
     measurement_quest_scores = create_measurement_questionnaire_scores(
         src['psychwell'], src['adlpq'], src['adlpqsp'],
         src['ies'], src['ruib1'], src['spinfo'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 21: MEASUREMENT Table (APOE Genotype) ---")
+    print("\n--- MEASUREMENT: APOE genotype ---")
     measurement_apoe = create_measurement_apoe(
         src['adqs'], person, date_anchor
     )
 
-    print("\n--- Phase 21b: OBSERVATION Table (Treatment Arm) ---")
+    print("\n--- OBSERVATION: Treatment arm ---")
     observation_tx = create_observation_treatment_arm(
         src['adqs'], person, date_anchor
     )
 
-    print("\n--- Phase 21c: OBSERVATION Table (Education) / MEASUREMENT (Baseline BMI) ---")
+    print("\n--- OBSERVATION: Education, retirement / MEASUREMENT: Baseline BMI ---")
     observation_education = create_observation_education(
         src['subjinfo'], person, date_anchor
     )
@@ -191,12 +196,12 @@ def main():
         src['subjinfo'], person, date_anchor
     )
 
-    print("\n--- Phase 22: Physical & Neurological Exam (Phyneuro) ---")
+    print("\n--- CONDITION: Physical & neurological exam (phyneuro) ---")
     phyneuro_cond, phyneuro_meas = create_phyneuro_observations_and_measurements(
         src['phyneuro'], person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 22b: Superficial Siderosis Conditions (MRI Reads) ---")
+    print("\n--- CONDITION: Superficial siderosis (MRI reads) ---")
     siderosis_cond = create_siderosis_conditions(
         src['imaging_mri_reads'], person, visit_occurrence, date_anchor
     )
@@ -221,10 +226,10 @@ def main():
     measurement = map_unit_concepts(measurement)
 
     # ── MI-CDM Extension (Park et al. 2025 / DICOM2OMOP guide) ──────
-    print("\n--- Phase 30: MI-CDM DICOM Sidecar Index (A4_JSONS) ---")
+    print("\n--- MI-CDM: DICOM sidecar index (A4_JSONS) ---")
     json_index = build_image_json_index(person, visit_occurrence, date_anchor, sources=src)
 
-    print("\n--- Phase 30b: MI-CDM PROCEDURE_OCCURRENCE (Imaging) ---")
+    print("\n--- MI-CDM: PROCEDURE_OCCURRENCE (imaging) ---")
     procedure_occurrence = create_procedure_occurrence(
         src, person, visit_occurrence, date_anchor
     )
@@ -237,13 +242,13 @@ def main():
     # image_feature links them to the real series (with metadata).
     measurement = relink_tau_pipeline_measurements(measurement, json_index)
 
-    print("\n--- Phase 31: MI-CDM IMAGE_OCCURRENCE ---")
+    print("\n--- MI-CDM: IMAGE_OCCURRENCE ---")
     image_occurrence = create_image_occurrence(
         src, person, visit_occurrence, procedure_occurrence, date_anchor,
         json_index=json_index
     )
 
-    print("\n--- Phase 32: MI-CDM IMAGE_FEATURE (Bridge) ---")
+    print("\n--- MI-CDM: IMAGE_FEATURE (bridge) ---")
     image_feature = create_image_feature(measurement, image_occurrence)
     measurement = backfill_measurement_event_links(
         measurement, image_feature, IMAGE_OCCURRENCE_FIELD_CONCEPT_ID
@@ -252,7 +257,12 @@ def main():
     # Strip MI-CDM annotation columns before export
     measurement = strip_mi_cdm_annotations(measurement)
 
-    print("\n--- Phase 33: MI-CDM DICOM Metadata -> MEASUREMENT ---")
+    print("\n--- MI-CDM: DICOM metadata -> MEASUREMENT ---")
+    # (_rel_path, _elem_idx) is the natural key of a sidecar series. It was
+    # carried from the JSON index onto image_occurrence rows precisely so we
+    # can join back here — after image_occurrence_ids were assigned post-
+    # concat — and stamp each metadata measurement with its series id
+    # (measurement_event_id + field concept 2100000532).
     n_metadata_meas = 0
     if len(json_index) > 0 and len(image_occurrence) > 0:
         io_ids = image_occurrence.loc[
@@ -271,37 +281,37 @@ def main():
             print(f"Total MEASUREMENT records incl. DICOM metadata: {len(measurement):,}")
 
     # ── Observations ─────────────────────────────────────────────────
-    print("\n--- Phase 11-12: OBSERVATION Table (Lifestyle & Family History) ---")
+    print("\n--- OBSERVATION: Lifestyle & family history ---")
     observation_lifestyle = create_observation(
         src['habits'], src['famhxpar'], src['famhxsib'],
         person, visit_occurrence, date_anchor
     )
 
-    print("\n--- Phase 15: OBSERVATION Table (Milestones) ---")
+    print("\n--- OBSERVATION: Milestones ---")
     observation_milestones = create_observation_milestones(
         src['ds'], person, date_anchor
     )
 
-    print("\n--- Phase 15b: DEATH Table ---")
+    print("\n--- DEATH ---")
     death = create_death(src['ds'], person, date_anchor)
 
-    print("\n--- Phase 17b: OBSERVATION Table (C-SSRS) ---")
+    print("\n--- OBSERVATION: C-SSRS ---")
     observation_cssrs = create_observation_cssrs(
         src['cssrs'], src['cssrslv'], person, date_anchor, visit_occurrence
     )
 
-    print("\n--- Phase 20: OBSERVATION Table (Study Partner) ---")
+    print("\n--- OBSERVATION: Study partner ---")
     observation_study_partner = create_observation_study_partner(
         src['spinfo'], person, date_anchor, visit_occurrence
     )
 
-    print("\n--- Phase 21: OBSERVATION Table (Secondary Questionnaires) ---")
+    print("\n--- OBSERVATION: Secondary questionnaires (IES, FTP, RSS, VIEWS, RUIB) ---")
     observation_secondary = create_observation_secondary_questionnaires(
         src['ies'], src['ftpscale'], src['rss'], src['views'],
         src['ruib'], src['ruib1'], person, date_anchor, visit_occurrence
     )
 
-    print("\n--- Phase 25: OBSERVATION Table (Questionnaires - AD Concerns, ADLPQ Items, GDS Items) ---")
+    print("\n--- OBSERVATION: Questionnaires (AD Concerns, ADL-PQ items, GDS) ---")
     observation_questionnaires = create_observation_questionnaires(
         src['concerns'], src['adlpq'], src['psychwell'],
         person, visit_occurrence, date_anchor,

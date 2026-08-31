@@ -34,7 +34,7 @@ def create_measurement_apoe(
 
     Field Mappings (concept_maps/adqs.csv):
         APOEGN        -> APOE gene alleles e2 and e3 and e4 [Identifier] (3029139, LOINC 42315-2)
-                         value_as_concept_id: E2/E2..E4/E4 (2100000420-425)
+                         value_as_concept_id: standard LOINC LA answers (36303222-36311054)
         APOEGNPRSNFLG -> Apolipoprotein E4 [Presence] in Blood (3006041, LOINC 15353-6)
                          value_as_concept_id: positive=4188539, negative=4188540
     """

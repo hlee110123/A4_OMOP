@@ -14,7 +14,7 @@ OBSERVATION in observation_questionnaires.py / observation.py.
 import pandas as pd
 
 from . import concepts
-from .helpers import prepare_source_df, calc_days_to_date, finalize_measurement_df
+from .helpers import prepare_source_df, finalize_measurement_df
 
 
 def create_measurement_questionnaire_scores(

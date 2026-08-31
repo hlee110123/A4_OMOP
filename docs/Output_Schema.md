@@ -247,6 +247,28 @@ Solanezumab intravenous infusion records. Only doses marked as `DONE='Yes'` in t
 
 The largest output file. Contains clinical labs, vitals, ECG parameters, cognitive assessments, AD biomarkers, neuroimaging results, CogState computerized tests, and questionnaire scores.
 
+### measurement_source_value grammar
+
+The prefix identifies the extracting module; grep by prefix to trace provenance.
+Formats vary by source (a historical artifact — kept stable so existing greps keep working):
+
+| Prefix / format | Source | Module |
+|---|---|---|
+| bare column (`STDWT`) | vitals | measurement_clinical |
+| `{LBTESTCD}: {LBTEST}` | central labs, ECG | measurement_clinical |
+| `PACC:`, `MMSE:`, `CDR:`, `CFI:`, `COGDIGIT:`, `COGFCSR:`, `COGLOGIC:` | cognitive | measurement_cognitive |
+| `AB:{test}\|{spec}\|{method}` | Abeta immunoassay | measurement_biomarkers |
+| `PTAU217\|{spec}\|{method}` (no prefix) | pTau-217 | measurement_biomarkers |
+| `ROCHE:{test}\|{spec}\|{method}` | Roche plasma panel | measurement_biomarkers |
+| `MRI:`, `FLAIR:`, `MRI_READS:`, `RETINAL:`, `PET_VA:` | imaging | measurement_imaging |
+| `AMYLOID\|…`, `TAU\|…`, `TAU_PETSURFER:`, `TAU_STANFORD:` (mixed) | PET SUVR | measurement_imaging |
+| `COGSTATE:`, `COGSTATE_BAT:` | CogState | measurement_cogstate |
+| `cogstate_macq:`, `cogstate_cpath:` (lowercase) | CogState questionnaires | measurement_cogstate |
+| `PSYCHWELL:`, `ADLPQ:`, `ADLPQSP:`, `RUIB1:`, `SPINFO:` | questionnaire scores | measurement_questionnaire_scores |
+| `ADQS:` | APOE, subject-level | observation_adqs |
+| `PHYNEURO:` | edema severity | condition |
+| DICOM attribute names (`EchoTime`, …) | sidecar metadata | image_metadata |
+
 ### Column Schema
 
 | Column | Type | Nullable | Description |
