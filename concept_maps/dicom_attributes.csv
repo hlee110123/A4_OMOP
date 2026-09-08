@@ -44,7 +44,6 @@ PartialFourierDirection,2128001223,Partial Fourier Direction,Measurement,0018903
 SeriesDescription,2128000162,Series Description,Measurement,0008103E,D,text,,,1,,
 ProtocolName,2128000864,Protocol Name,Measurement,00181030,D,text,,,1,,
 StudyDescription,2128000160,Study Description,Measurement,00081030,D,text,,,1,,Often contains the BID (already in person_source_value)
-ProcedureStepDescription,2128002501,Performed Procedure Step Description,Measurement,00400254,D,text,,,1,,
 Manufacturer,2128000056,Manufacturer,Measurement,00080070,D,text,,,1,,
 SequenceName,2128000797,Sequence Name,Measurement,00180024,D,text,,,1,,
 PulseSequenceName,2128001196,Pulse Sequence Name,Measurement,00189005,D,text,,,1,,
@@ -53,6 +52,5 @@ ReconstructionMethod,2128003055,Reconstruction Method,Measurement,00541103,D,tex
 ConvolutionKernel,2128000983,Convolution Kernel,Measurement,00181210,D,text,,,1,,
 AttenuationCorrectionMethod,2128003053,Attenuation Correction Method,Measurement,00541101,D,text,,,1,,
 Radiopharmaceutical,2128000805,Radiopharmaceutical,Measurement,00180031,D,text,,,1,,value_as_concept_id normalized by filename sequence via radiopharmaceuticals.csv
-ImageComments,2128001740,Image Comments,Measurement,00204000,D,text,,,1,,
 DeidentificationMethod,2128000372,De-identification Method,Measurement,00120063,D,text,,,1,,
 ParallelAcquisitionTechnique,2128001256,Parallel Acquisition Technique,Measurement,00189078,D,text,,,1,,GRAPPA/SENSE vendor spellings vary

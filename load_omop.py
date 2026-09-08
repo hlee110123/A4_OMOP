@@ -10,6 +10,7 @@ column order, so a positional COPY would put values in the wrong columns and sti
 succeed. Each table is truncated first, so this is safe to re-run.
 """
 import io
+import csv
 import os
 import sys
 import time
@@ -122,7 +123,9 @@ def main():
             if not p.exists():
                 continue
             with open(p, "rb") as fh:
-                csv_n = sum(1 for _ in fh) - 1
+                # CSV records, not physical lines: quoted fields may contain
+                # newlines, which made a raw line count report false mismatches.
+                csv_n = sum(1 for _ in csv.reader(fh)) - 1
             cur.execute(f'select count(*) from "{SCHEMA}"."{t}"')
             db_n = cur.fetchone()[0]
             ok &= db_n == csv_n

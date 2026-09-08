@@ -385,7 +385,10 @@ def create_dicom_metadata_measurements(
 
         for _, r in sub.iterrows():
             raw = r['_raw']
-            raw_str = str(raw)[:50]
+            # Free text is machine-generated (protocol/vendor strings) after the
+            # whitelist dropped operator-typed attributes; newlines are stripped
+            # so no value can span CSV lines.
+            raw_str = ' '.join(str(raw).split())[:50]
             base = {
                 'person_id': r['person_id'],
                 'measurement_concept_id': spec['concept_id'],
@@ -410,8 +413,8 @@ def create_dicom_metadata_measurements(
                     vals = [v for v in raw if isinstance(v, (int, float))]
                     if multivalue == 'uniform' and vals and len(set(vals)) == 1:
                         base['value_as_number'] = vals[0] * scale
-                    base['measurement_source_value'] = json.dumps(raw)[:50]
-                    base['value_source_value'] = json.dumps(raw)[:50]
+                    base['measurement_source_value'] = ' '.join(json.dumps(raw).split())[:50]
+                    base['value_source_value'] = ' '.join(json.dumps(raw).split())[:50]
                     records.append(base)
                 elif isinstance(raw, (int, float)):
                     base['value_as_number'] = raw * scale
