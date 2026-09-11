@@ -1,0 +1,19 @@
+cohort,n_source,n_omop,n_intersection,n_union,jaccard,source_only,omop_only,note
+A1 Enrolled (identity),6945,6945,6945,6945,1.0,0,0,
+A2 Randomized,1169,1169,1169,1169,1.0,0,0,
+A3 Solanezumab arm,578,578,578,578,1.0,0,0,
+A4 Placebo arm,591,591,591,591,1.0,0,0,
+A5 Study completed,1171,1171,1171,1171,1.0,0,0,
+A6 Screen failure,5238,5238,5238,5238,1.0,0,0,
+A7 Died,23,23,23,23,1.0,0,0,
+A8 mITT (reconstructed),1147,1165,1147,1165,0.984549356223176,0,18,ADaM MITTFL is analysis metadata excluded from the CDM by design; OMOP side reconstructs it as randomized + >=2 PACC dates
+B1 Amyloid-positive (>=20 CL),1697,1697,1697,1697,1.0,0,0,
+B2 APOE e4 carrier,1886,1886,1886,1886,1.0,0,0,
+B3 GDS > 5 (any visit),342,342,342,342,1.0,0,0,
+B4 MMSE < 27 (any visit),1074,1074,1074,1074,1.0,0,0,
+B5 CDR-SB > 0 (any visit),1872,1872,1872,1872,1.0,0,0,
+B6 Abnormal exam finding (ever),3661,3661,3661,3661,1.0,0,0,
+B7 Solanezumab-exposed,572,572,572,572,1.0,0,0,
+B8 Family hx dementia (parent/sib),3947,3947,3947,3947,1.0,0,0,
+B9 Tau-PET scanned,449,449,449,449,1.0,0,0,
+B10 Smoker >=1 pack/day (any visit),90,90,90,90,1.0,0,0,"Criterion expressed natively per side: >=1 pack/day (source) vs >=20 cigarettes/day (OMOP, x20 pack conversion)"
