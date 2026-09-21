@@ -26,11 +26,17 @@ def create_measurement_apoe(
     adqs_df: pd.DataFrame,
     person_df: pd.DataFrame,
     date_anchor_df: pd.DataFrame,
+    clrm_lab_df: pd.DataFrame = None,
+    subjinfo_df: pd.DataFrame = None,
 ) -> pd.DataFrame:
     """
     Create OMOP MEASUREMENT records for APOE genotype and carrier status.
 
-    Source: adqs.csv (subject-level) | Date: synthetic_consent_date
+    Source: adqs.csv, gaps filled from SUBJINFO (both derive from the
+    clrm_lab CLT1878 genotyping, which is not loaded separately — one
+    germline result, one row per person).
+    Date: specimen collection (earliest CLT1878 draw; 88% consent-day,
+    99.9% within screening), consent date when no draw record exists.
 
     Field Mappings (concept_maps/adqs.csv):
         APOEGN        -> APOE gene alleles e2 and e3 and e4 [Identifier] (3029139, LOINC 42315-2)
@@ -45,7 +51,22 @@ def create_measurement_apoe(
         [c for c in available if c != 'BID']
     ].reset_index()
 
+    # SUBJINFO backstop: 19 genotyped persons are absent from ADQS's APOEGN.
+    if subjinfo_df is not None and 'APOEGN' in subjinfo_df.columns:
+        si = subjinfo_df[['BID', 'APOEGN', 'APOEGNPRSNFLG']].drop_duplicates('BID')
+        subject_df = subject_df.merge(si, on='BID', how='outer', suffixes=('', '_si'))
+        for col in ('APOEGN', 'APOEGNPRSNFLG'):
+            subject_df[col] = subject_df[col].fillna(subject_df[f'{col}_si'])
+        subject_df = subject_df.drop(columns=['APOEGN_si', 'APOEGNPRSNFLG_si'])
+
     subject_df = prepare_source_df(subject_df, person_df, date_anchor_df)
+
+    # Specimen-collection dates from the underlying lab test.
+    draw_days = {}
+    if clrm_lab_df is not None:
+        d = clrm_lab_df[(clrm_lab_df['LBTESTCD'] == 'CLT1878')
+                        & (clrm_lab_df['TSTSTAT'] == 'D')]
+        draw_days = d.groupby('BID')['LBDTM_DAYS_CONSENT'].min().to_dict()
 
     # APOE genotype value concepts (LOINC Answer codes, Athena-verified)
     # Standard LOINC answer concepts from LA21353-LA21361 series; retired customs 2100000420-425.
@@ -62,6 +83,9 @@ def create_measurement_apoe(
 
     for _, row in subject_df.iterrows():
         meas_date = row.get('synthetic_consent_date')
+        offset = draw_days.get(row['BID'])
+        if pd.notna(meas_date) and offset is not None and pd.notna(offset):
+            meas_date = meas_date + pd.Timedelta(days=int(offset))
 
         # APOE Genotype
         if pd.notna(row.get('APOEGN')):

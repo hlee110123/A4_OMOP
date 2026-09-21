@@ -177,7 +177,8 @@ def main():
 
     print("\n--- MEASUREMENT: APOE genotype ---")
     measurement_apoe = create_measurement_apoe(
-        src['adqs'], person, date_anchor
+        src['adqs'], person, date_anchor,
+        clrm_lab_df=src['clrm_lab'], subjinfo_df=src['subjinfo'],
     )
 
     print("\n--- OBSERVATION: Treatment arm ---")

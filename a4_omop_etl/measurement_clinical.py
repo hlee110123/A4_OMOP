@@ -86,6 +86,12 @@ def create_measurement_labs(
 
     # Filter to completed tests only
     labs_filtered = labs_df[labs_df['TSTSTAT'] == 'D'].copy()
+    # CLT1878 (APOE genotyping) is deliberately excluded: the same germline
+    # result is loaded once per person from ADQS/SUBJINFO in
+    # observation_adqs.create_measurement_apoe (with standard value concepts
+    # and specimen-collection dating); loading it here too counted every
+    # genotype twice under concept 3029139.
+    labs_filtered = labs_filtered[labs_filtered['LBTESTCD'] != 'CLT1878']
     print(f"  Labs: {len(labs_df)} total -> {len(labs_filtered)} (TSTSTAT='D')")
 
     labs_filtered = prepare_source_df(labs_filtered, person_df, date_anchor_df, visit_occurrence_df)
