@@ -8,8 +8,6 @@ APOE4_POSITIVE,4188539,APOE epsilon 4 allele,Measurement,,SNOMED concept for pos
 APOE4_NEGATIVE,4188540,APOE epsilon 4 allele absence,Measurement,,SNOMED concept for negative carrier (used as value_as_concept_id)
 # Treatment arm assignment — TX is not derivable from drug_exposure because trial was blinded
 TX,618771,Clinical trial arm,Observation,,"SNOMED 876783001 standard Observable Entity (replaced study-specific custom)"
-TX_PLACEBO,2100000401,Placebo treatment arm,Observation,,Custom (used as value_as_concept_id)
-TX_SOLANEZUMAB,2100000402,Solanezumab treatment arm,Observation,,Custom (used as value_as_concept_id)
 # APOE genotype value concepts (LOINC LA answer codes, used as value_as_concept_id paired with APOEGN test)
 E2E2,36307526,APOE e2/e2,Measurement,,LOINC LA21356-3
 E2E3,36310377,APOE e2/e3,Measurement,,LOINC LA21357-1

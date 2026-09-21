@@ -53,7 +53,10 @@ def scan_maps():
     found = {}
     for path in sorted(MAP_DIR.glob('*.csv')):
         with open(path, newline='') as f:
-            reader = csv.DictReader(f)
+            # Skip leading comment lines (adqs.csv starts with one); otherwise
+            # DictReader takes the comment as the header and scans nothing.
+            lines = [l for l in f if not l.lstrip().startswith('#')]
+            reader = csv.DictReader(lines)
             id_cols = [c for c in (reader.fieldnames or []) if c and 'concept_id' in c]
             name_col = next((c for c in (reader.fieldnames or [])
                              if c and 'concept_name' in c), None)

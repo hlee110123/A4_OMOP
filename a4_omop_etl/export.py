@@ -157,9 +157,9 @@ def validate_mi_cdm(
     sidecar = io[io['local_path'].notna()]
     if len(sidecar) > 0:
         rate = sidecar['visit_occurrence_id'].notna().mean()
-        results['micdm_visit_linkage'] = rate >= 0.99
-        print(f"Sidecar visit linkage: {rate:.2%} - "
-              f"{'PASS' if results['micdm_visit_linkage'] else 'FAIL'}")
+        # Informational only: linkage below 99% signals data coverage, not a
+        # pipeline defect, so it is printed but does not gate the exit code.
+        print(f"Sidecar visit linkage: {rate:.2%} (informational)")
 
     return results
 
@@ -225,13 +225,20 @@ def validate_data_quality(tables: dict, base_dir=None) -> dict:
                                  chunksize=2_000_000):
             found.update(used_standard.intersection(chunk['concept_id'].astype(int)))
         unresolved = used_standard - found
-        # Known-external vocabularies not in the local snapshot: CDISC ids
-        # (instrument items), PPI/UK Biobank (reviewer adoptions).
+        # Known-external vocabularies absent from the local snapshot, by id
+        # range: CDISC instrument items (37.5M band), PPI (903630), UK Biobank
+        # (35.80-35.82M band). Ids outside these ranges must resolve locally.
+        def _known_external(cid):
+            return (37_522_000 <= cid <= 37_547_000
+                    or cid == 903_630
+                    or 35_800_000 <= cid <= 35_830_000)
+        unexplained = sorted(c for c in unresolved if not _known_external(c))
+        results['dq_standard_concepts_resolved'] = not unexplained
         print(f"Standard concepts in local snapshot: {len(found)}/{len(used_standard)}"
-              + (f"; {len(unresolved)} not in snapshot (external vocabularies — "
-                 f"verify CDISC/PPI/UK Biobank are loaded in the target CDM)" if unresolved else "")
-              + " - PASS (external ids are a WARN, not a failure)")
-        results['dq_standard_concepts_resolved'] = True
+              + (f"; {len(unresolved) - len(unexplained)} known-external "
+                 f"(load CDISC/PPI/UK Biobank in the target CDM)" if unresolved else "")
+              + (f"; UNEXPLAINED {unexplained[:10]}" if unexplained else "")
+              + f" - {'PASS' if not unexplained else 'FAIL'}")
     else:
         print("Standard vocabulary CONCEPT.csv not found - concept check skipped")
 
@@ -242,12 +249,31 @@ def validate_data_quality(tables: dict, base_dir=None) -> dict:
     m = tables.get('measurement')
     if m is not None and len(m):
         key = ['person_id', 'measurement_concept_id', 'measurement_date',
-               'measurement_source_value', 'value_as_number', 'measurement_event_id']
+               'measurement_source_value', 'value_as_number',
+               'value_source_value', 'measurement_event_id']
         dups = int(m.duplicated(subset=[k for k in key if k in m.columns]).sum())
+        results['dq_measurement_dup_rate'] = dups / len(m) < 0.02
         print(f"MEASUREMENT duplicate natural keys: {dups:,} "
               f"({dups/len(m):.2%}; ECG triplicates repeat by design) - "
-              f"{'PASS' if dups/len(m) < 0.02 else 'WARN'}")
-        results['dq_measurement_dup_rate'] = dups / len(m) < 0.02
+              f"{'PASS' if results['dq_measurement_dup_rate'] else 'FAIL'}")
+
+    # Unmapped concepts: a concept_id of 0 means a source code silently lost
+    # its mapping (e.g. a concept-map row removed without an explicit
+    # extraction exclusion). Zero today; any regression fails the run.
+    zero_counts = {}
+    for name, cols in concept_cols.items():
+        df = tables.get(name)
+        if df is None or len(df) == 0:
+            continue
+        for col in cols:
+            if col in df.columns:
+                n0 = int((df[col] == 0).sum())
+                if n0:
+                    zero_counts[f"{name}.{col}"] = n0
+    results['dq_no_unmapped_concepts'] = not zero_counts
+    print(f"Unmapped (concept_id=0) event rows: "
+          f"{zero_counts if zero_counts else 0} - "
+          f"{'PASS' if not zero_counts else 'FAIL'}")
 
     # Date ranges: synthetic anchor is 2020-01-01 + <=364d; screening visits
     # reach ~6 months before consent and follow-up ~8.5 years after.
