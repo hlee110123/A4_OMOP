@@ -290,16 +290,23 @@ def create_measurement_imaging_extended(
     # the categorical amyloid-eligibility visual reads, emitted here with
     # value_as_concept_id (9191 Positive / 9189 Negative; rare 'no agreement'
     # kept as string with concept 0).
-    pet_merged = prepare_source_df(pet_va_df, person_df, date_anchor_df)
+    # The VA file's scan_date_DAYS_CONSENT is a year-shifted de-identified
+    # date: joined to the SUVR file per scan, 100.0% of the 4,492 pairs differ
+    # by exactly 3, 4, 5 or 6 calendar years. The reads are screening-visit
+    # events (all rows are VISCODE 2), so they are dated by the visit.
+    pet_merged = prepare_source_df(pet_va_df, person_df, date_anchor_df,
+                                   visit_occurrence_df, visit_extra_cols=['visit_start_date'])
     print(f"  PET VA: {len(pet_va_df)} total -> {len(pet_merged)} matched")
 
     READ_VALUE_CONCEPTS = {'positive': 9191, 'negative': 9189}
     read_fields = [('PET_VA_READ1', 'elig_vi_1'), ('PET_VA_READ2', 'elig_vi_2'),
                    ('PET_VA_CONSENSUS', 'consensus'), ('PET_VA_OVERALL', 'overall_score')]
     pet_count = 0
+    pet_undated = 0
     for _, row in pet_merged.iterrows():
-        obs_date = calc_days_to_date(row, 'scan_date_DAYS_CONSENT')
-        if obs_date is None:
+        obs_date = row.get('visit_start_date')
+        if pd.isna(obs_date):
+            pet_undated += 1
             continue
         for key, col in read_fields:
             raw = row.get(col)
@@ -314,7 +321,7 @@ def create_measurement_imaging_extended(
                 'value_as_concept_id': READ_VALUE_CONCEPTS.get(str(raw).strip().lower(), 0),
                 'value_source_value': str(raw),
                 'unit_source_value': '',
-                'visit_occurrence_id': None,
+                'visit_occurrence_id': row.get('visit_occurrence_id'),
                 'measurement_source_value': f"PET_VA:{col}|ligand={row.get('ligand', 'NA')}",
                 '_mi_cdm_modality': 'PT',
                 '_mi_cdm_series_type': 'AMYLOID_PET',
@@ -322,6 +329,8 @@ def create_measurement_imaging_extended(
                 '_mi_cdm_viscode': _viscode(row),
             })
             pet_count += 1
+    if pet_undated:
+        print(f"  PET VA: skipped {pet_undated} rows with no resolvable visit date")
 
     # --- Tau PET PetSurfer (alternative pipeline) ---
     petsurfer_count = 0
