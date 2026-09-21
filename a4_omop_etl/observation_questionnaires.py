@@ -65,9 +65,9 @@ def create_observation_questionnaires(
             if field in row and pd.notna(row[field]):
                 concept = QUESTIONNAIRE_CONCEPTS.get(field, {'concept_id': 0, 'name': field, 'unit': 'score'})
 
-                # No consent-date fallback: an unresolvable visit (SV says
-                # 'Not Done' while the CRF says DONE) leaves the date empty and
-                # the row is dropped and reported downstream by drop_undated.
+                # Dated by the visit; Not-Done visits contribute their SV
+                # window-end date via build_visit_linkage (NULL visit id).
+                # Truly undated rows drop-and-report via drop_undated.
                 obs_date = row.get('visit_start_date')
 
                 observations.append(build_observation_record(
@@ -98,7 +98,7 @@ def create_observation_questionnaires(
         for _, row in merged.iterrows():
             for field, concept in ADLPQ_ITEM_CONCEPTS.items():
                 if field in row and pd.notna(row[field]):
-                    # No fallback: undated rows drop-and-report downstream.
+                    # Dated by the visit (incl. Not-Done window-end dates).
                     obs_date = row.get('visit_start_date')
 
                     val_str = str(row[field])
@@ -146,7 +146,7 @@ def create_observation_questionnaires(
         # in MEASUREMENT). Items cannot be naively summed to the total:
         # five positively-worded items are reverse-scored.
         if pd.notna(row.get('GDTOTAL')):
-            # No fallback: undated rows drop-and-report downstream.
+            # Dated by the visit (incl. Not-Done window-end dates).
             total_date = row.get('visit_start_date')
             observations.append(build_observation_record(
                 person_id=row['person_id'],
@@ -162,9 +162,9 @@ def create_observation_questionnaires(
             if field in row and pd.notna(row[field]):
                 concept = QUESTIONNAIRE_CONCEPTS[field]
 
-                # No consent-date fallback: an unresolvable visit (SV says
-                # 'Not Done' while the CRF says DONE) leaves the date empty and
-                # the row is dropped and reported downstream by drop_undated.
+                # Dated by the visit; Not-Done visits contribute their SV
+                # window-end date via build_visit_linkage (NULL visit id).
+                # Truly undated rows drop-and-report via drop_undated.
                 obs_date = row.get('visit_start_date')
 
                 val = int(row[field])

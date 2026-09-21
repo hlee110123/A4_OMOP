@@ -139,6 +139,47 @@ def calc_days_to_date(row, days_col: str):
 
 # ─── Source Data Preparation ─────────────────────────────────────────
 
+def build_visit_linkage(visit_occurrence_df, sv_df, person_df, date_anchor_df):
+    """VISIT_OCCURRENCE linkage rows plus date-only pseudo-rows for Not-Done visits.
+
+    SV rows with SVTYPE='Not Done' are excluded from VISIT_OCCURRENCE, but CRFs
+    completed at those visit codes (DONE=Yes) still need a date. Every Not-Done
+    SV row carries SVUSEDTC (visit-window end) even though SVSTDTC is empty, so
+    this returns the real visit rows plus pseudo-rows keyed the same way
+    (visit_source_value, person_id) whose visit_start_date is that window-end
+    date and whose visit_occurrence_id is NULL — the NULL id is the signature
+    that no protocol visit backs the row. The window end can run days-to-weeks
+    after the actual administration (median gap on completed visits is 1 day),
+    but stays inside the correct visit epoch.
+
+    Pass the result to prepare_source_df in place of visit_occurrence_df where
+    this tethering is wanted; truly undated rows still drop via drop_undated.
+    """
+    cols = ['visit_occurrence_id', 'person_id', 'visit_source_value', 'visit_start_date']
+    real = visit_occurrence_df[cols].copy()
+
+    nd = sv_df[sv_df['SVTYPE'] == 'Not Done'].copy()
+    nd['days'] = nd['SVSTDTC_DAYS_CONSENT'].fillna(nd['SVUSEDTC_DAYS_CONSENT'])
+    nd = nd[pd.notna(nd['days'])]
+    nd = nd.merge(person_df[['person_id', 'person_source_value']],
+                  left_on='BID', right_on='person_source_value', how='inner')
+    nd = nd.merge(date_anchor_df[['BID', 'synthetic_consent_date']], on='BID', how='left')
+    nd['visit_source_value'] = (
+        nd['BID'] + '_'
+        + pd.to_numeric(nd['VISITCD'], errors='coerce').astype('Int64')
+          .astype(str).str.zfill(3)
+    )
+    nd['visit_start_date'] = nd['synthetic_consent_date'] + pd.to_timedelta(
+        nd['days'].astype(int), unit='D')
+    nd['visit_occurrence_id'] = pd.NA
+    pseudo = nd.loc[~nd['visit_source_value'].isin(set(real['visit_source_value'])), cols]
+    pseudo = pseudo.drop_duplicates('visit_source_value')
+
+    print(f"  Visit linkage: {len(real):,} visits + {len(pseudo):,} Not-Done "
+          f"window-end dates (no visit_occurrence_id)")
+    return pd.concat([real, pseudo], ignore_index=True)
+
+
 def prepare_source_df(
     df: pd.DataFrame,
     person_df: pd.DataFrame,

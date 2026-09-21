@@ -16,7 +16,8 @@ import datetime
 import pandas as pd
 
 from .config import OUTPUT_DIR, load_all_sources
-from .helpers import create_date_anchor, concat_and_assign_ids, drop_undated
+from .helpers import (create_date_anchor, concat_and_assign_ids, drop_undated,
+                      build_visit_linkage)
 from .person import create_person_table
 from .visit import create_visit_occurrence, create_observation_period
 from .death import create_death
@@ -101,6 +102,10 @@ def main():
     # ── VISIT_OCCURRENCE ────────────────────────────────────
     print("\n--- VISIT_OCCURRENCE ---")
     visit_occurrence = create_visit_occurrence(src['sv'], person, date_anchor)
+    # Linkage view for CRF modules: real visits plus window-end dates for
+    # Not-Done visits, so completed forms at those visits get a real date
+    # (NULL visit_occurrence_id) instead of dropping. See build_visit_linkage.
+    visit_linkage = build_visit_linkage(visit_occurrence, src['sv'], person, date_anchor)
 
     # ── OBSERVATION_PERIOD ──────────────────────────────────
     print("\n--- OBSERVATION_PERIOD ---")
@@ -172,7 +177,7 @@ def main():
     measurement_quest_scores = create_measurement_questionnaire_scores(
         src['psychwell'], src['adlpq'], src['adlpqsp'],
         src['ies'], src['ruib1'], src['spinfo'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: APOE genotype ---")
@@ -199,7 +204,7 @@ def main():
 
     print("\n--- CONDITION: Physical & neurological exam (phyneuro) ---")
     phyneuro_cond, phyneuro_meas = create_phyneuro_observations_and_measurements(
-        src['phyneuro'], person, visit_occurrence, date_anchor
+        src['phyneuro'], person, visit_linkage, date_anchor
     )
 
     print("\n--- CONDITION: Superficial siderosis (MRI reads) ---")
@@ -209,6 +214,11 @@ def main():
     condition_occurrence = concat_and_assign_ids(
         [phyneuro_cond, siderosis_cond], 'condition_occurrence_id'
     )
+    # condition_start_date is NOT NULL in CDM v5.4 — same backstop as
+    # measurement/observation (currently drops zero rows).
+    condition_occurrence = drop_undated(condition_occurrence, 'condition_start_date',
+                                        'condition_occurrence_id', 'CONDITION_OCCURRENCE',
+                                        source_col='condition_source_value')
 
     # ── Combine all measurements ─────────────────────────────────────
     measurement = concat_and_assign_ids([
@@ -315,7 +325,7 @@ def main():
     print("\n--- OBSERVATION: Questionnaires (AD Concerns, ADL-PQ items, GDS) ---")
     observation_questionnaires = create_observation_questionnaires(
         src['concerns'], src['adlpq'], src['psychwell'],
-        person, visit_occurrence, date_anchor,
+        person, visit_linkage, date_anchor,
         adlpqsp_df=src['adlpqsp'],
     )
 

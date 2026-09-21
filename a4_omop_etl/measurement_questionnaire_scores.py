@@ -48,8 +48,9 @@ def create_measurement_questionnaire_scores(
     def _add_measurement(row, field, concept, source_prefix, meas_date=None):
         """Append a measurement row from a concept dict entry."""
         if meas_date is None:
-            # No consent-date fallback: an unresolvable visit leaves the date
-            # empty and the row is dropped and reported by drop_undated.
+            # Dated by the visit; Not-Done visits contribute their SV
+            # window-end date via build_visit_linkage (NULL visit id). No
+            # consent-date fallback — truly undated rows drop-and-report.
             meas_date = row.get('visit_start_date')
 
         measurements.append({
@@ -104,7 +105,8 @@ def create_measurement_questionnaire_scores(
     ruib1_count = 0
     for _, row in ruib1_merged.iterrows():
         if pd.notna(row.get('BR1NIGHT')):
-            # No fallback: undated rows drop-and-report downstream.
+            # Dated by the visit (incl. Not-Done window-end dates); truly
+            # undated rows drop-and-report downstream.
             meas_date = row.get('visit_start_date')
             measurements.append({
                 'person_id': row['person_id'],
@@ -125,7 +127,8 @@ def create_measurement_questionnaire_scores(
     for _, row in sp_merged.iterrows():
         # Dictionary range is 0..168: zero in-person hours is a valid answer.
         if pd.notna(row.get('INFHRS')) and row.get('INFHRS') >= 0:
-            # No fallback: undated rows drop-and-report downstream.
+            # Dated by the visit (incl. Not-Done window-end dates); truly
+            # undated rows drop-and-report downstream.
             meas_date = row.get('visit_start_date')
             measurements.append({
                 'person_id': row['person_id'],

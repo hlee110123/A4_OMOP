@@ -133,9 +133,10 @@ def create_phyneuro_observations_and_measurements(
     measurements = []
 
     for _, row in phyneuro_merged.iterrows():
+        # Dated by the visit; Not-Done visits contribute their SV window-end
+        # date via build_visit_linkage (NULL visit_occurrence_id). No
+        # consent-date fallback — truly undated rows drop-and-report.
         cond_date = row.get('visit_start_date')
-        if pd.isna(cond_date):
-            cond_date = row.get('synthetic_consent_date')
 
         for field in all_exam_fields:
             val = row.get(field)
