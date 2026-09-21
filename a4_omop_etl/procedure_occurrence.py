@@ -27,9 +27,14 @@ _SOURCE_CONFIG = {
     'imaging_mri_reads': ('MRI_BRAIN',      'STUDYDATE_DAYS_CONSENT'),
     'imaging_flair':     ('MRI_BRAIN',      None),  # Uses VISCODE/visit_start_date
     'imaging_retinal':   ('RETINAL_IMAGING','ExamDate_DAYS_CONSENT'),
-    'imaging_pet_va':    ('PET_AMYLOID',    'scan_date_DAYS_CONSENT'),
-    'tau_petsurfer':     ('PET_TAU',        None),  # Uses VISCODE/visit_start_date
-    'tau_stanford':      ('PET_TAU',        None),  # Uses VISCODE/visit_start_date
+    # imaging_pet_va, tau_petsurfer and tau_stanford are deliberately absent:
+    # they are re-reads/re-analyses of scans already represented here (the
+    # screening PET via imaging_amyloid; the tau scan via imaging_tau and the
+    # FTP sidecars in extend_procedures_from_json). Including them created
+    # procedures per ANALYSIS instead of per scan, at provably wrong dates
+    # (PET_VA's scan_date is year-shifted; the tau pipelines stamp VISCODE=2,
+    # the florbetapir visit) — 4,939 phantom rows. Per the MI-CDM model,
+    # analysis provenance belongs in image_feature.alg_system, not here.
 }
 
 
