@@ -131,7 +131,7 @@ def main():
     print("\n--- MEASUREMENT: Biomarkers ---")
     measurement_biomarkers = create_measurement_biomarkers(
         src['biomarker_ab'], src['biomarker_ptau'], src['biomarker_roche'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: Imaging (MRI volumes, PET SUVR) ---")

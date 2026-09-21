@@ -43,9 +43,10 @@ def create_measurement_cogstate(
         print(f"  WARNING: CogState visit linkage only {linked:.1%}; check VISIT codes")
 
     # Calculate test date
+    # No consent-date fallback (dead today: every row has a test date);
+    # a future undated row drops-and-reports rather than misdating to day 0.
     cogstate_merged['measurement_date'] = cogstate_merged.apply(
-        lambda row: (calc_days_to_date(row, 'TESTDATE_DAYS_CONSENT') or row['synthetic_consent_date']),
-        axis=1
+        calc_days_to_date, args=('TESTDATE_DAYS_CONSENT',), axis=1
     )
 
     # Get unique test codes
@@ -191,8 +192,9 @@ def create_measurement_cogstate_questionnaires(
     # MACQ Total Scores
     macq_totals = cogstate_macq_df[cogstate_macq_df['Question'] == 'MCQT Total'].copy()
     macq_totals_merged = prepare_source_df(macq_totals, person_df, date_anchor_df, visit_df)
+    # No consent-date fallback: undated rows drop-and-report downstream.
     macq_totals_merged['measurement_date'] = macq_totals_merged.apply(
-        lambda row: calc_days_to_date(row, 'Date_DAYS_CONSENT') or row['synthetic_consent_date'], axis=1
+        calc_days_to_date, args=('Date_DAYS_CONSENT',), axis=1
     )
 
     macq_total_count = 0
@@ -214,7 +216,7 @@ def create_measurement_cogstate_questionnaires(
     macq_items = cogstate_macq_df[cogstate_macq_df['Question'] != 'MCQT Total'].copy()
     macq_items_merged = prepare_source_df(macq_items, person_df, date_anchor_df, visit_df)
     macq_items_merged['measurement_date'] = macq_items_merged.apply(
-        lambda row: calc_days_to_date(row, 'Date_DAYS_CONSENT') or row['synthetic_consent_date'], axis=1
+        calc_days_to_date, args=('Date_DAYS_CONSENT',), axis=1
     )
 
     # Items are keyed on the question text: the file has no question-number
@@ -269,7 +271,7 @@ def create_measurement_cogstate_questionnaires(
 
     cpath_merged = prepare_source_df(cpath_questions, person_df, date_anchor_df, visit_df)
     cpath_merged['measurement_date'] = cpath_merged.apply(
-        lambda row: calc_days_to_date(row, 'Date_DAYS_CONSENT') or row['synthetic_consent_date'], axis=1
+        calc_days_to_date, args=('Date_DAYS_CONSENT',), axis=1
     )
 
     # C-PATH Individual Items (Q1-Q26)
@@ -300,7 +302,7 @@ def create_measurement_cogstate_questionnaires(
 
     cpath_totals_merged = prepare_source_df(cpath_totals, person_df, date_anchor_df, visit_df)
     cpath_totals_merged['measurement_date'] = cpath_totals_merged.apply(
-        lambda row: calc_days_to_date(row, 'Date_DAYS_CONSENT') or row['synthetic_consent_date'], axis=1
+        calc_days_to_date, args=('Date_DAYS_CONSENT',), axis=1
     )
 
     cpath_total_count = 0

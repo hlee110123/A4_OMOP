@@ -239,8 +239,12 @@ def create_observation_milestones(
 
         concept_info = MILESTONE_CONCEPTS.get(dsdecod, {'concept_id': 0, 'name': dsdecod})
 
-        # Calculate observation date
-        obs_date = calc_days_to_date(row, 'DSSTDTC_DAYS_CONSENT') or row['synthetic_consent_date']
+        # DSSTDTC when recorded. It is absent only for INFORMED CONSENT
+        # OBTAINED events, whose date IS the consent date by definition; any
+        # other undated milestone drops-and-reports rather than misdating.
+        obs_date = calc_days_to_date(row, 'DSSTDTC_DAYS_CONSENT')
+        if obs_date is None and dsdecod == 'INFORMED CONSENT OBTAINED':
+            obs_date = row['synthetic_consent_date']
 
         observations.append(build_observation_record(
             person_id=row['person_id'],

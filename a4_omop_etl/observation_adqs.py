@@ -167,8 +167,9 @@ def create_observation_treatment_arm(
     for _, row in tx_df.iterrows():
         tx_value = str(row['TX'])
         # The assignment happened at randomization, not consent. RNDMDT is
-        # present for every TX-assigned subject; consent date is a safety net.
-        obs_date = calc_days_to_date(row, 'RNDMDT_DAYS_CONSENT') or row['synthetic_consent_date']
+        # present for every TX-assigned subject; if that ever regresses the
+        # row drops-and-reports rather than misdating to consent day.
+        obs_date = calc_days_to_date(row, 'RNDMDT_DAYS_CONSENT')
         observations.append(build_observation_record(
             person_id=row['person_id'],
             observation_concept_id=TX_CONCEPT_ID,

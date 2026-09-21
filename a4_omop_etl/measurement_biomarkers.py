@@ -64,8 +64,13 @@ def create_measurement_biomarkers(
 
     # ---- pTau-217 Tests ----
     ab_count = len(measurements)
-    ptau_filtered = prepare_source_df(ptau217_df, person_df, date_anchor_df, visit_occurrence_df)
+    ptau_filtered = prepare_source_df(ptau217_df, person_df, date_anchor_df, visit_occurrence_df,
+                                      visit_extra_cols=['visit_start_date'])
     ptau_filtered['measurement_date'] = ptau_filtered.apply(calc_days_to_date, args=('COLLECTION_DATE_DAYS_CONSENT',), axis=1)
+    # Collection date first, visit date when the offset is missing; truly
+    # undated rows drop-and-report downstream.
+    _no_dt = ptau_filtered['measurement_date'].isna()
+    ptau_filtered.loc[_no_dt, 'measurement_date'] = ptau_filtered.loc[_no_dt, 'visit_start_date']
 
     concept = BIOMARKER_CONCEPTS.get('PTAU217', {})
     for _, row in ptau_filtered.iterrows():
@@ -99,8 +104,11 @@ def create_measurement_biomarkers(
 
     # ---- Roche Panel ----
     roche_count_start = len(measurements)
-    roche_filtered = prepare_source_df(roche_df, person_df, date_anchor_df, visit_occurrence_df)
+    roche_filtered = prepare_source_df(roche_df, person_df, date_anchor_df, visit_occurrence_df,
+                                       visit_extra_cols=['visit_start_date'])
     roche_filtered['measurement_date'] = roche_filtered.apply(calc_days_to_date, args=('LABD_DAYS_CONSENT',), axis=1)
+    _no_dt = roche_filtered['measurement_date'].isna()
+    roche_filtered.loc[_no_dt, 'measurement_date'] = roche_filtered.loc[_no_dt, 'visit_start_date']
 
     for _, row in roche_filtered.iterrows():
         testcd = str(row.get('LBTESTCD', ''))
