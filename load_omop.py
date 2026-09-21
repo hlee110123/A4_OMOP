@@ -122,7 +122,7 @@ def main():
             p = csv_path(t)
             if not p.exists():
                 continue
-            with open(p, "rb") as fh:
+            with open(p, newline="") as fh:
                 # CSV records, not physical lines: quoted fields may contain
                 # newlines, which made a raw line count report false mismatches.
                 csv_n = sum(1 for _ in csv.reader(fh)) - 1
