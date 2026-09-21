@@ -70,24 +70,29 @@ def create_procedure_occurrence(
                 src_df, person_df, date_anchor_df,
                 visit_occurrence_df, visit_extra_cols=['visit_start_date']
             )
-            merged['_scan_date'] = merged.apply(
-                lambda row: row.get('visit_start_date')
-                if pd.notna(row.get('visit_start_date'))
-                else row.get('synthetic_consent_date'),
-                axis=1
-            )
+            merged['_scan_date'] = merged['visit_start_date']
         else:
-            merged = prepare_source_df(src_df, person_df, date_anchor_df)
+            # Visit merge also supplies visit_occurrence_id, which these rows
+            # previously lacked, and the visit-date fallback below.
+            merged = prepare_source_df(
+                src_df, person_df, date_anchor_df,
+                visit_occurrence_df, visit_extra_cols=['visit_start_date']
+            )
             merged['_scan_date'] = merged.apply(
                 calc_days_to_date, args=(days_col,), axis=1
             )
-            # Fallback to synthetic consent date
+            # Fallback chain mirrors image_occurrence/measurement: scan date,
+            # then visit date, never a consent date. Undatable rows skipped.
             mask = merged['_scan_date'].isna()
-            if mask.any():
-                merged.loc[mask, '_scan_date'] = merged.loc[mask, 'synthetic_consent_date']
+            if mask.any() and 'visit_start_date' in merged.columns:
+                merged.loc[mask, '_scan_date'] = merged.loc[mask, 'visit_start_date']
 
         concept = PROCEDURE_CONCEPTS[proc_type]
 
+        n_undated = int(merged['_scan_date'].isna().sum())
+        if n_undated:
+            print(f"  {src_key}: skipped {n_undated} rows with no resolvable "
+                  f"scan or visit date")
         for _, row in merged.iterrows():
             if pd.isna(row.get('_scan_date')):
                 continue

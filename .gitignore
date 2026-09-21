@@ -109,3 +109,4 @@ analyses/results/micdm_*.png
 custom_concepts_draft/
 dicom2omop/
 load_omop_to_postgres.ipynb
+.etl_logs/

@@ -65,9 +65,10 @@ def create_observation_questionnaires(
             if field in row and pd.notna(row[field]):
                 concept = QUESTIONNAIRE_CONCEPTS.get(field, {'concept_id': 0, 'name': field, 'unit': 'score'})
 
+                # No consent-date fallback: an unresolvable visit (SV says
+                # 'Not Done' while the CRF says DONE) leaves the date empty and
+                # the row is dropped and reported downstream by drop_undated.
                 obs_date = row.get('visit_start_date')
-                if pd.isna(obs_date):
-                    obs_date = row['synthetic_consent_date']
 
                 observations.append(build_observation_record(
                     person_id=row['person_id'],
@@ -97,9 +98,8 @@ def create_observation_questionnaires(
         for _, row in merged.iterrows():
             for field, concept in ADLPQ_ITEM_CONCEPTS.items():
                 if field in row and pd.notna(row[field]):
+                    # No fallback: undated rows drop-and-report downstream.
                     obs_date = row.get('visit_start_date')
-                    if pd.isna(obs_date):
-                        obs_date = row['synthetic_consent_date']
 
                     val_str = str(row[field])
                     val_concept_id = None
@@ -146,9 +146,8 @@ def create_observation_questionnaires(
         # in MEASUREMENT). Items cannot be naively summed to the total:
         # five positively-worded items are reverse-scored.
         if pd.notna(row.get('GDTOTAL')):
+            # No fallback: undated rows drop-and-report downstream.
             total_date = row.get('visit_start_date')
-            if pd.isna(total_date):
-                total_date = row['synthetic_consent_date']
             observations.append(build_observation_record(
                 person_id=row['person_id'],
                 observation_concept_id=QUESTIONNAIRE_CONCEPTS['GDTOTAL']['concept_id'],
@@ -163,9 +162,10 @@ def create_observation_questionnaires(
             if field in row and pd.notna(row[field]):
                 concept = QUESTIONNAIRE_CONCEPTS[field]
 
+                # No consent-date fallback: an unresolvable visit (SV says
+                # 'Not Done' while the CRF says DONE) leaves the date empty and
+                # the row is dropped and reported downstream by drop_undated.
                 obs_date = row.get('visit_start_date')
-                if pd.isna(obs_date):
-                    obs_date = row['synthetic_consent_date']
 
                 val = int(row[field])
                 observations.append(build_observation_record(

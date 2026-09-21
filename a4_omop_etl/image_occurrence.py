@@ -136,28 +136,33 @@ def _build_tabular_rows(
                 src_df, person_df, date_anchor_df,
                 visit_occurrence_df, visit_extra_cols=['visit_start_date']
             )
-            merged['_scan_date'] = merged.apply(
-                lambda row: row.get('visit_start_date')
-                if pd.notna(row.get('visit_start_date'))
-                else row.get('synthetic_consent_date'),
-                axis=1
-            )
+            merged['_scan_date'] = merged['visit_start_date']
         else:
             if has_viscode:
                 merged = prepare_source_df(
-                    src_df, person_df, date_anchor_df, visit_occurrence_df
+                    src_df, person_df, date_anchor_df, visit_occurrence_df,
+                    visit_extra_cols=['visit_start_date']
                 )
             else:
                 merged = prepare_source_df(src_df, person_df, date_anchor_df)
             merged['_scan_date'] = merged.apply(
                 calc_days_to_date, args=(days_col,), axis=1
             )
+            # Fallback chain mirrors the measurement side exactly (scan date,
+            # then visit date, never a consent date): a fabricated consent
+            # date collapsed distinct visits in the dedup and mislinked 192
+            # tau features to an amyloid series. Rows with no resolvable date
+            # are skipped and counted below.
             mask = merged['_scan_date'].isna()
-            if mask.any():
-                merged.loc[mask, '_scan_date'] = merged.loc[mask, 'synthetic_consent_date']
+            if mask.any() and 'visit_start_date' in merged.columns:
+                merged.loc[mask, '_scan_date'] = merged.loc[mask, 'visit_start_date']
 
         modality_code, anatomic_site = _SERIES_CONFIG[series_type]
 
+        n_undated = int(merged['_scan_date'].isna().sum())
+        if n_undated:
+            print(f"  {src_key}: skipped {n_undated} tabular rows with no "
+                  f"resolvable scan or visit date")
         for _, row in merged.iterrows():
             if pd.isna(row.get('_scan_date')):
                 continue
