@@ -48,9 +48,9 @@ def create_measurement_questionnaire_scores(
     def _add_measurement(row, field, concept, source_prefix, meas_date=None):
         """Append a measurement row from a concept dict entry."""
         if meas_date is None:
+            # No consent-date fallback: an unresolvable visit leaves the date
+            # empty and the row is dropped and reported by drop_undated.
             meas_date = row.get('visit_start_date')
-            if pd.isna(meas_date):
-                meas_date = row.get('synthetic_consent_date')
 
         measurements.append({
             'person_id': row['person_id'],
@@ -62,7 +62,7 @@ def create_measurement_questionnaire_scores(
             'measurement_source_value': f'{source_prefix}:{field}',
         })
 
-    # --- GDS Total + STAI Total from psychwell ---
+    # --- STAI Total from psychwell ---
     psych_merged = prepare_source_df(psychwell_df[psychwell_df['DONE'] == 1].copy() if 'DONE' in psychwell_df.columns else psychwell_df.copy(),
                                       person_df, date_anchor_df, visit_occurrence_df, visit_extra_cols=['visit_start_date'])
     print(f"  PSYCHWELL: {len(psychwell_df)} total -> {len(psych_merged)} valid")
@@ -104,7 +104,8 @@ def create_measurement_questionnaire_scores(
     ruib1_count = 0
     for _, row in ruib1_merged.iterrows():
         if pd.notna(row.get('BR1NIGHT')):
-            meas_date = row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date']
+            # No fallback: undated rows drop-and-report downstream.
+            meas_date = row.get('visit_start_date')
             measurements.append({
                 'person_id': row['person_id'],
                 'measurement_concept_id': MEAS_CONCEPTS['RUIB1_NIGHTS']['concept_id'],
@@ -124,7 +125,8 @@ def create_measurement_questionnaire_scores(
     for _, row in sp_merged.iterrows():
         # Dictionary range is 0..168: zero in-person hours is a valid answer.
         if pd.notna(row.get('INFHRS')) and row.get('INFHRS') >= 0:
-            meas_date = row.get('visit_start_date') if pd.notna(row.get('visit_start_date')) else row['synthetic_consent_date']
+            # No fallback: undated rows drop-and-report downstream.
+            meas_date = row.get('visit_start_date')
             measurements.append({
                 'person_id': row['person_id'],
                 'measurement_concept_id': OBS_MEAS_CONCEPTS['CONTACT_HRS']['concept_id'],
