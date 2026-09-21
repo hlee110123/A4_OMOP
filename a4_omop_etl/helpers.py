@@ -146,11 +146,14 @@ def build_visit_linkage(visit_occurrence_df, sv_df, person_df, date_anchor_df):
     completed at those visit codes (DONE=Yes) still need a date. Every Not-Done
     SV row carries SVUSEDTC (visit-window end) even though SVSTDTC is empty, so
     this returns the real visit rows plus pseudo-rows keyed the same way
-    (visit_source_value, person_id) whose visit_start_date is that window-end
-    date and whose visit_occurrence_id is NULL — the NULL id is the signature
-    that no protocol visit backs the row. The window end can run days-to-weeks
-    after the actual administration (median gap on completed visits is 1 day),
-    but stays inside the correct visit epoch.
+    (visit_source_value, person_id) whose visit_start_date is that end date
+    and whose visit_occurrence_id is NULL — the NULL id is the signature that
+    no protocol visit backs the row. On a Not-Done visit SVUSEDTC behaves
+    like the visit CLOSURE date: measured on the tethered admins it runs a
+    median of ~3 months after the visit's nominal week (IQR +60..+160d), but
+    sits a median of 14 days from the subject's nearest real visit — the
+    right neighborhood of their timeline, biased late, vs. the day-0 stamp
+    (off by years) or dropping the row that it replaces.
 
     Pass the result to prepare_source_df in place of visit_occurrence_df where
     this tethering is wanted; truly undated rows still drop via drop_undated.

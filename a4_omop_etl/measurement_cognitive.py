@@ -208,10 +208,17 @@ def create_measurement_cdr(
     cdr_filtered = cdr_df[cdr_df['DONE'] == 'Yes'].copy()
     print(f"  CDR: {len(cdr_df)} total -> {len(cdr_filtered)} (DONE='Yes')")
 
-    cdr_filtered = prepare_source_df(cdr_filtered, person_df, date_anchor_df, visit_occurrence_df)
+    cdr_filtered = prepare_source_df(cdr_filtered, person_df, date_anchor_df, visit_occurrence_df,
+                                     visit_extra_cols=['visit_start_date'])
     cdr_filtered['measurement_date'] = cdr_filtered.apply(
         calc_days_to_date, args=('CDADTC_DAYS_CONSENT',), axis=1
     )
+    # Assessment-date offset first; visit date (incl. Not-Done window-end
+    # dates from build_visit_linkage) when the offset is missing. Truly
+    # undated rows drop-and-report downstream.
+    _no_offset = cdr_filtered['measurement_date'].isna()
+    cdr_filtered.loc[_no_offset, 'measurement_date'] = \
+        cdr_filtered.loc[_no_offset, 'visit_start_date']
 
     # Core scores + domain scores
     core_cols = ['CDGLOBAL', 'CDSOB']

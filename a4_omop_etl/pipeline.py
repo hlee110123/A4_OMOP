@@ -119,13 +119,13 @@ def main():
     print("\n--- MEASUREMENT: Clinical (vitals, labs, ECG) ---")
     measurement_clinical = create_measurement_clinical(
         src['vitals'], src['clrm_lab'], src['clrm_ecg'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: Cognitive (PACC, MMSE, CDR) ---")
     measurement_cognitive, observation_mmse = create_measurement_cognitive(
         src['pacc'], src['mmse'], src['cdr'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: Biomarkers ---")
@@ -137,7 +137,7 @@ def main():
     print("\n--- MEASUREMENT: Imaging (MRI volumes, PET SUVR) ---")
     measurement_imaging = create_measurement_imaging(
         src['imaging_mri'], src['imaging_amyloid'], src['imaging_tau'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: CogState computerized ---")
@@ -155,14 +155,14 @@ def main():
     print("\n--- MEASUREMENT: Extended cognitive (CFI, digit, FCSR, logic) ---")
     measurement_cog_extended = create_measurement_cognitive_extended(
         src['cfi'], src['cfisp'], src['cogdigit'], src['cogfcsr'], src['coglogic'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- MEASUREMENT: Extended imaging (reads, FLAIR, retinal, tau pipelines) ---")
     measurement_imaging_extended = create_measurement_imaging_extended(
         src['imaging_mri_reads'], src['imaging_flair'],
         src['imaging_retinal'], src['imaging_pet_va'],
-        person, visit_occurrence, date_anchor,
+        person, visit_linkage, date_anchor,
         tau_petsurfer_df=src['tau_petsurfer'],
         tau_stanford_df=src['tau_stanford'],
     )
@@ -295,7 +295,7 @@ def main():
     print("\n--- OBSERVATION: Lifestyle & family history ---")
     observation_lifestyle = create_observation(
         src['habits'], src['famhxpar'], src['famhxsib'],
-        person, visit_occurrence, date_anchor
+        person, visit_linkage, date_anchor
     )
 
     print("\n--- OBSERVATION: Milestones ---")
@@ -308,18 +308,18 @@ def main():
 
     print("\n--- OBSERVATION: C-SSRS ---")
     observation_cssrs = create_observation_cssrs(
-        src['cssrs'], src['cssrslv'], person, date_anchor, visit_occurrence
+        src['cssrs'], src['cssrslv'], person, date_anchor, visit_linkage
     )
 
     print("\n--- OBSERVATION: Study partner ---")
     observation_study_partner = create_observation_study_partner(
-        src['spinfo'], person, date_anchor, visit_occurrence
+        src['spinfo'], person, date_anchor, visit_linkage
     )
 
     print("\n--- OBSERVATION: Secondary questionnaires (IES, FTP, RSS, VIEWS, RUIB) ---")
     observation_secondary = create_observation_secondary_questionnaires(
         src['ies'], src['ftpscale'], src['rss'], src['views'],
-        src['ruib'], src['ruib1'], person, date_anchor, visit_occurrence
+        src['ruib'], src['ruib1'], person, date_anchor, visit_linkage
     )
 
     print("\n--- OBSERVATION: Questionnaires (AD Concerns, ADL-PQ items, GDS) ---")
